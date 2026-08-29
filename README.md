@@ -26,6 +26,7 @@ Murmur aims to provide:
 - **Bring your own keys** — connect transcription and AI providers you choose.
 - **Hardware choice** — start with Omi and add devices behind a common interface.
 - **Provider choice** — avoid coupling the experience to a single model vendor.
+- **Remote control** — securely send approved voice commands to your computers, servers, and automations from wherever you are.
 - **Privacy by design** — make capture visible, obtain consent, minimize retention, and keep secrets in platform-secure storage.
 - **Open source** — make the client and device integrations inspectable and community-driven.
 - **Useful basics** — live transcription, summaries, searchable conversations, notes, and action items without unnecessary complexity.
@@ -76,6 +77,7 @@ Current technical direction:
 | Local data | Drift and SQLite |
 | Secrets | `flutter_secure_storage` |
 | Provider APIs | Dart HTTP and WebSockets |
+| Remote control | Authenticated agents with an optional relay |
 | Backend | None required for the initial app |
 
 ## Development
@@ -110,6 +112,34 @@ Provider support will be decided during implementation. Likely categories includ
 
 The provider layer should use small adapters so users are not forced into one vendor.
 
+## Remote manager
+
+Murmur should turn a wearable into a secure remote manager. You could speak into your Omi while away from your desk and ask a paired computer or server to check a deployment, start a backup, run an approved automation, or report its status. The result should return to Murmur as a readable response and, where the device permits it, a spoken response.
+
+```text
+Omi → Murmur → transcription and intent → permission check
+                                                │
+                                                ▼
+                                      encrypted relay or tunnel
+                                                │
+                              ┌─────────────────┴─────────────────┐
+                              ▼                                   ▼
+                    agent on your computer              agent on your server
+                              │                                   │
+                              └────────── result and audit ───────┘
+```
+
+Remote control will be opt-in and is not implemented yet. Its design must treat model output as untrusted input rather than executing generated shell commands directly. The first version should require:
+
+- explicitly paired and revocable devices
+- encrypted, authenticated communication
+- allowlisted tools and structured commands
+- confirmation for destructive or sensitive actions
+- least-privilege agents on every target machine
+- a durable audit log of requests, approvals, results, and failures
+
+Users should be able to self-host the remote agent and relay. A managed relay may be considered later, but it must not be required for local wearable features.
+
 ## Privacy and responsible recording
 
 A wearable microphone can capture sensitive conversations. The app must make recording status obvious and give people control over collection, retention, deletion, and export. Users are responsible for obtaining consent and following the recording and privacy laws that apply where they live and record.
@@ -125,6 +155,7 @@ Before a production release, the project should document its threat model, key s
 - [ ] Build secure bring-your-own-key configuration
 - [ ] Ship the basic capture → transcript → summary flow
 - [ ] Add local history, search, export, and deletion
+- [ ] Design and implement the authenticated remote-agent protocol
 - [ ] Document a process for adding more wearable adapters
 - [ ] Identify reusable fixes and contribute them upstream to Omi
 
@@ -142,6 +173,7 @@ The project is at the scaffold stage. Early contributions are especially useful 
 - reliable background audio and Bluetooth behavior on iOS and Android
 - secure on-device key and conversation storage
 - provider-neutral interfaces
+- secure remote agents, permissions, and command auditing
 - privacy, consent, and data-retention design
 - accessibility and low-friction mobile UX
 
