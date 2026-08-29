@@ -114,4 +114,4 @@ Open an issue with a focused proposal before starting a large implementation.
 
 ## License
 
-No license has been selected yet. Until one is added, the repository contents remain under their authors' default copyright. The project intends to choose an OSI-approved open-source license before implementation begins.
+Licensed under the [Apache License 2.0](LICENSE).
