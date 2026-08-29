@@ -10,12 +10,12 @@
 
 **Your wearable. Your models. Your memory.**
 
-Murmur is a planned open-source mobile app for connecting AI wearables to the services you already pay for. Pair a device, add your own provider keys, and turn captured audio into transcripts, summaries, memories, and actions—without being locked into an expensive subscription.
+Murmur is an open-source mobile app for connecting AI wearables to the services you already pay for. Pair a device, add your own provider keys, and turn captured audio into transcripts, summaries, memories, and actions—without being locked into an expensive subscription.
 
 The first target is the [Omi wearable](https://github.com/BasedHardware/omi). The longer-term goal is a small, device-agnostic foundation that can support other Bluetooth voice wearables through adapters.
 
 > [!NOTE]
-> This repository is currently a product proposal and planning space. No app has been implemented yet.
+> Murmur is at the scaffold stage. The Flutter shell builds, but device connectivity and product functionality have not been implemented yet.
 
 ## Why this project
 
@@ -43,7 +43,7 @@ The initial experience should be deliberately small:
 
 Omi support is the first milestone. Support for additional wearables should arrive through device adapters only after the core flow is reliable.
 
-## Tentative architecture
+## Architecture
 
 ```text
 Wearable
@@ -57,13 +57,47 @@ Local conversation store ◄──────────── AI provider
           └──► summaries, notes, actions, and export
 ```
 
-Current assumptions—not final decisions:
+Current technical direction:
 
-- A cross-platform mobile client, with **Flutter** as the leading option and **React Native** still under consideration.
+- A **Flutter and Dart** mobile client for iOS and Android.
 - Omi-compatible BLE audio as the first device adapter.
 - Direct provider calls where practical, with an optional self-hosted gateway only where mobile limitations require one.
 - API keys stored using iOS Keychain / Android Keystore-backed secure storage and never committed or synced by default.
 - A local-first data model with explicit opt-in for any cloud synchronization.
+
+### Stack
+
+| Area | Choice |
+| --- | --- |
+| UI | Flutter |
+| State | Riverpod |
+| Navigation | `go_router` |
+| Bluetooth LE | `flutter_reactive_ble` behind wearable adapters |
+| Local data | Drift and SQLite |
+| Secrets | `flutter_secure_storage` |
+| Provider APIs | Dart HTTP and WebSockets |
+| Backend | None required for the initial app |
+
+## Development
+
+Murmur currently targets iOS and Android and uses the application ID `dev.october.murmur`.
+
+Prerequisites:
+
+- Flutter 3.35 or newer
+- the iOS or Android toolchain for the platform you want to run
+
+```bash
+flutter pub get
+flutter run
+```
+
+Before submitting changes:
+
+```bash
+flutter analyze
+flutter test
+```
 
 ## Possible provider support
 
@@ -84,8 +118,9 @@ Before a production release, the project should document its threat model, key s
 
 ## Roadmap
 
+- [x] Choose Flutter for the cross-platform mobile client
+- [x] Scaffold the iOS and Android app
 - [ ] Validate Omi BLE pairing and audio streaming
-- [ ] Choose Flutter or React Native based on a small device prototype
 - [ ] Define device, transcription, and AI provider interfaces
 - [ ] Build secure bring-your-own-key configuration
 - [ ] Ship the basic capture → transcript → summary flow
@@ -101,10 +136,10 @@ Murmur is an independent community project and is not affiliated with or endorse
 
 ## Contributing
 
-The project is in the design stage. Early contributions are especially useful around:
+The project is at the scaffold stage. Early contributions are especially useful around:
 
 - Omi protocol and BLE behavior
-- Flutter versus React Native tradeoffs for background audio and Bluetooth
+- reliable background audio and Bluetooth behavior on iOS and Android
 - secure on-device key and conversation storage
 - provider-neutral interfaces
 - privacy, consent, and data-retention design
