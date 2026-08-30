@@ -16,10 +16,11 @@ void main() {
     await tester.pump();
 
     expect(find.text('murmur'), findsOneWidget);
-    expect(find.text('Bluetooth ready'), findsOneWidget);
-    expect(find.text('Not connected'), findsOneWidget);
-    expect(find.text('Scan for Omi'), findsOneWidget);
-    expect(find.text('No Omi found yet'), findsOneWidget);
+    expect(find.text('Ready'), findsOneWidget);
+    expect(find.text('Connect your Omi'), findsOneWidget);
+    expect(find.text('Tap wearable to scan'), findsOneWidget);
+    expect(find.byKey(const Key('omi-action')), findsOneWidget);
+    expect(find.bySemanticsLabel('Omi wearable'), findsOneWidget);
   });
 
   testWidgets('discovers, connects, and disconnects an Omi', (tester) async {
@@ -29,9 +30,10 @@ void main() {
     await tester.pumpWidget(_testApp(client));
     await tester.pump();
 
-    await tester.tap(find.text('Scan for Omi'));
+    await tester.tap(find.byKey(const Key('omi-action')));
     await tester.pump();
-    expect(find.text('Searching for Omi…'), findsOneWidget);
+    expect(find.text('Looking for Omi'), findsOneWidget);
+    expect(find.text('Searching nearby…'), findsOneWidget);
 
     client.discover(
       const OmiDevice(id: 'omi-1', name: 'Omi DevKit', rssi: -48),
@@ -40,14 +42,10 @@ void main() {
     client.finishScan();
     await tester.pump();
 
-    expect(find.text('Omi DevKit'), findsOneWidget);
-    expect(find.text('Strong signal · -48 dBm'), findsOneWidget);
+    expect(find.text('Omi found'), findsOneWidget);
+    expect(find.text('Omi DevKit · strong signal'), findsOneWidget);
 
-    final connectButton = tester.widget<FilledButton>(
-      find.widgetWithText(FilledButton, 'Connect'),
-    );
-    expect(connectButton.onPressed, isNotNull);
-    connectButton.onPressed!();
+    await tester.tap(find.byKey(const Key('omi-action')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 350));
     expect(client.connectCalls, 1);
@@ -59,15 +57,15 @@ void main() {
     expect(find.text('Connected'), findsWidgets);
     expect(find.text('Disconnect'), findsOneWidget);
 
-    final disconnectButton = tester.widget<OutlinedButton>(
-      find.widgetWithText(OutlinedButton, 'Disconnect'),
+    final disconnectButton = tester.widget<TextButton>(
+      find.widgetWithText(TextButton, 'Disconnect'),
     );
     expect(disconnectButton.onPressed, isNotNull);
     disconnectButton.onPressed!();
     client.finishConnection();
     await tester.pumpAndSettle();
 
-    expect(find.text('Not connected'), findsOneWidget);
+    expect(find.text('Omi found'), findsOneWidget);
   });
 }
 
@@ -83,8 +81,9 @@ class FakeOmiBleClient implements OmiBleClient {
     sync: true,
   );
   final _scanController = StreamController<OmiDevice>.broadcast(sync: true);
-  final _connectionController =
-      StreamController<OmiConnectionState>.broadcast(sync: true);
+  final _connectionController = StreamController<OmiConnectionState>.broadcast(
+    sync: true,
+  );
   int connectCalls = 0;
 
   @override
