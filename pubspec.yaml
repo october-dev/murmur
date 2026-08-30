@@ -16,6 +16,7 @@ dependencies:
   go_router: ^17.2.3
   http: ^1.6.0
   path_provider: ^2.1.5
+  permission_handler: ^11.4.0
   sqlite3: ^2.9.4
   web_socket_channel: ^3.0.3
 

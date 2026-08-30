@@ -15,7 +15,7 @@ Murmur is an open-source mobile app for connecting AI wearables to the services 
 The first target is the [Omi wearable](https://github.com/BasedHardware/omi). The longer-term goal is a small, device-agnostic foundation that can support other Bluetooth voice wearables through adapters.
 
 > [!NOTE]
-> Murmur is at the scaffold stage. The Flutter shell builds, but device connectivity and product functionality have not been implemented yet.
+> Murmur can now discover nearby Omi wearables, connect or disconnect over Bluetooth Low Energy, and show the live connection state. Audio capture and AI features are not implemented yet.
 
 ## Why this project
 
@@ -94,6 +94,10 @@ flutter pub get
 flutter run
 ```
 
+Run Murmur on a physical iOS or Android device: Bluetooth discovery is not available in the standard mobile simulators. Wake the Omi, keep it nearby, allow Bluetooth/Nearby devices access when prompted, and tap **Scan for Omi**. The app only shows devices advertising Omi's BLE service.
+
+The current milestone deliberately stops at a verified BLE connection. It does not subscribe to the microphone characteristic, record audio, or send data to a provider.
+
 Before submitting changes:
 
 ```bash
@@ -150,7 +154,8 @@ Before a production release, the project should document its threat model, key s
 
 - [x] Choose Flutter for the cross-platform mobile client
 - [x] Scaffold the iOS and Android app
-- [ ] Validate Omi BLE pairing and audio streaming
+- [x] Discover Omi hardware and show its live BLE connection state
+- [ ] Validate Omi BLE audio streaming
 - [ ] Define device, transcription, and AI provider interfaces
 - [ ] Build secure bring-your-own-key configuration
 - [ ] Ship the basic capture → transcript → summary flow
@@ -165,9 +170,11 @@ Before a production release, the project should document its threat model, key s
 
 Murmur is an independent community project and is not affiliated with or endorsed by Based Hardware or Omi. We intend to respect upstream licensing, clearly attribute reused work, report relevant findings, and contribute generally useful fixes or documentation back to Omi whenever possible.
 
+The initial device detection follows Omi's advertised BLE service and is attributed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 ## Contributing
 
-The project is at the scaffold stage. Early contributions are especially useful around:
+The project is at an early device-connectivity stage. Contributions are especially useful around:
 
 - Omi protocol and BLE behavior
 - reliable background audio and Bluetooth behavior on iOS and Android
