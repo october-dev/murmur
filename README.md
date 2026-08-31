@@ -117,7 +117,10 @@ package. The app remains the reference implementation and end-user experience.
 Core code does not depend on a particular device, provider, UI, or remote
 transport. Connectors describe their capabilities; consumers decide what to do
 with the events they support. See [docs/architecture.md](docs/architecture.md)
-for the proposed contracts, dependency rules, and package boundaries.
+for the proposed contracts, dependency rules, and package boundaries. The
+[voice runtime design](docs/voice-runtime.md) captures the lifecycle,
+endpointing, provider fallback, offline model-pack, and echo-protection patterns
+already exercised in October Desktop and opens them for community development.
 
 ## First-class voice sources
 
@@ -269,6 +272,11 @@ provider-specific privacy implications.
 - [ ] Add a phone-microphone reference connector
 - [ ] Validate Omi BLE audio streaming and normalize its audio frames
 - [ ] Add provider-neutral transcription interfaces and a deterministic fake
+- [ ] Add the capture coordinator with safe cancellation, tail flushing, and
+      warm push-to-talk
+- [ ] Add provider selection with offline-first fallback
+- [ ] Add an atomic on-device voice model-pack manager
+- [ ] Add speech feedback with interruption and echo-loop protection
 - [ ] Build secure bring-your-own-key configuration
 - [ ] Ship the capture → transcript → summary reference flow
 - [ ] Add local history, search, export, retention, and deletion
@@ -306,6 +314,8 @@ Contributions are especially useful around:
 - phone, headset, desktop, network, and wearable connectors
 - reliable background capture on iOS and Android
 - provider-neutral transcription and AI interfaces
+- voice-session races, endpointing, model packs, and engine fallback
+- accessible speech feedback and echo-loop prevention
 - secure on-device keys and conversation storage
 - remote-agent permissions, commands, and auditing
 - privacy, consent, accessibility, and data-retention design

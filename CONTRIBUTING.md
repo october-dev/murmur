@@ -51,7 +51,20 @@ and recorded protocol fixtures.
 - Preserve attribution and license notices for adapted code or protocol details.
 
 Read [docs/architecture.md](docs/architecture.md) before changing a shared
-interface.
+interface. Read [docs/voice-runtime.md](docs/voice-runtime.md) before changing
+capture lifecycle, provider, endpointing, model-pack, or speech-output behavior.
+
+## Voice-runtime pull requests
+
+Runtime changes should include deterministic tests for the failure and timing
+paths they touch. Depending on the change, cover delayed startup, cancellation
+during startup, late partials or finals, duplicate finalization, empty results,
+provider disconnect, input mute and resume, timeout cleanup, and speech-output
+echo suppression. Tests must use synthetic text and audio.
+
+Keep product commands and billing policy outside the runtime. Provider-specific
+dependencies belong behind adapters, with their licenses and model terms called
+out in the pull request.
 
 ## Connector pull requests
 

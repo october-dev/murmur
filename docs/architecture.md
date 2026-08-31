@@ -73,6 +73,12 @@ is replaceable and declares the formats or events it consumes and produces.
 Backpressure, interruption, reconnect, and partial-result semantics must be
 explicit. Unbounded audio buffering is not acceptable.
 
+The capture coordinator is a separate runtime component, not UI state. It owns
+session generations, immediate input gating, bounded finalization, warm
+push-to-talk parking, honest capture readiness, and cleanup. The detailed
+runtime design and race-condition invariants are in
+[voice-runtime.md](voice-runtime.md).
+
 ### Providers
 
 Provider adapters expose narrow capabilities rather than one universal AI
@@ -161,6 +167,9 @@ reviewable steps rather than a single repository-wide move.
 - Remote actions require structured commands and a policy decision.
 - Destructive or sensitive actions require confirmation.
 - Every long-lived session has an explicit, idempotent close path.
+- Late events from a cancelled or superseded session cannot dispatch actions.
+- Speech output gates recognition so the application cannot transcribe itself.
+- Diagnostics contain lifecycle metadata and text lengths, not speech content.
 - Tests and examples use synthetic audio unless redistribution and consent are
   documented.
 
