@@ -5,33 +5,37 @@ The architecture keeps hardware transport, speech providers, product UI, and
 remote actions independent so each can evolve without becoming a requirement
 for the others.
 
-This document describes the intended public boundaries. Interfaces that do not
-yet exist in code are proposals to be refined through linked GitHub issues and
-small pull requests.
+The wire boundary exists as the versioned `murmur.v1` Protocol Buffer schema.
+Runtime interfaces that do not yet exist remain proposals to be refined through
+linked GitHub issues and small pull requests.
 
 ## Dependency rule
 
 Dependencies point inward:
 
 ```text
-app and host integrations
-          │
-          ▼
-providers and optional capabilities
-          │
-          ▼
-connectors ───────────────► core voice contracts
+apps / agents / host integrations
+              │
+              ▼
+connectors / providers / runtime policy
+              │
+              ▼
+        language SDK model
+              │
+              ▼
+ murmur.v1 protocol + conformance suite
 ```
 
-The core does not import Flutter UI, Omi-specific code, provider SDKs, database
-implementations, or remote-agent transports. A connector can depend on the core;
-the core cannot depend on a connector.
+The protocol does not import or encode Flutter UI, Omi-specific behavior,
+provider SDKs, databases, or remote-agent transports. SDKs depend on the
+protocol; connectors and applications depend on an SDK. The dependency never
+points back from the protocol to an implementation.
 
 ## Layers
 
-### Core voice contracts
+### Protocol contracts
 
-The core owns the smallest stable vocabulary shared across integrations:
+The protocol owns the smallest stable vocabulary shared across integrations:
 
 - `VoiceSource` — identity, display metadata, transport, and capabilities
 - `VoiceConnector` — discovery and connection lifecycle for a source family
@@ -42,9 +46,20 @@ The core owns the smallest stable vocabulary shared across integrations:
 - `VoiceCapability` — optional features such as battery, buttons, speaker output,
   background capture, and device-side recording
 
-Names and fields remain provisional until the first core-contract issue is
-accepted. Contracts should be usable in pure Dart where platform APIs are not
-required.
+The canonical fields live in `spec/proto/murmur/v1`. Binary transports use
+protobuf encoding; JSON transports and fixtures use ProtoJSON. Session-scoped
+sequences and monotonic timestamps preserve order without pretending clocks on
+different machines are comparable.
+
+### SDKs and conformance
+
+SDKs provide idiomatic models and runtime implementations without becoming the
+source of truth. Dart, TypeScript, Python, and Rust start from the same event
+envelope and fixtures. A new Swift, Kotlin, C++, Go, or other SDK can become
+compatible by implementing `murmur.v1` and passing `conformance/`.
+
+Generated protobuf bindings may remain internal to an SDK. Connector and app
+APIs should expose stable, idiomatic types instead of code-generator details.
 
 ### Connectors
 
@@ -72,6 +87,12 @@ is replaceable and declares the formats or events it consumes and produces.
 
 Backpressure, interruption, reconnect, and partial-result semantics must be
 explicit. Unbounded audio buffering is not acceptable.
+
+The capture coordinator is a separate runtime component, not UI state. It owns
+session generations, immediate input gating, bounded finalization, warm
+push-to-talk parking, honest capture readiness, and cleanup. The detailed
+runtime design and race-condition invariants are in
+[voice-runtime.md](voice-runtime.md).
 
 ### Providers
 
@@ -132,25 +153,20 @@ Capabilities prevent Omi or mobile assumptions from becoming universal:
 
 Unsupported capabilities remain absent, not simulated.
 
-## Target package layout
+## Repository layout
 
 ```text
-lib/
-├── murmur.dart                 # stable public exports
-└── src/
-    ├── core/                   # pure-Dart voice contracts and events
-    ├── connectors/
-    │   ├── omi/                # Omi BLE implementation
-    │   ├── microphone/         # reference device microphone
-    │   └── testing/            # deterministic fixtures
-    ├── providers/              # STT, model, TTS adapters
-    ├── storage/                # local reference implementation
-    ├── remote/                 # command and policy boundaries
-    └── app/                    # Flutter reference experience
+spec/                           # canonical protobuf + manifest schemas
+conformance/                    # shared ProtoJSON fixtures
+sdks/
+├── dart/murmur_protocol/       # Flutter and pure-Dart surface
+├── typescript/                 # Node, Electron, web, React Native
+├── python/                     # research, automation, AI services
+└── rust/murmur-protocol/       # native, sidecar, server, embedded
+connectors/                     # connector manifests and packages
+apps/flutter/                   # reference mobile experience
+agents/                         # remote-manager implementations
 ```
-
-The migration from the current feature-based app layout should happen in small,
-reviewable steps rather than a single repository-wide move.
 
 ## Privacy and security invariants
 
@@ -161,6 +177,9 @@ reviewable steps rather than a single repository-wide move.
 - Remote actions require structured commands and a policy decision.
 - Destructive or sensitive actions require confirmation.
 - Every long-lived session has an explicit, idempotent close path.
+- Late events from a cancelled or superseded session cannot dispatch actions.
+- Speech output gates recognition so the application cannot transcribe itself.
+- Diagnostics contain lifecycle metadata and text lengths, not speech content.
 - Tests and examples use synthetic audio unless redistribution and consent are
   documented.
 

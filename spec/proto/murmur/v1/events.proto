@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package murmur.v1;
+
+import "murmur/v1/common.proto";
+import "murmur/v1/intent.proto";
+import "murmur/v1/session.proto";
+
+option java_multiple_files = true;
+option java_package = "dev.murmur.protocol.v1";
+option swift_prefix = "MRM";
+
+enum TranscriptKind {
+  TRANSCRIPT_KIND_UNSPECIFIED = 0;
+  TRANSCRIPT_KIND_PARTIAL = 1;
+  TRANSCRIPT_KIND_FINAL = 2;
+  TRANSCRIPT_KIND_REJECTED = 3;
+}
+
+message SessionStateChanged {
+  SessionState previous = 1;
+  SessionState current = 2;
+}
+
+message CaptureReadiness {
+  bool live = 1;
+}
+
+message AudioLevel {
+  // Normalized 0.0 through 1.0.
+  float amplitude = 1;
+}
+
+message Transcript {
+  TranscriptKind kind = 1;
+  string text = 2;
+  string provider_id = 3;
+  float confidence = 4;
+}
+
+message RuntimeEvent {
+  ProtocolVersion protocol = 1;
+  string session_id = 2;
+  uint64 sequence = 3;
+  uint64 monotonic_time_us = 4;
+
+  oneof payload {
+    SessionStateChanged session_state_changed = 10;
+    CaptureReadiness capture_readiness = 11;
+    AudioLevel audio_level = 12;
+    Transcript transcript = 13;
+    MurmurError error = 14;
+    IntentProposal intent_proposal = 15;
+    ConfirmationRequest confirmation_request = 16;
+    ActionResult action_result = 17;
+  }
+}

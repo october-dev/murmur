@@ -1,0 +1,20 @@
+{
+  "$schema": "../../spec/connector-manifest.schema.json",
+  "id": "dev.murmur.connector.omi",
+  "name": "Omi",
+  "version": "0.1.0",
+  "protocolMajor": 1,
+  "status": "experimental",
+  "transports": ["bluetooth-le"],
+  "capabilities": ["discovery", "connection"],
+  "implementation": {
+    "language": "dart",
+    "sdk": "murmur_protocol",
+    "path": "apps/flutter/lib/src/features/device"
+  },
+  "platforms": ["android", "ios"],
+  "licenses": {
+    "implementation": "Apache-2.0",
+    "protocolReference": "MIT"
+  }
+}
