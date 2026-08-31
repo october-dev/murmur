@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package murmur.v1;
+
+option java_multiple_files = true;
+option java_package = "dev.murmur.protocol.v1";
+option swift_prefix = "MRM";
+
+// The wire-contract version, independent of any SDK or application version.
+message ProtocolVersion {
+  uint32 major = 1;
+  uint32 minor = 2;
+}
+
+// Stable machine-readable failure data. Human messages are safe for display
+// but are not stable API and must not contain speech, credentials, or audio.
+message MurmurError {
+  string code = 1;
+  string message = 2;
+  bool retryable = 3;
+  map<string, string> metadata = 4;
+}

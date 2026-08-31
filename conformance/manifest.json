@@ -1,0 +1,11 @@
+{
+  "protocol": { "major": 1, "minor": 0 },
+  "fixtureSets": [
+    {
+      "name": "runtime-events",
+      "path": "fixtures/runtime-events.jsonl",
+      "events": 7,
+      "synthetic": true
+    }
+  ]
+}

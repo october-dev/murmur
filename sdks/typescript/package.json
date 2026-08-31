@@ -1,0 +1,19 @@
+{
+  "name": "@murmur/protocol",
+  "version": "0.1.0",
+  "description": "Language-neutral Murmur voice protocol models for TypeScript.",
+  "type": "module",
+  "private": true,
+  "exports": "./src/index.ts",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "node --test test/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.8.0"
+  },
+  "engines": {
+    "node": ">=22.18"
+  }
+}

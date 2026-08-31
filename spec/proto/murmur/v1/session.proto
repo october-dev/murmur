@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package murmur.v1;
+
+import "murmur/v1/common.proto";
+import "murmur/v1/source.proto";
+
+option java_multiple_files = true;
+option java_package = "dev.murmur.protocol.v1";
+option swift_prefix = "MRM";
+
+enum CaptureMode {
+  CAPTURE_MODE_UNSPECIFIED = 0;
+  CAPTURE_MODE_TAP_TO_SPEAK = 1;
+  CAPTURE_MODE_HOLD_TO_TALK = 2;
+  CAPTURE_MODE_HANDS_FREE = 3;
+  CAPTURE_MODE_WAKE_PHRASE = 4;
+}
+
+enum SessionState {
+  SESSION_STATE_UNSPECIFIED = 0;
+  SESSION_STATE_IDLE = 1;
+  SESSION_STATE_STARTING = 2;
+  SESSION_STATE_LISTENING = 3;
+  SESSION_STATE_WARM_MUTED = 4;
+  SESSION_STATE_FINALIZING = 5;
+  SESSION_STATE_STOPPED = 6;
+  SESSION_STATE_ERROR = 7;
+}
+
+enum AudioEncoding {
+  AUDIO_ENCODING_UNSPECIFIED = 0;
+  AUDIO_ENCODING_PCM_S16LE = 1;
+  AUDIO_ENCODING_PCM_F32LE = 2;
+  AUDIO_ENCODING_OPUS = 3;
+}
+
+message AudioFormat {
+  uint32 sample_rate_hz = 1;
+  uint32 channels = 2;
+  AudioEncoding encoding = 3;
+  uint32 frame_duration_ms = 4;
+}
+
+message StartSession {
+  VoiceSource source = 1;
+  CaptureMode mode = 2;
+  AudioFormat requested_format = 3;
+}
+
+message StopSession {
+  string reason = 1;
+}
+
+message SetInputGate {
+  bool open = 1;
+  // When closing, allow audio already accepted by the provider to finalize.
+  bool flush_accepted_audio = 2;
+}
+
+message FinalizeSession {}
+
+message SessionControl {
+  ProtocolVersion protocol = 1;
+  string session_id = 2;
+  uint64 request_sequence = 3;
+
+  oneof command {
+    StartSession start = 10;
+    StopSession stop = 11;
+    SetInputGate input_gate = 12;
+    FinalizeSession finalize = 13;
+  }
+}
+
+message AudioFrame {
+  ProtocolVersion protocol = 1;
+  string session_id = 2;
+  uint64 sequence = 3;
+  uint64 monotonic_time_us = 4;
+  AudioFormat format = 5;
+  bytes payload = 6;
+}

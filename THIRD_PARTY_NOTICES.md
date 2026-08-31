@@ -4,7 +4,7 @@
 
 Murmur's initial Omi device integration uses the Omi BLE service UUID,
 device-detection behavior, and the wearable product image at
-`assets/images/omi-wearable.webp` documented in and adapted from
+`apps/flutter/assets/images/omi-wearable.webp` documented in and adapted from
 [BasedHardware/omi](https://github.com/BasedHardware/omi). The image originates
 from `app/assets/images/omi-without-rope.webp` in that repository.
 

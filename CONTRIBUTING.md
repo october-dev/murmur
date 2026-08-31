@@ -22,15 +22,18 @@ public contract, storage backend, or remote command.
 
 Prerequisites:
 
-- Flutter 3.35 or newer
-- an iOS or Android toolchain for platform work
-- a physical device for Bluetooth validation
+- `protoc` 29 or newer for protocol changes
+- the toolchain for the SDK you are changing
+- Flutter 3.35 or newer for the reference app
+- an iOS or Android toolchain and physical device for Bluetooth validation
 
 ```bash
-flutter pub get
-flutter analyze
-flutter test
+make check
 ```
+
+Use `make check-protocol`, `check-conformance`, `check-dart`, `check-flutter`,
+`check-typescript`, `check-python`, or `check-rust` to run one surface. CI runs
+all surfaces on every pull request.
 
 Standard simulators do not provide the complete BLE path. Most core, provider,
 and UI changes should still be testable without physical hardware through fakes
@@ -40,6 +43,10 @@ and recorded protocol fixtures.
 
 - Keep the core source-neutral; do not add Omi or provider assumptions to shared
   contracts.
+- Treat `spec/proto/murmur/v1` as the canonical public contract; no SDK owns the
+  wire model.
+- Add or update shared conformance fixtures for observable protocol behavior.
+- Preserve protobuf field numbers and enum values within a protocol major.
 - Keep transport, audio processing, providers, storage, and UI behind separate
   boundaries.
 - Make start, stop, disconnect, cancellation, and cleanup behavior explicit.
@@ -87,7 +94,8 @@ Experimental support is welcome when its status is explicit.
 
 - Keep the change focused on one issue.
 - Add or update tests for behavior changes.
-- Run `flutter analyze` and `flutter test`.
+- Run the relevant `make check-*` targets; run `make check` when all toolchains
+  are available.
 - Update public documentation when behavior or contracts change.
 - Link the issue and explain how each acceptance criterion is satisfied.
 - Call out untested platforms or hardware honestly.

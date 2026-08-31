@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package murmur.v1;
+
+import "google/protobuf/struct.proto";
+
+option java_multiple_files = true;
+option java_package = "dev.murmur.protocol.v1";
+option swift_prefix = "MRM";
+
+enum ActionRisk {
+  ACTION_RISK_UNSPECIFIED = 0;
+  ACTION_RISK_READ_ONLY = 1;
+  ACTION_RISK_REVERSIBLE = 2;
+  ACTION_RISK_SENSITIVE = 3;
+  ACTION_RISK_DESTRUCTIVE = 4;
+}
+
+message ProposedAction {
+  string action_id = 1;
+  string tool = 2;
+  google.protobuf.Struct arguments = 3;
+  ActionRisk risk = 4;
+  bool confirmation_required = 5;
+}
+
+message IntentProposal {
+  string proposal_id = 1;
+  repeated ProposedAction actions = 2;
+  string clarification = 3;
+  uint64 expires_at_unix_ms = 4;
+}
+
+message ConfirmationRequest {
+  string proposal_id = 1;
+  repeated string action_ids = 2;
+  string prompt = 3;
+}
+
+enum ActionStatus {
+  ACTION_STATUS_UNSPECIFIED = 0;
+  ACTION_STATUS_STARTED = 1;
+  ACTION_STATUS_SUCCEEDED = 2;
+  ACTION_STATUS_FAILED = 3;
+  ACTION_STATUS_REJECTED = 4;
+  ACTION_STATUS_CANCELLED = 5;
+}
+
+message ActionResult {
+  string proposal_id = 1;
+  string action_id = 2;
+  ActionStatus status = 3;
+  google.protobuf.Struct output = 4;
+  string error_code = 5;
+}

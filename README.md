@@ -23,11 +23,12 @@ wearables, the phone microphone, headsets, computers, servers, network streams,
 and future hardware through adapters behind one source-neutral contract.
 
 > [!NOTE]
-> Murmur is early-stage. The current Flutter app can discover nearby Omi
+> Murmur is early-stage. The versioned protocol, conformance fixtures, and
+> initial Dart, TypeScript, Python, and Rust SDK models are in place. The
+> Flutter reference app can discover nearby Omi
 > wearables, connect or disconnect over Bluetooth Low Energy, and show the live
-> connection state. The generalized voice runtime, audio streaming, provider
-> adapters, and additional connectors are active roadmap work—not finished
-> features.
+> connection state. Audio streaming, the capture coordinator, provider adapters,
+> and additional connectors remain active roadmap work—not finished features.
 
 ## Voice as a modality
 
@@ -78,45 +79,49 @@ Murmur is one project with several cooperating surfaces:
 
 | Surface | Purpose | Status |
 | --- | --- | --- |
-| Voice runtime | Source-neutral sessions, audio frames, events, and capability contracts | Planned |
-| Connector SDK | A stable way to add wearables, microphones, and network sources | Planned |
+| Protocol | Versioned source, session, audio, transcript, intent, and action contracts | `murmur.v1` implemented |
+| Conformance suite | Shared fixtures and compatibility behavior across languages | Initial runtime-event suite implemented |
+| SDKs | Native Murmur models for Dart, TypeScript, Python, and Rust | Initial models implemented |
+| Voice runtime | Race-safe capture, endpointing, provider, and output coordination | Designed; implementation planned |
+| Connector contract | A stable way to add wearables, microphones, and network sources | Manifest and protocol implemented |
 | Omi connector | BLE discovery, connection, and audio transport for Omi hardware | Connection implemented; audio planned |
 | Provider adapters | Transcription, language-model, embedding, and speech output integrations | Planned |
 | Flutter app | Pair sources, configure providers, capture, review, search, and act | Omi connection implemented |
 | Remote agent protocol | Permissioned commands and audited results across computers and servers | Design stage |
 
-The runtime and connector contracts are intended to become an importable Dart
-package. The app remains the reference implementation and end-user experience.
+The protocol is the product boundary. SDKs, connectors, apps, and agents are
+replaceable implementations. Flutter is the first reference experience, not a
+requirement for using Murmur.
 
 ## Architecture
 
 ```text
- voice sources
+ voice sources and host runtimes
  ┌──────────┬──────────┬──────────┬──────────┬───────────┐
  │ Omi BLE  │ phone mic│ headsets │ desktop  │ net stream│
  └────┬─────┴────┬─────┴────┬─────┴────┬─────┴─────┬─────┘
       └───────────┴───────────┼───────────┴───────────┘
                               ▼
-                  connector + capability layer
+                  connectors + providers
                               │
                               ▼
-            voice session ─► normalized audio frames
-                              │
-                 ┌────────────┼────────────┐
-                 ▼            ▼            ▼
-                VAD     transcription     local store
+                  Murmur SDK implementation
                               │
                               ▼
-                    typed voice events
+        murmur.v1 protocol + conformance fixtures
                               │
-            ┌─────────────────┼──────────────────┐
-            ▼                 ▼                  ▼
-        host apps         AI providers      remote agents
+             ┌────────────────┼────────────────┐
+             ▼                ▼                ▼
+       Flutter/mobile   Electron/web     servers/agents
+                              │
+                              ▼
+              typed transcripts, intents, and results
 ```
 
-Core code does not depend on a particular device, provider, UI, or remote
-transport. Connectors describe their capabilities; consumers decide what to do
-with the events they support. See [docs/architecture.md](docs/architecture.md)
+Protocol and conformance code does not depend on a particular language, device,
+provider, UI, or remote transport. Connectors describe their capabilities;
+consumers decide what to do with the events they support. See
+[docs/architecture.md](docs/architecture.md)
 for the proposed contracts, dependency rules, and package boundaries. The
 [voice runtime design](docs/voice-runtime.md) captures the lifecycle,
 endpointing, provider fallback, offline model-pack, and echo-protection patterns
@@ -143,8 +148,11 @@ capture optional instead of leaking device assumptions into the core.
 
 ## Technical direction
 
-- A **Dart-first core contract** shared by the package and reference app.
-- A **Flutter** client for iOS and Android.
+- A **protocol-first contract** defined with Protocol Buffers and ProtoJSON.
+- Shared **conformance fixtures** that every SDK and transport must pass.
+- Small SDKs for **Dart, TypeScript, Python, and Rust**, with more languages
+  added without changing the protocol.
+- A **Flutter reference client** for iOS and Android.
 - Transport-specific connectors, with Omi-compatible BLE implemented first
   through `flutter_reactive_ble`.
 - Direct provider calls where practical, with an optional self-hosted gateway
@@ -159,20 +167,37 @@ capture optional instead of leaking device assumptions into the core.
 
 | Area | Choice |
 | --- | --- |
-| Core and mobile | Dart and Flutter |
-| State | Riverpod |
-| Navigation | `go_router` |
-| Bluetooth LE | `flutter_reactive_ble` behind connector interfaces |
-| Local data | Drift and SQLite |
-| Secrets | `flutter_secure_storage` |
-| Provider APIs | Dart HTTP and WebSockets |
+| Canonical contract | Protocol Buffers plus ProtoJSON |
+| Compatibility | Language-neutral conformance fixtures |
+| SDKs | Dart, TypeScript, Python, and Rust |
+| Reference mobile app | Flutter, Riverpod, and `go_router` |
+| Initial Bluetooth connector | `flutter_reactive_ble` behind Murmur contracts |
+| Reference local data | Drift and SQLite |
+| Reference secret storage | `flutter_secure_storage` |
+| Transports | In-process, WebSocket, gRPC, stdio, local socket, or FFI |
 | Remote control | Authenticated agents with an optional relay |
 | Backend | None required for local capture and processing |
 
 ## Current implementation
 
-Murmur currently targets iOS and Android and uses the application ID
-`dev.october.murmur`.
+The repository is a framework-neutral monorepo:
+
+```text
+spec/                 murmur.v1 protobuf schemas
+conformance/          cross-language fixtures
+sdks/                 Dart, TypeScript, Python, and Rust models
+connectors/            connector manifests and implementations
+apps/flutter/          iOS and Android reference app
+agents/                remote-agent boundary
+```
+
+Validate the protocol and shared fixtures with:
+
+```bash
+make check-protocol check-conformance
+```
+
+The reference app uses the application ID `dev.october.murmur`. To run it:
 
 Prerequisites:
 
@@ -180,6 +205,7 @@ Prerequisites:
 - the iOS or Android toolchain for the platform you want to run
 
 ```bash
+cd apps/flutter
 flutter pub get
 flutter run
 ```
@@ -196,9 +222,11 @@ provider.
 Before submitting changes:
 
 ```bash
-flutter analyze
-flutter test
+make check
 ```
+
+Individual `make check-*` targets are available when a contributor only has the
+toolchain for one SDK. CI runs every supported language independently.
 
 ## Provider model
 
@@ -267,7 +295,10 @@ provider-specific privacy implications.
 - [x] Choose Flutter for the cross-platform reference app
 - [x] Scaffold the iOS and Android app
 - [x] Discover Omi hardware and show its live BLE connection state
-- [ ] Define the source-neutral voice runtime and typed event contracts
+- [x] Define the language-neutral `murmur.v1` protocol and typed event envelope
+- [x] Add shared conformance fixtures
+- [x] Scaffold Dart, TypeScript, Python, and Rust SDK models
+- [x] Make Flutter a reference consumer under `apps/flutter`
 - [ ] Refactor Omi behind the shared connector interface
 - [ ] Add a phone-microphone reference connector
 - [ ] Validate Omi BLE audio streaming and normalize its audio frames
@@ -282,7 +313,7 @@ provider-specific privacy implications.
 - [ ] Add local history, search, export, retention, and deletion
 - [ ] Document and test the process for adding more voice connectors
 - [ ] Design and implement the authenticated remote-agent protocol
-- [ ] Package the reusable runtime for other Flutter and Dart applications
+- [ ] Implement the reusable capture runtime across the first SDKs
 - [ ] Identify reusable fixes and contribute them upstream to Omi
 
 ## Relationship to Omi

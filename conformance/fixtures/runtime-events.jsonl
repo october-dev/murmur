@@ -1,0 +1,7 @@
+{"protocol":{"major":1,"minor":0},"sessionId":"session-test-1","sequence":"1","monotonicTimeUs":"1000","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_STARTING"}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-test-1","sequence":"2","monotonicTimeUs":"2000","captureReadiness":{"live":true}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-test-1","sequence":"3","monotonicTimeUs":"3000","audioLevel":{"amplitude":0.25}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-test-1","sequence":"4","monotonicTimeUs":"4000","transcript":{"kind":"TRANSCRIPT_KIND_PARTIAL","text":"synthetic hello","providerId":"fake","confidence":0.5}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-test-1","sequence":"5","monotonicTimeUs":"5000","transcript":{"kind":"TRANSCRIPT_KIND_FINAL","text":"synthetic hello world","providerId":"fake","confidence":1.0}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-test-1","sequence":"6","monotonicTimeUs":"6000","intentProposal":{"proposalId":"proposal-test-1","actions":[{"actionId":"action-test-1","tool":"system.status","arguments":{},"risk":"ACTION_RISK_READ_ONLY","confirmationRequired":false}],"expiresAtUnixMs":"4102444800000"}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-test-1","sequence":"7","monotonicTimeUs":"7000","actionResult":{"proposalId":"proposal-test-1","actionId":"action-test-1","status":"ACTION_STATUS_SUCCEEDED","output":{"ok":true}}}

@@ -1,0 +1,12 @@
+name: murmur_protocol
+description: Language-neutral Murmur voice protocol models for Dart and Flutter.
+version: 0.1.0
+repository: https://github.com/october-dev/murmur
+publish_to: none
+
+environment:
+  sdk: ^3.9.2
+
+dev_dependencies:
+  lints: ^5.1.1
+  test: ^1.26.2

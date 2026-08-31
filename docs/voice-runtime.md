@@ -30,10 +30,11 @@ final transcript or proposed intent is used.
 The runtime must be usable without October, Omi, Flutter widgets, a paid
 service, or a network connection.
 
-## Proposed contracts
+## Proposed runtime contracts
 
-The exact Dart API will be finalized through GitHub issues. The public model
-should preserve these concepts:
+The language-neutral event envelope is defined in `murmur.v1`. Each SDK can
+offer an idiomatic coordinator and provider API, but its observable behavior
+should preserve these concepts and pass the shared conformance suite:
 
 ### `VoiceProvider`
 
@@ -235,14 +236,17 @@ implementation part of its Apache-licensed core.
 
 ## Implementation sequence
 
-1. Land pure-Dart provider, event, and capture-state contracts.
-2. Build a deterministic fake provider that can delay startup, emit partials,
+1. Extend `murmur.v1` and the shared fixtures only when a missing wire concept is
+   proven; keep framework-specific state out of the schema.
+2. Implement the provider and capture-state contracts in the first SDK without
+   changing their cross-language semantics.
+3. Build a deterministic fake provider that can delay startup, emit partials,
    deliver late finals, reject a final, fail, and disconnect.
-3. Implement the capture coordinator and its race-condition test matrix.
-4. Connect phone microphone and Omi audio through the same session boundary.
-5. Add provider selection, graceful fallback, and BYOK credential injection.
-6. Add the atomic on-device model-pack manager.
-7. Add speech feedback and echo-loop protection.
-8. Add typed intent proposals and the confirmation boundary.
+4. Implement the capture coordinator and its race-condition test matrix.
+5. Connect phone microphone and Omi audio through the same session boundary.
+6. Add provider selection, graceful fallback, and BYOK credential injection.
+7. Add the atomic on-device model-pack manager.
+8. Add speech feedback and echo-loop protection.
+9. Add typed intent proposals and the confirmation boundary.
 
 Each stage should be useful and reviewable without waiting for the entire stack.

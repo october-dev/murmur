@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "murmur-protocol"
+version = "0.1.0"
+description = "Language-neutral Murmur voice protocol models for Python."
+requires-python = ">=3.11"
+license = "Apache-2.0"
+
+[tool.setuptools.packages.find]
+where = ["src"]

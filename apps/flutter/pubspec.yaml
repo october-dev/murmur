@@ -1,0 +1,33 @@
+name: murmur_app
+description: "Flutter reference app for the framework-neutral Murmur voice protocol."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  drift: ^2.31.0
+  flutter:
+    sdk: flutter
+  flutter_reactive_ble: ^5.4.2
+  flutter_riverpod: ^3.3.2
+  flutter_secure_storage: ^10.3.1
+  go_router: ^17.2.3
+  http: ^1.6.0
+  murmur_protocol:
+    path: ../../sdks/dart/murmur_protocol
+  path_provider: ^2.1.5
+  permission_handler: ^11.4.0
+  sqlite3: ^2.9.4
+  web_socket_channel: ^3.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/omi-wearable.webp

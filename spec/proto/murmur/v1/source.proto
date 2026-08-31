@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package murmur.v1;
+
+option java_multiple_files = true;
+option java_package = "dev.murmur.protocol.v1";
+option swift_prefix = "MRM";
+
+enum SourceTransport {
+  SOURCE_TRANSPORT_UNSPECIFIED = 0;
+  SOURCE_TRANSPORT_BLUETOOTH_LE = 1;
+  SOURCE_TRANSPORT_LOCAL_AUDIO = 2;
+  SOURCE_TRANSPORT_NETWORK = 3;
+  SOURCE_TRANSPORT_FILE = 4;
+  SOURCE_TRANSPORT_SYNTHETIC = 5;
+}
+
+enum SourceCapability {
+  SOURCE_CAPABILITY_UNSPECIFIED = 0;
+  SOURCE_CAPABILITY_LIVE_AUDIO = 1;
+  SOURCE_CAPABILITY_STORED_AUDIO = 2;
+  SOURCE_CAPABILITY_BATTERY = 3;
+  SOURCE_CAPABILITY_HARDWARE_CONTROL = 4;
+  SOURCE_CAPABILITY_OUTPUT_AUDIO = 5;
+  SOURCE_CAPABILITY_BACKGROUND_CAPTURE = 6;
+  SOURCE_CAPABILITY_INPUT_MUTE = 7;
+  SOURCE_CAPABILITY_SPEAKER_VERIFICATION = 8;
+}
+
+message VoiceSource {
+  string source_id = 1;
+  string display_name = 2;
+  SourceTransport transport = 3;
+  repeated SourceCapability capabilities = 4;
+  // Non-sensitive connector metadata. Credentials, raw device identifiers,
+  // signed URLs, and user speech are forbidden here.
+  map<string, string> metadata = 5;
+}
