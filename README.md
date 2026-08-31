@@ -8,81 +8,168 @@
 
 # Murmur
 
-**Your wearable. Your models. Your memory.**
+**Voice belongs everywhere.**
 
-Murmur is an open-source mobile app for connecting AI wearables to the services you already pay for. Pair a device, add your own provider keys, and turn captured audio into transcripts, summaries, memories, and actions—without being locked into an expensive subscription.
+Murmur is an open-source voice modality layer and reference app for devices,
+applications, and agents. It gives software a consistent way to discover voice
+sources, capture audio, produce transcripts and structured intent, and route
+approved actions—without coupling every product to one wearable, model vendor,
+or cloud.
 
-The first target is the [Omi wearable](https://github.com/BasedHardware/omi). The longer-term goal is a small, device-agnostic foundation that can support other Bluetooth voice wearables through adapters.
+[Omi](https://github.com/BasedHardware/omi) is Murmur's flagship wearable
+connector and the first real hardware integration. It is a major part of the
+project, but not its boundary. Murmur is designed to accept voice from AI
+wearables, the phone microphone, headsets, computers, servers, network streams,
+and future hardware through adapters behind one source-neutral contract.
 
 > [!NOTE]
-> Murmur can now discover nearby Omi wearables, connect or disconnect over Bluetooth Low Energy, and show the live connection state. Audio capture and AI features are not implemented yet.
+> Murmur is early-stage. The current Flutter app can discover nearby Omi
+> wearables, connect or disconnect over Bluetooth Low Energy, and show the live
+> connection state. The generalized voice runtime, audio streaming, provider
+> adapters, and additional connectors are active roadmap work—not finished
+> features.
 
-## Why this project
+## Voice as a modality
 
-AI wearables are useful, but their companion apps often tie the hardware to one cloud, one model, and one recurring plan. Hardware owners should be able to choose how their audio is processed and where their data lives.
+Voice is more than a recorder screen. It is an input modality that applications
+should be able to consume as predictably as touch, keyboard, pointer, or gaze.
+Murmur separates that modality into reusable layers:
 
-Murmur aims to provide:
+1. **Connect** to an available voice source.
+2. **Capture** normalized audio frames with explicit session state.
+3. **Transform** speech through interchangeable transcription, language, and
+   text-to-speech providers.
+4. **Emit** typed events such as partial transcripts, final transcripts,
+   proposed intents, and action results.
+5. **Act** through permissioned integrations while treating model output as
+   untrusted input.
 
-- **Bring your own keys** — connect transcription and AI providers you choose.
-- **Hardware choice** — start with Omi and add devices behind a common interface.
-- **Provider choice** — avoid coupling the experience to a single model vendor.
-- **Remote control** — securely send approved voice commands to your computers, servers, and automations from wherever you are.
-- **Privacy by design** — make capture visible, obtain consent, minimize retention, and keep secrets in platform-secure storage.
-- **Open source** — make the client and device integrations inspectable and community-driven.
-- **Useful basics** — live transcription, summaries, searchable conversations, notes, and action items without unnecessary complexity.
+An app should not need to understand Omi BLE characteristics to receive speech,
+and an Omi connector should not need to know which transcription provider or
+agent consumes its audio.
 
-## Product direction
+## Why Murmur
 
-The initial experience should be deliberately small:
+Voice products are commonly built as closed vertical stacks: one microphone,
+one app, one cloud, one model, and one subscription. That makes useful hardware
+hard to extend and forces every app team to rebuild capture, permissions,
+provider integrations, session state, and safety controls.
 
-1. Pair an Omi device over Bluetooth Low Energy.
-2. Configure a speech-to-text provider and an LLM using your own API keys.
-3. Start and stop capture with an unmistakable in-app state.
-4. Stream or upload audio for transcription.
-5. Generate a summary, notes, and action items.
-6. Search or export your own conversation history.
+Murmur provides an open alternative:
 
-Omi support is the first milestone. Support for additional wearables should arrive through device adapters only after the core flow is reliable.
+- **Voice-source choice** — wearables, phones, headsets, computers, and streams
+  connect through adapters.
+- **Bring your own models** — use hosted or local speech, language, and voice
+  providers through small interfaces.
+- **Embeddable runtime** — applications consume normalized voice events instead
+  of device-specific transport details.
+- **Reference app** — the Flutter client proves the same public contracts used
+  by other applications.
+- **Remote control** — approved voice commands can reach paired computers,
+  servers, and automations through a secure protocol.
+- **Local-first ownership** — users control keys, recordings, transcripts,
+  retention, deletion, and export.
+- **Open connectors** — hardware support is inspectable, testable, and reusable
+  by the community.
+
+## Project surfaces
+
+Murmur is one project with several cooperating surfaces:
+
+| Surface | Purpose | Status |
+| --- | --- | --- |
+| Voice runtime | Source-neutral sessions, audio frames, events, and capability contracts | Planned |
+| Connector SDK | A stable way to add wearables, microphones, and network sources | Planned |
+| Omi connector | BLE discovery, connection, and audio transport for Omi hardware | Connection implemented; audio planned |
+| Provider adapters | Transcription, language-model, embedding, and speech output integrations | Planned |
+| Flutter app | Pair sources, configure providers, capture, review, search, and act | Omi connection implemented |
+| Remote agent protocol | Permissioned commands and audited results across computers and servers | Design stage |
+
+The runtime and connector contracts are intended to become an importable Dart
+package. The app remains the reference implementation and end-user experience.
 
 ## Architecture
 
 ```text
-Wearable
-   │ Bluetooth LE
-   ▼
-Device adapter ──► audio pipeline ──► transcription provider
-                                           │
-                                           ▼
-Local conversation store ◄──────────── AI provider
-          │
-          └──► summaries, notes, actions, and export
+ voice sources
+ ┌──────────┬──────────┬──────────┬──────────┬───────────┐
+ │ Omi BLE  │ phone mic│ headsets │ desktop  │ net stream│
+ └────┬─────┴────┬─────┴────┬─────┴────┬─────┴─────┬─────┘
+      └───────────┴───────────┼───────────┴───────────┘
+                              ▼
+                  connector + capability layer
+                              │
+                              ▼
+            voice session ─► normalized audio frames
+                              │
+                 ┌────────────┼────────────┐
+                 ▼            ▼            ▼
+                VAD     transcription     local store
+                              │
+                              ▼
+                    typed voice events
+                              │
+            ┌─────────────────┼──────────────────┐
+            ▼                 ▼                  ▼
+        host apps         AI providers      remote agents
 ```
 
-Current technical direction:
+Core code does not depend on a particular device, provider, UI, or remote
+transport. Connectors describe their capabilities; consumers decide what to do
+with the events they support. See [docs/architecture.md](docs/architecture.md)
+for the proposed contracts, dependency rules, and package boundaries.
 
-- A **Flutter and Dart** mobile client for iOS and Android.
-- Omi-compatible BLE audio as the first device adapter.
-- Direct provider calls where practical, with an optional self-hosted gateway only where mobile limitations require one.
-- API keys stored using iOS Keychain / Android Keystore-backed secure storage and never committed or synced by default.
-- A local-first data model with explicit opt-in for any cloud synchronization.
+## First-class voice sources
+
+The connector model covers multiple source families:
+
+- **AI wearables** — Omi first, followed by community-supported devices with
+  documented protocols and compatible licenses.
+- **Phone and tablet microphones** — a zero-hardware path for development,
+  accessibility, and everyday use.
+- **Headsets and microphones** — operating-system audio inputs, including wired,
+  Bluetooth, and USB devices where the platform exposes them.
+- **Desktop and server capture** — local agents that publish permissioned audio
+  sessions or voice events.
+- **Network and recorded sources** — test fixtures, files, and authenticated
+  streams for automation and reproducible development.
+
+Not every connector exposes the same controls. Capability discovery keeps
+battery state, hardware buttons, speaker output, codec selection, and background
+capture optional instead of leaking device assumptions into the core.
+
+## Technical direction
+
+- A **Dart-first core contract** shared by the package and reference app.
+- A **Flutter** client for iOS and Android.
+- Transport-specific connectors, with Omi-compatible BLE implemented first
+  through `flutter_reactive_ble`.
+- Direct provider calls where practical, with an optional self-hosted gateway
+  only when platform limitations require one.
+- API keys stored using iOS Keychain / Android Keystore-backed secure storage
+  and never committed or synchronized by default.
+- A local-first data model with explicit opt-in for cloud synchronization.
+- Typed events and structured commands instead of passing untrusted model text
+  directly into tools.
 
 ### Stack
 
 | Area | Choice |
 | --- | --- |
-| UI | Flutter |
+| Core and mobile | Dart and Flutter |
 | State | Riverpod |
 | Navigation | `go_router` |
-| Bluetooth LE | `flutter_reactive_ble` behind wearable adapters |
+| Bluetooth LE | `flutter_reactive_ble` behind connector interfaces |
 | Local data | Drift and SQLite |
 | Secrets | `flutter_secure_storage` |
 | Provider APIs | Dart HTTP and WebSockets |
 | Remote control | Authenticated agents with an optional relay |
-| Backend | None required for the initial app |
+| Backend | None required for local capture and processing |
 
-## Development
+## Current implementation
 
-Murmur currently targets iOS and Android and uses the application ID `dev.october.murmur`.
+Murmur currently targets iOS and Android and uses the application ID
+`dev.october.murmur`.
 
 Prerequisites:
 
@@ -94,9 +181,14 @@ flutter pub get
 flutter run
 ```
 
-Run Murmur on a physical iOS or Android device: Bluetooth discovery is not available in the standard mobile simulators. Wake the Omi, keep it nearby, allow Bluetooth/Nearby devices access when prompted, and tap **Scan for Omi**. The app only shows devices advertising Omi's BLE service.
+Run the Omi connection flow on a physical iOS or Android device: Bluetooth
+discovery is not available in standard mobile simulators. Wake the Omi, keep it
+nearby, allow Bluetooth or Nearby devices access when prompted, and tap
+**Scan for Omi**. The app currently shows devices advertising Omi's BLE service.
 
-The current milestone deliberately stops at a verified BLE connection. It does not subscribe to the microphone characteristic, record audio, or send data to a provider.
+The current milestone stops at a verified BLE connection. It does not yet
+subscribe to the microphone characteristic, record audio, or send data to a
+provider.
 
 Before submitting changes:
 
@@ -105,86 +197,120 @@ flutter analyze
 flutter test
 ```
 
-## Possible provider support
+## Provider model
 
-Provider support will be decided during implementation. Likely categories include:
+Transcription and intelligence sit behind provider-neutral adapters. The same
+voice session can be processed by a user-selected hosted service, a local model,
+or a self-hosted endpoint without changing the connector.
 
-- Speech-to-text services
-- Hosted or local language models
-- Embedding and search providers
-- Optional user-owned storage or sync backends
+Provider families include:
 
-The provider layer should use small adapters so users are not forced into one vendor.
+- speech-to-text and diarization
+- language models and structured intent
+- embeddings and search
+- text-to-speech and wearable response channels
+- user-owned storage or synchronization backends
+
+Murmur does not require users to send recordings to an October-operated service.
 
 ## Remote manager
 
-Murmur should turn a wearable into a secure remote manager. You could speak into your Omi while away from your desk and ask a paired computer or server to check a deployment, start a backup, run an approved automation, or report its status. The result should return to Murmur as a readable response and, where the device permits it, a spoken response.
+Murmur turns voice into a secure remote-management modality. A user can speak
+through an Omi, phone, headset, or another connector while away from their desk
+and ask a paired computer or server to check a deployment, start a backup, run
+an approved automation, or report status.
 
 ```text
-Omi → Murmur → transcription and intent → permission check
-                                                │
-                                                ▼
-                                      encrypted relay or tunnel
-                                                │
-                              ┌─────────────────┴─────────────────┐
-                              ▼                                   ▼
-                    agent on your computer              agent on your server
-                              │                                   │
-                              └────────── result and audit ───────┘
+voice source → Murmur → transcript + structured intent → permission check
+                                                        │
+                                                        ▼
+                                              encrypted relay or tunnel
+                                                        │
+                                      ┌─────────────────┴─────────────────┐
+                                      ▼                                   ▼
+                            agent on a computer                 agent on a server
+                                      │                                   │
+                                      └──────── result + audit ───────────┘
 ```
 
-Remote control will be opt-in and is not implemented yet. Its design must treat model output as untrusted input rather than executing generated shell commands directly. The first version should require:
+Remote control is opt-in and not implemented yet. Its design treats model output
+as untrusted input rather than executing generated shell commands directly. It
+requires:
 
-- explicitly paired and revocable devices
+- explicitly paired and revocable clients
 - encrypted, authenticated communication
 - allowlisted tools and structured commands
 - confirmation for destructive or sensitive actions
 - least-privilege agents on every target machine
 - a durable audit log of requests, approvals, results, and failures
 
-Users should be able to self-host the remote agent and relay. A managed relay may be considered later, but it must not be required for local wearable features.
+Users can self-host the remote agent and relay. A managed relay may be considered
+later, but it is not required for local voice features.
 
 ## Privacy and responsible recording
 
-A wearable microphone can capture sensitive conversations. The app must make recording status obvious and give people control over collection, retention, deletion, and export. Users are responsible for obtaining consent and following the recording and privacy laws that apply where they live and record.
+A voice modality can capture sensitive conversations regardless of whether its
+microphone is in a wearable, phone, or computer. Murmur makes recording and
+streaming state explicit and gives users control over collection, providers,
+retention, deletion, and export. Users are responsible for obtaining consent
+and following applicable recording and privacy laws.
 
-Before a production release, the project should document its threat model, key storage, data flows, retention defaults, deletion behavior, telemetry, and provider-specific privacy implications.
+Before a production release, the project documents its threat model, key
+storage, data flows, retention defaults, deletion behavior, telemetry, and
+provider-specific privacy implications.
 
 ## Roadmap
 
-- [x] Choose Flutter for the cross-platform mobile client
+- [x] Choose Flutter for the cross-platform reference app
 - [x] Scaffold the iOS and Android app
 - [x] Discover Omi hardware and show its live BLE connection state
-- [ ] Validate Omi BLE audio streaming
-- [ ] Define device, transcription, and AI provider interfaces
+- [ ] Define the source-neutral voice runtime and typed event contracts
+- [ ] Refactor Omi behind the shared connector interface
+- [ ] Add a phone-microphone reference connector
+- [ ] Validate Omi BLE audio streaming and normalize its audio frames
+- [ ] Add provider-neutral transcription interfaces and a deterministic fake
 - [ ] Build secure bring-your-own-key configuration
-- [ ] Ship the basic capture → transcript → summary flow
-- [ ] Add local history, search, export, and deletion
+- [ ] Ship the capture → transcript → summary reference flow
+- [ ] Add local history, search, export, retention, and deletion
+- [ ] Document and test the process for adding more voice connectors
 - [ ] Design and implement the authenticated remote-agent protocol
-- [ ] Document a process for adding more wearable adapters
+- [ ] Package the reusable runtime for other Flutter and Dart applications
 - [ ] Identify reusable fixes and contribute them upstream to Omi
 
 ## Relationship to Omi
 
-[BasedHardware/omi](https://github.com/BasedHardware/omi) is the primary reference for the first device integration. Its open-source Flutter app, firmware, SDKs, and device protocol provide valuable prior art for understanding Omi hardware and BLE audio.
+[BasedHardware/omi](https://github.com/BasedHardware/omi) is the primary
+reference for Murmur's first wearable connector. Its open-source Flutter app,
+firmware, SDKs, and device protocol provide valuable prior art for understanding
+Omi hardware and BLE audio.
 
-Murmur is an independent community project and is not affiliated with or endorsed by Based Hardware or Omi. We intend to respect upstream licensing, clearly attribute reused work, report relevant findings, and contribute generally useful fixes or documentation back to Omi whenever possible.
+Murmur is an independent community project and is not affiliated with or
+endorsed by Based Hardware or Omi. We respect upstream licensing, clearly
+attribute reused work, report relevant findings, and contribute generally useful
+fixes or documentation back to Omi whenever possible.
 
-The initial device detection follows Omi's advertised BLE service and is attributed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+The current device detection follows Omi's advertised BLE service and is
+attributed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Contributing
 
-The project is at an early device-connectivity stage. Contributions are especially useful around:
+Community tasks live in [GitHub Issues](https://github.com/october-dev/murmur/issues).
+Issues marked `good first issue` are deliberately bounded; `help wanted` issues
+benefit from domain or platform experience. Comment on an issue before starting
+large work so connector and public-API decisions stay coordinated.
 
-- Omi protocol and BLE behavior
-- reliable background audio and Bluetooth behavior on iOS and Android
-- secure on-device key and conversation storage
-- provider-neutral interfaces
-- secure remote agents, permissions, and command auditing
-- privacy, consent, and data-retention design
-- accessibility and low-friction mobile UX
+Contributions are especially useful around:
 
-Open an issue with a focused proposal before starting a large implementation.
+- core voice-session, audio-frame, capability, and event contracts
+- Omi protocol behavior and BLE audio
+- phone, headset, desktop, network, and wearable connectors
+- reliable background capture on iOS and Android
+- provider-neutral transcription and AI interfaces
+- secure on-device keys and conversation storage
+- remote-agent permissions, commands, and auditing
+- privacy, consent, accessibility, and data-retention design
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 ## License
 
