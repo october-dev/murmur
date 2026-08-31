@@ -60,6 +60,8 @@ and recorded protocol fixtures.
 Read [docs/architecture.md](docs/architecture.md) before changing a shared
 interface. Read [docs/voice-runtime.md](docs/voice-runtime.md) before changing
 capture lifecycle, provider, endpointing, model-pack, or speech-output behavior.
+Read [docs/connectors/guide.md](docs/connectors/guide.md) before adding a new
+connector.
 
 ## Voice-runtime pull requests
 

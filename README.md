@@ -146,6 +146,11 @@ Not every connector exposes the same controls. Capability discovery keeps
 battery state, hardware buttons, speaker output, codec selection, and background
 capture optional instead of leaking device assumptions into the core.
 
+Community connectors are welcome. See
+[docs/connectors/guide.md](docs/connectors/guide.md) for the full authoring
+reference, manifest schema, lifecycle model, testing requirements, and proposal
+template.
+
 ## Technical direction
 
 - A **protocol-first contract** defined with Protocol Buffers and ProtoJSON.

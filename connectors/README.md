@@ -20,4 +20,8 @@ audio path is being completed. Its manifest makes that limitation explicit and
 allows a native, Rust, TypeScript, or other implementation to be added later
 without changing host applications.
 
+See [docs/connectors/guide.md](../docs/connectors/guide.md) for the full connector
+authoring guide, including the lifecycle, capability model, manifest reference,
+testing requirements, and privacy documentation.
+
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for the connector acceptance rules.
