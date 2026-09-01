@@ -1,0 +1,35 @@
+name: murmur_flutter
+description: Flutter bindings for Murmur voice connectors and native capabilities.
+version: 0.1.0
+repository: https://github.com/october-dev/murmur
+issue_tracker: https://github.com/october-dev/murmur/issues
+
+environment:
+  sdk: ^3.3.0
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  murmur_protocol: ^0.1.0
+
+# Used only while both packages are developed in this monorepo. Remove this
+# override from the release archive after murmur_protocol is on pub.dev.
+dependency_overrides:
+  murmur_protocol:
+    path: ../../../sdks/dart/murmur_protocol
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: dev.october.murmur_flutter
+        pluginClass: MurmurFlutterPlugin
+      ios:
+        pluginClass: MurmurFlutterPlugin
+
+topics:
+  - audio
+  - voice
+  - wearables
+  - flutter-plugin

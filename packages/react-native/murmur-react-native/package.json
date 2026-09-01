@@ -1,0 +1,52 @@
+{
+  "name": "@october-dev/murmur-react-native",
+  "version": "0.1.0",
+  "description": "Native Murmur bindings for Expo and React Native apps on iOS and Android.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/october-dev/murmur.git",
+    "directory": "packages/react-native/murmur-react-native"
+  },
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "default": "./build/index.js"
+    }
+  },
+  "files": [
+    "android",
+    "ios",
+    "build",
+    "app.plugin.js",
+    "expo-module.config.json",
+    "MurmurReactNative.podspec",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "prepare": "expo-module prepare",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@october-dev/murmur-protocol": "0.1.0"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "expo": "*",
+    "expo-module-scripts": "^56.0.3",
+    "react": "*",
+    "react-native": "*",
+    "typescript": "^5.9.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

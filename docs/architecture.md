@@ -163,9 +163,13 @@ sdks/
 ├── typescript/                 # Node, Electron, web, React Native
 ├── python/                     # research, automation, AI services
 └── rust/murmur-protocol/       # native, sidecar, server, embedded
+packages/
+├── flutter/murmur_flutter/     # Flutter native capability binding
+└── react-native/               # Expo / React Native native binding
 connectors/                     # connector manifests and packages
 apps/flutter/                   # reference mobile experience
 agents/                         # remote-manager implementations
+integrations/omarchy/           # Omarchy Quattro bar integration
 ```
 
 ## Privacy and security invariants

@@ -13,10 +13,13 @@ APIs.
 
 | SDK | Intended environments | State |
 | --- | --- | --- |
-| Dart | Flutter and pure-Dart applications | Source and event model implemented |
-| TypeScript | Node, Electron, React Native, and web | Event model implemented |
+| Dart (`murmur_protocol`) | Flutter and pure-Dart applications | Source and event model implemented; pub.dev metadata prepared |
+| TypeScript (`@october-dev/murmur-protocol`) | Node, Electron, React Native, and web | Event model implemented; npm build metadata prepared |
 | Python | Research, automation, and AI services | Event model implemented |
 | Rust | Native runtimes, sidecars, servers, and embedded hosts | Event model implemented |
 
 The SDKs intentionally start small. Audio processing, BLE access, databases,
 and model providers belong in separate packages built on these contracts.
+Framework-native packages live under `packages/` and depend inward on these
+SDKs. In particular, the Expo / React Native package does not define a second
+voice protocol.

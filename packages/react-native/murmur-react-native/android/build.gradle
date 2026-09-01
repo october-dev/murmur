@@ -1,0 +1,12 @@
+apply plugin: 'com.android.library'
+apply plugin: 'expo-module-gradle-plugin'
+
+group = 'dev.october.murmur.reactnative'
+version = '0.1.0'
+
+android {
+  namespace 'dev.october.murmur.reactnative'
+  defaultConfig {
+    minSdkVersion 23
+  }
+}

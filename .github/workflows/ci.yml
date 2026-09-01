@@ -30,7 +30,7 @@ jobs:
           channel: stable
           flutter-version: "3.35.x"
           cache: true
-      - run: make check-dart check-flutter
+      - run: make check-dart check-flutter check-flutter-plugin
 
   typescript:
     runs-on: ubuntu-latest

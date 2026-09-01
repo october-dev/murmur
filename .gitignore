@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub/
 **/build/
 /coverage/
+packages/flutter/murmur_flutter/pubspec.lock
 
 # Symbolication related
 app.*.symbols

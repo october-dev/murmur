@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["MurmurReactNativeModule"]
+  },
+  "android": {
+    "modules": ["dev.october.murmur.reactnative.MurmurReactNativeModule"]
+  }
+}

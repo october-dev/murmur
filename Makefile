@@ -1,8 +1,8 @@
 PROTO_FILES := $(shell find spec/proto -name '*.proto' -type f | sort)
 
-.PHONY: check check-protocol check-conformance check-dart check-flutter check-typescript check-python check-rust
+.PHONY: check check-protocol check-conformance check-dart check-flutter check-flutter-plugin check-typescript check-python check-rust
 
-check: check-protocol check-conformance check-dart check-flutter check-typescript check-python check-rust
+check: check-protocol check-conformance check-dart check-flutter check-flutter-plugin check-typescript check-python check-rust
 
 check-protocol:
 	@descriptor="$$(mktemp)"; \
@@ -17,6 +17,9 @@ check-dart:
 
 check-flutter:
 	cd apps/flutter && flutter pub get && flutter analyze && flutter test
+
+check-flutter-plugin:
+	cd packages/flutter/murmur_flutter && flutter pub get && flutter analyze
 
 check-typescript:
 	cd sdks/typescript && npm ci && npm run check && npm test

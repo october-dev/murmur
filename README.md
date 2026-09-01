@@ -86,7 +86,10 @@ Murmur is one project with several cooperating surfaces:
 | Connector contract | A stable way to add wearables, microphones, and network sources | Manifest and protocol implemented |
 | Omi connector | BLE discovery, connection, and audio transport for Omi hardware | Connection implemented; audio planned |
 | Provider adapters | Transcription, language-model, embedding, and speech output integrations | Planned |
+| Flutter packages | Embeddable protocol and native capability APIs for Flutter apps | Package and plugin scaffolded |
+| Expo / React Native package | Native iOS and Android bindings plus Expo configuration | Module and config plugin scaffolded |
 | Flutter app | Pair sources, configure providers, capture, review, search, and act | Omi connection implemented |
+| Omarchy plugin | Voice and wearable state in the Omarchy Quattro bar | Widget and panel scaffolded |
 | Remote agent protocol | Permissioned commands and audited results across computers and servers | Design stage |
 
 The protocol is the product boundary. SDKs, connectors, apps, and agents are
@@ -112,7 +115,9 @@ requirement for using Murmur.
                               │
              ┌────────────────┼────────────────┐
              ▼                ▼                ▼
-       Flutter/mobile   Electron/web     servers/agents
+       Flutter apps     Expo/RN apps     desktop/agents
+              │              │                 │
+              └──────────────┼─────────────────┘
                               │
                               ▼
               typed transcripts, intents, and results
@@ -153,6 +158,8 @@ capture optional instead of leaking device assumptions into the core.
 - Shared **conformance fixtures** that every SDK and transport must pass.
 - Small SDKs for **Dart, TypeScript, Python, and Rust**, with more languages
   added without changing the protocol.
+- Thin **Flutter and Expo / React Native native bindings** built on the same
+  protocol SDKs instead of separate voice stacks.
 - A **Flutter reference client** for iOS and Android.
 - Transport-specific connectors, with Omi-compatible BLE implemented first
   through `flutter_reactive_ble`.
@@ -171,11 +178,13 @@ capture optional instead of leaking device assumptions into the core.
 | Canonical contract | Protocol Buffers plus ProtoJSON |
 | Compatibility | Language-neutral conformance fixtures |
 | SDKs | Dart, TypeScript, Python, and Rust |
+| Mobile packages | Flutter plugin and Expo Modules API for React Native |
 | Reference mobile app | Flutter, Riverpod, and `go_router` |
 | Initial Bluetooth connector | `flutter_reactive_ble` behind Murmur contracts |
 | Reference local data | Drift and SQLite |
 | Reference secret storage | `flutter_secure_storage` |
 | Transports | In-process, WebSocket, gRPC, stdio, local socket, or FFI |
+| Desktop shell | Omarchy Quattro bar plugin |
 | Remote control | Authenticated agents with an optional relay |
 | Backend | None required for local capture and processing |
 
@@ -187,9 +196,11 @@ The repository is a framework-neutral monorepo:
 spec/                 murmur.v1 protobuf schemas
 conformance/          cross-language fixtures
 sdks/                 Dart, TypeScript, Python, and Rust models
+packages/             Flutter and Expo / React Native bindings
 connectors/            connector manifests and implementations
 apps/flutter/          iOS and Android reference app
 agents/                remote-agent boundary
+integrations/           desktop and operating-system integrations
 ```
 
 Validate the protocol and shared fixtures with:
@@ -228,6 +239,55 @@ make check
 
 Individual `make check-*` targets are available when a contributor only has the
 toolchain for one SDK. CI runs every supported language independently.
+
+## Embed Murmur
+
+The reusable package surfaces live beside the reference app and consume the
+same versioned protocol models. After the first pub.dev release, Flutter apps
+install:
+
+```bash
+flutter pub add murmur_protocol murmur_flutter
+```
+
+The Flutter plugin exposes native capability and permission channels and
+re-exports `murmur_protocol`. Omi discovery remains in the reference app until
+the connector extraction is complete.
+
+Expo and React Native mobile apps install:
+
+```bash
+npm install @october-dev/murmur-protocol @october-dev/murmur-react-native
+```
+
+Expo apps add the native configuration plugin:
+
+```json
+{
+  "expo": {
+    "plugins": ["@october-dev/murmur-react-native"]
+  }
+}
+```
+
+The native package uses the Expo Modules API on iOS and Android. It requires a
+development or production build and does not run in Expo Go. Bare React Native
+apps use the same package after installing Expo Modules; they do not need the
+managed Expo workflow. The TypeScript protocol remains usable in web projects,
+but `@october-dev/murmur-react-native` is intentionally mobile-only.
+
+The Omarchy Quattro integration is installable from a local checkout:
+
+```bash
+omarchy plugin add "$PWD/integrations/omarchy" --enable
+```
+
+Its current bar widget is read-only and does not execute commands or read API
+keys. See [integrations/omarchy](integrations/omarchy/README.md) for validation,
+security, and marketplace packaging notes.
+
+These package names and source layouts are scaffolded but are not published to
+pub.dev, npm, or the Omarchy marketplace yet.
 
 ## Provider model
 
@@ -300,6 +360,9 @@ provider-specific privacy implications.
 - [x] Add shared conformance fixtures
 - [x] Scaffold Dart, TypeScript, Python, and Rust SDK models
 - [x] Make Flutter a reference consumer under `apps/flutter`
+- [x] Scaffold a reusable Flutter plugin on top of `murmur_protocol`
+- [x] Scaffold Expo / React Native native bindings and configuration
+- [x] Scaffold an Omarchy Quattro bar widget and panel
 - [ ] Refactor Omi behind the shared connector interface
 - [ ] Add a phone-microphone reference connector
 - [ ] Validate Omi BLE audio streaming and normalize its audio frames
@@ -315,6 +378,8 @@ provider-specific privacy implications.
 - [ ] Document and test the process for adding more voice connectors
 - [ ] Design and implement the authenticated remote-agent protocol
 - [ ] Implement the reusable capture runtime across the first SDKs
+- [ ] Publish reviewed Dart, Flutter, and npm packages
+- [ ] Connect and security-review the Omarchy local service bridge
 - [ ] Identify reusable fixes and contribute them upstream to Omi
 
 ## Relationship to Omi
