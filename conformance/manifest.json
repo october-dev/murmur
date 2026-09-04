@@ -1,11 +1,21 @@
 {
+  "manifestVersion": 1,
   "protocol": { "major": 1, "minor": 0 },
   "fixtureSets": [
-    {
-      "name": "runtime-events",
-      "path": "fixtures/runtime-events.jsonl",
-      "events": 7,
-      "synthetic": true
-    }
+    { "name": "runtime-events", "message": "RuntimeEvent", "path": "fixtures/runtime-events.jsonl", "lines": 7, "expect": "accept" },
+    { "name": "source-discovery", "message": "VoiceSource", "path": "fixtures/source-discovery.jsonl", "lines": 2, "expect": "accept" },
+    { "name": "session-control", "message": "SessionControl", "path": "fixtures/session-control.jsonl", "lines": 5, "expect": "accept" },
+    { "name": "audio-frames", "message": "AudioFrame", "path": "fixtures/audio-frames.jsonl", "lines": 2, "expect": "accept" },
+    { "name": "forward-compatible-events", "message": "RuntimeEvent", "path": "fixtures/forward-compatible-events.jsonl", "lines": 3, "expect": "accept", "unknownFields": ["extension", "transcript/speakerLabel"] },
+    { "name": "invalid-missing-payload", "message": "RuntimeEvent", "path": "fixtures/invalid/missing-payload.jsonl", "lines": 1, "expect": "reject", "reason": "missing-payload", "rejection": "parse" },
+    { "name": "invalid-ambiguous-oneof", "message": "RuntimeEvent", "path": "fixtures/invalid/ambiguous-oneof.jsonl", "lines": 1, "expect": "reject", "reason": "ambiguous-oneof", "rejection": "parse" },
+    { "name": "invalid-missing-session-command", "message": "SessionControl", "path": "fixtures/invalid/missing-session-command.jsonl", "lines": 1, "expect": "reject", "reason": "missing-session-command", "rejection": "parse" },
+    { "name": "invalid-ambiguous-session-command", "message": "SessionControl", "path": "fixtures/invalid/ambiguous-session-command.jsonl", "lines": 1, "expect": "reject", "reason": "ambiguous-session-command", "rejection": "parse" },
+    { "name": "invalid-enum", "message": "RuntimeEvent", "path": "fixtures/invalid/enum.jsonl", "lines": 2, "expect": "reject", "reason": "invalid-enum", "rejection": "parse" },
+    { "name": "invalid-sequence-order", "message": "RuntimeEvent", "path": "fixtures/invalid/sequence-order.jsonl", "lines": 4, "expect": "reject", "reason": "sequence-order", "rejection": "order", "rejectLine": 3 },
+    { "name": "invalid-uint64", "message": "RuntimeEvent", "path": "fixtures/invalid/uint64.jsonl", "lines": 4, "expect": "reject", "reason": "invalid-uint64", "rejection": "parse" },
+    { "name": "invalid-protocol-major", "message": "RuntimeEvent", "path": "fixtures/invalid/protocol-major.jsonl", "lines": 2, "expect": "reject", "reason": "unsupported-protocol-major", "rejection": "parse" },
+    { "name": "invalid-protocol-version", "message": "RuntimeEvent", "path": "fixtures/invalid/protocol-version.jsonl", "lines": 3, "expect": "reject", "reason": "invalid-protocol-version", "rejection": "parse" },
+    { "name": "invalid-audio-frames", "message": "AudioFrame", "path": "fixtures/invalid/audio-frames.jsonl", "lines": 5, "expect": "reject", "reason": "invalid-audio-frame", "rejection": "parse" }
   ]
 }

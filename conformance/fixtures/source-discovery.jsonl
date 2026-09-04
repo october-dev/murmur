@@ -1,0 +1,2 @@
+{"sourceId":"source-synthetic-1","displayName":"Synthetic microphone","transport":"SOURCE_TRANSPORT_SYNTHETIC","capabilities":["SOURCE_CAPABILITY_LIVE_AUDIO","SOURCE_CAPABILITY_INPUT_MUTE"],"metadata":{"manufacturer":"synthetic","model":"fixture"}}
+{"sourceId":"source-synthetic-minimal","displayName":"Synthetic minimal source","transport":"SOURCE_TRANSPORT_LOCAL_AUDIO"}

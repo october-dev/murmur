@@ -1,0 +1,5 @@
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid","sequence":"1","monotonicTimeUs":"1","format":{"sampleRateHz":16000,"channels":1,"encoding":"AUDIO_ENCODING_MP3","frameDurationMs":10},"payload":"AAAA"}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid","sequence":"2","monotonicTimeUs":"2","format":{"sampleRateHz":16000,"channels":1,"encoding":"AUDIO_ENCODING_PCM_S16LE","frameDurationMs":10},"payload":"not*base64"}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid","sequence":"3","monotonicTimeUs":"3","format":{"sampleRateHz":16000,"channels":1,"encoding":"AUDIO_ENCODING_PCM_S16LE","frameDurationMs":10},"payload":"AAA=="}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid","sequence":"4","monotonicTimeUs":"4","format":{"sampleRateHz":"16000","channels":1,"encoding":"AUDIO_ENCODING_PCM_S16LE","frameDurationMs":10},"payload":"AAAA"}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid","sequence":"5","monotonicTimeUs":"5","format":{"sampleRateHz":16000,"channels":1,"encoding":"AUDIO_ENCODING_PCM_S16LE","frameDurationMs":10}}
