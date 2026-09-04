@@ -1,0 +1,4 @@
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid-order","sequence":"1","monotonicTimeUs":"1","captureReadiness":{"live":true}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid-order","sequence":"3","monotonicTimeUs":"2","captureReadiness":{"live":true}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid-order","sequence":"2","monotonicTimeUs":"3","captureReadiness":{"live":true}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid-order","sequence":"3","monotonicTimeUs":"4","captureReadiness":{"live":true}}

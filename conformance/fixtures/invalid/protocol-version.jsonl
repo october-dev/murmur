@@ -1,0 +1,3 @@
+{"protocol":{"major":1.5,"minor":0},"sessionId":"session-invalid","sequence":"1","monotonicTimeUs":"1","captureReadiness":{"live":true}}
+{"protocol":{"major":true,"minor":0},"sessionId":"session-invalid","sequence":"2","monotonicTimeUs":"2","captureReadiness":{"live":true}}
+{"protocol":{"major":1,"minor":-1},"sessionId":"session-invalid","sequence":"3","monotonicTimeUs":"3","captureReadiness":{"live":true}}

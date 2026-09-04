@@ -34,15 +34,15 @@ final class RuntimeEvent {
     if (sessionId.trim().isEmpty) {
       throw ArgumentError.value(sessionId, 'sessionId', 'must not be empty');
     }
-    if (sequence < 0 || monotonicTimeUs < 0) {
+    if (sequence < BigInt.zero || monotonicTimeUs < BigInt.zero) {
       throw ArgumentError('sequence and monotonicTimeUs must be non-negative');
     }
   }
 
   final ProtocolVersion protocol;
   final String sessionId;
-  final int sequence;
-  final int monotonicTimeUs;
+  final BigInt sequence;
+  final BigInt monotonicTimeUs;
   final RuntimePayloadKind kind;
   final Map<String, Object?> payload;
 
@@ -63,8 +63,8 @@ final class RuntimeEvent {
       );
     }
 
-    final sequence = _parseUint64(json['sequence'], 'sequence');
-    final monotonicTimeUs = _parseUint64(
+    final sequence = parseUint64(json['sequence'], 'sequence');
+    final monotonicTimeUs = parseUint64(
       json['monotonicTimeUs'],
       'monotonicTimeUs',
     );
@@ -106,21 +106,15 @@ final class RuntimeEvent {
   String toJsonString() => jsonEncode(toJson());
 }
 
-int _parseUint64(Object? value, String field) {
-  final parsed = switch (value) {
-    final int number => number,
-    final String text => int.tryParse(text),
-    _ => null,
-  };
-  if (parsed == null || parsed < 0) {
-    throw FormatException('$field must be a non-negative uint64 string');
-  }
-  return parsed;
-}
-
 void _validatePayload(RuntimePayloadKind kind, Map<String, Object?> payload) {
   if (kind == RuntimePayloadKind.transcript) {
-    if (payload['kind'] is! String || payload['text'] is! String) {
+    const kinds = {
+      'TRANSCRIPT_KIND_UNSPECIFIED',
+      'TRANSCRIPT_KIND_PARTIAL',
+      'TRANSCRIPT_KIND_FINAL',
+      'TRANSCRIPT_KIND_REJECTED',
+    };
+    if (!kinds.contains(payload['kind']) || payload['text'] is! String) {
       throw const FormatException('transcript requires kind and text');
     }
   }
@@ -129,6 +123,24 @@ void _validatePayload(RuntimePayloadKind kind, Map<String, Object?> payload) {
     if (amplitude is! num || amplitude < 0 || amplitude > 1) {
       throw const FormatException(
         'audioLevel.amplitude must be between 0 and 1',
+      );
+    }
+  }
+  if (kind == RuntimePayloadKind.sessionStateChanged) {
+    const states = {
+      'SESSION_STATE_UNSPECIFIED',
+      'SESSION_STATE_IDLE',
+      'SESSION_STATE_STARTING',
+      'SESSION_STATE_LISTENING',
+      'SESSION_STATE_WARM_MUTED',
+      'SESSION_STATE_FINALIZING',
+      'SESSION_STATE_STOPPED',
+      'SESSION_STATE_ERROR',
+    };
+    if (!states.contains(payload['previous']) ||
+        !states.contains(payload['current'])) {
+      throw const FormatException(
+        'sessionStateChanged requires known previous and current states',
       );
     }
   }

@@ -13,10 +13,10 @@ APIs.
 
 | SDK | Intended environments | State |
 | --- | --- | --- |
-| Dart (`murmur_protocol`) | Flutter and pure-Dart applications | Source and event model implemented; pub.dev metadata prepared |
-| TypeScript (`@october-dev/murmur-protocol`) | Node, Electron, React Native, and web | Event model implemented; npm build metadata prepared |
-| Python | Research, automation, and AI services | Event model implemented |
-| Rust | Native runtimes, sidecars, servers, and embedded hosts | Event model implemented |
+| Dart (`murmur_protocol`) | Flutter and pure-Dart applications | Event, session-control, audio-frame, and source models implemented; pub.dev metadata prepared |
+| TypeScript (`@october-dev/murmur-protocol`) | Node, Electron, React Native, and web | Event, session-control, audio-frame, and source models implemented; npm build metadata prepared |
+| Python | Research, automation, and AI services | Event, session-control, audio-frame, and source models implemented |
+| Rust | Native runtimes, sidecars, servers, and embedded hosts | Event, session-control, audio-frame, and source models implemented |
 
 The SDKs intentionally start small. Audio processing, BLE access, databases,
 and model providers belong in separate packages built on these contracts.

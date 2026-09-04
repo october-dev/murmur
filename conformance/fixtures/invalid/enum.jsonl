@@ -1,0 +1,2 @@
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid","sequence":"1","monotonicTimeUs":"1","transcript":{"kind":"TRANSCRIPT_KIND_SYNTHETIC_BOGUS","text":"synthetic invalid enum"}}
+{"protocol":{"major":1,"minor":0},"sessionId":"session-invalid","sequence":"2","monotonicTimeUs":"2","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_SYNTHETIC_BOGUS"}}
