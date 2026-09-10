@@ -3,7 +3,7 @@
   "protocol": { "major": 1, "minor": 0 },
   "fixtureSets": [
     { "name": "runtime-events", "message": "RuntimeEvent", "path": "fixtures/runtime-events.jsonl", "lines": 7, "expect": "accept" },
-    { "name": "source-discovery", "message": "VoiceSource", "path": "fixtures/source-discovery.jsonl", "lines": 2, "expect": "accept" },
+    { "name": "source-discovery", "message": "VoiceSource", "path": "fixtures/source-discovery.jsonl", "lines": 3, "expect": "accept" },
     { "name": "session-control", "message": "SessionControl", "path": "fixtures/session-control.jsonl", "lines": 5, "expect": "accept" },
     { "name": "audio-frames", "message": "AudioFrame", "path": "fixtures/audio-frames.jsonl", "lines": 2, "expect": "accept" },
     { "name": "forward-compatible-events", "message": "RuntimeEvent", "path": "fixtures/forward-compatible-events.jsonl", "lines": 3, "expect": "accept", "unknownFields": ["extension", "transcript/speakerLabel"] },

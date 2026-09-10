@@ -314,7 +314,11 @@ def main() -> None:
     connector = json.loads((ROOT / "connectors/omi/connector.json").read_text(encoding="utf-8"))
     assert connector["protocolMajor"] == protocol["major"], "connector protocol major mismatch"
     assert (ROOT / connector["implementation"]["path"]).is_dir(), "connector implementation path missing"
-    print("Murmur protocol fixtures and connector manifests are consistent (15 sets, 43 lines).")
+    total_lines = sum(fixture_set["lines"] for fixture_set in fixture_sets)
+    print(
+        "Murmur protocol fixtures and connector manifests are consistent "
+        f"({len(fixture_sets)} sets, {total_lines} lines)."
+    )
 
 
 if __name__ == "__main__":

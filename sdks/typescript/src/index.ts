@@ -203,11 +203,12 @@ export function parseVoiceSource(input: unknown): VoiceSource {
   )
   const rawMetadata = object.metadata ?? {}
   const metadataObject = asObject(rawMetadata, 'metadata')
-  const metadata: Record<string, string> = {}
-  for (const [key, value] of Object.entries(metadataObject)) {
-    if (typeof value !== 'string') throw new TypeError('metadata values must be strings')
-    metadata[key] = value
-  }
+  const metadata = Object.fromEntries(
+    Object.entries(metadataObject).map(([key, value]) => {
+      if (typeof value !== 'string') throw new TypeError('metadata values must be strings')
+      return [key, value] as const
+    })
+  )
   return {
     sourceId: asNonEmptyString(object.sourceId, 'sourceId'),
     displayName: asNonEmptyString(object.displayName, 'displayName'),
