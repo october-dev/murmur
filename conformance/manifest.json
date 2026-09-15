@@ -17,5 +17,19 @@
     { "name": "invalid-protocol-major", "message": "RuntimeEvent", "path": "fixtures/invalid/protocol-major.jsonl", "lines": 2, "expect": "reject", "reason": "unsupported-protocol-major", "rejection": "parse" },
     { "name": "invalid-protocol-version", "message": "RuntimeEvent", "path": "fixtures/invalid/protocol-version.jsonl", "lines": 3, "expect": "reject", "reason": "invalid-protocol-version", "rejection": "parse" },
     { "name": "invalid-audio-frames", "message": "AudioFrame", "path": "fixtures/invalid/audio-frames.jsonl", "lines": 5, "expect": "reject", "reason": "invalid-audio-frame", "rejection": "parse" }
+  ],
+  "scenarioManifestVersion": 1,
+  "scenarioTimeoutsMs": { "startup": 1000, "endpoint": 500, "finalize": 500, "shutdown": 200, "warmHold": 1000 },
+  "scenarioSets": [
+    { "name": "release-during-startup", "path": "fixtures/scenarios/release-during-startup.jsonl", "steps": 6, "providerCapabilities": ["gracefulFinalize"], "utterances": [] },
+    { "name": "late-final", "path": "fixtures/scenarios/late-final.jsonl", "steps": 17, "providerCapabilities": ["partialTranscripts", "gracefulFinalize"], "utterances": ["synthetic first synthetic tail"] },
+    { "name": "empty-final", "path": "fixtures/scenarios/empty-final.jsonl", "steps": 15, "providerCapabilities": ["partialTranscripts", "gracefulFinalize", "rejectedFinal"], "utterances": [] },
+    { "name": "provider-disconnect", "path": "fixtures/scenarios/provider-disconnect.jsonl", "steps": 11, "providerCapabilities": ["partialTranscripts", "gracefulFinalize"], "utterances": [] },
+    { "name": "finalize-timeout", "path": "fixtures/scenarios/finalize-timeout.jsonl", "steps": 13, "providerCapabilities": ["gracefulFinalize"], "utterances": ["synthetic kept"] },
+    { "name": "rapid-restart", "path": "fixtures/scenarios/rapid-restart.jsonl", "steps": 16, "providerCapabilities": ["gracefulFinalize"], "utterances": [] },
+    { "name": "repeated-stop", "path": "fixtures/scenarios/repeated-stop.jsonl", "steps": 17, "providerCapabilities": ["gracefulFinalize"], "utterances": [] },
+    { "name": "warm-mute-cycle", "path": "fixtures/scenarios/warm-mute-cycle.jsonl", "steps": 25, "providerCapabilities": ["gracefulFinalize", "warmGate", "realAudioReadiness", "amplitude"], "utterances": ["synthetic one"] },
+    { "name": "startup-timeout", "path": "fixtures/scenarios/startup-timeout.jsonl", "steps": 6, "providerCapabilities": ["gracefulFinalize"], "utterances": [] },
+    { "name": "startup-failure", "path": "fixtures/scenarios/startup-failure.jsonl", "steps": 19, "providerCapabilities": ["gracefulFinalize"], "utterances": [] }
   ]
 }

@@ -1,0 +1,6 @@
+{"start":{"mode":"CAPTURE_MODE_HOLD_TO_TALK"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"1","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_STARTING"}}}
+{"connect_ok":{}}
+{"release":{}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"2","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_STARTING","current":"SESSION_STATE_STOPPED"}}}
+{"provider_open_ok":{}}

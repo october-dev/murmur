@@ -1,0 +1,25 @@
+{"start":{"mode":"CAPTURE_MODE_HOLD_TO_TALK"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"1","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_STARTING"}}}
+{"connect_ok":{}}
+{"provider_open_ok":{}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"2","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_STARTING","current":"SESSION_STATE_LISTENING"}}}
+{"frame":{"seq":1}}
+{"readiness":{"live":true}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"3","monotonicTimeUs":"0","captureReadiness":{"live":true}}}
+{"amplitude":{"value":0.25}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"4","monotonicTimeUs":"0","audioLevel":{"amplitude":0.25}}}
+{"release":{}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"5","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_LISTENING","current":"SESSION_STATE_WARM_MUTED"}}}
+{"frame":{"seq":2}}
+{"final":{"text":"synthetic one"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"6","monotonicTimeUs":"0","transcript":{"kind":"TRANSCRIPT_KIND_FINAL","text":"synthetic one"}}}
+{"provider_flushed":{}}
+{"advanceMs":{"ms":400}}
+{"start":{"mode":"CAPTURE_MODE_HOLD_TO_TALK"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"7","monotonicTimeUs":"400000","sessionStateChanged":{"previous":"SESSION_STATE_WARM_MUTED","current":"SESSION_STATE_LISTENING"}}}
+{"frame":{"seq":3}}
+{"release":{}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"8","monotonicTimeUs":"400000","sessionStateChanged":{"previous":"SESSION_STATE_LISTENING","current":"SESSION_STATE_WARM_MUTED"}}}
+{"provider_flushed":{}}
+{"advanceMs":{"ms":1000}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"9","monotonicTimeUs":"1400000","sessionStateChanged":{"previous":"SESSION_STATE_WARM_MUTED","current":"SESSION_STATE_STOPPED"}}}
