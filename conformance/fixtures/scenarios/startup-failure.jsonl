@@ -1,0 +1,19 @@
+{"start":{"mode":"CAPTURE_MODE_TAP_TO_SPEAK"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"1","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_STARTING"}}}
+{"connect_fail":{"error":{"code":"connect_failed","message":"The synthetic source did not connect.","retryable":true}}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"2","monotonicTimeUs":"0","error":{"code":"connect_failed","message":"The synthetic source did not connect.","retryable":true}}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"3","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_STARTING","current":"SESSION_STATE_ERROR"}}}
+{"start":{"mode":"CAPTURE_MODE_TAP_TO_SPEAK"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-2","sequence":"1","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_STARTING"}}}
+{"connect_ok":{}}
+{"provider_open_fail":{"error":{"code":"provider_unavailable","message":"The synthetic provider refused the session.","retryable":false}}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-2","sequence":"2","monotonicTimeUs":"0","error":{"code":"provider_unavailable","message":"The synthetic provider refused the session.","retryable":false}}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-2","sequence":"3","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_STARTING","current":"SESSION_STATE_ERROR"}}}
+{"start":{"mode":"CAPTURE_MODE_TAP_TO_SPEAK"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-3","sequence":"1","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_STARTING"}}}
+{"connect_ok":{}}
+{"provider_open_ok":{}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-3","sequence":"2","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_STARTING","current":"SESSION_STATE_LISTENING"}}}
+{"provider_failed":{"error":{"code":"decoder_crashed","message":"The synthetic decoder crashed.","retryable":false}}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-3","sequence":"3","monotonicTimeUs":"0","error":{"code":"decoder_crashed","message":"The synthetic decoder crashed.","retryable":false}}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-3","sequence":"4","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_LISTENING","current":"SESSION_STATE_ERROR"}}}
