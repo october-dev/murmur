@@ -34,6 +34,7 @@ Parse success is asserted separately. Failure messages use
 Unknown additive fields beside a known oneof arm are ignored for a supported
 major. A message whose only arm is unknown is rejected because it has no known
 arm. Accepted fixtures are canonical: default-valued fields are omitted.
+An explicitly present default-valued known field in a checked-in fixture must preserve its presence when round-tripped.
 
 ## Compatibility profile
 

@@ -1,3 +1,9 @@
+## Unreleased
+
+- Add typed audio formats and session commands with presence-preserving
+  ProtoJSON serialization.
+- Add framework-neutral voice connector, session, state, and error interfaces.
+
 ## 0.1.0
 
 - Add versioned protocol, runtime-event, and voice-source models.
