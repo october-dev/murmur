@@ -1,0 +1,17 @@
+{"start":{"mode":"CAPTURE_MODE_TAP_TO_SPEAK"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"1","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_STARTING"}}}
+{"connect_ok":{}}
+{"provider_open_ok":{}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"2","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_STARTING","current":"SESSION_STATE_LISTENING"}}}
+{"frame":{"seq":1,"silent":true}}
+{"frame":{"seq":2}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"3","monotonicTimeUs":"0","captureReadiness":{"live":true}}}
+{"final":{"text":"synthetic first"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"4","monotonicTimeUs":"0","transcript":{"kind":"TRANSCRIPT_KIND_FINAL","text":"synthetic first"}}}
+{"finalize":{}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"5","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_LISTENING","current":"SESSION_STATE_FINALIZING"}}}
+{"final":{"text":"synthetic tail"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"6","monotonicTimeUs":"0","transcript":{"kind":"TRANSCRIPT_KIND_FINAL","text":"synthetic tail"}}}
+{"provider_closed":{"expected":true}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"7","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_FINALIZING","current":"SESSION_STATE_STOPPED"}}}
+{"final":{"text":"synthetic late"}}

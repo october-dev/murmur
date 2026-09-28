@@ -1,0 +1,15 @@
+{"start":{"mode":"CAPTURE_MODE_TAP_TO_SPEAK"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"1","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_STARTING"}}}
+{"connect_ok":{}}
+{"provider_open_ok":{}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"2","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_STARTING","current":"SESSION_STATE_LISTENING"}}}
+{"partial":{"text":"synthetic hel"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"3","monotonicTimeUs":"0","transcript":{"kind":"TRANSCRIPT_KIND_PARTIAL","text":"synthetic hel"}}}
+{"rejected":{"text":"synthetic hello"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"4","monotonicTimeUs":"0","transcript":{"kind":"TRANSCRIPT_KIND_REJECTED","text":"synthetic hello"}}}
+{"final":{"text":""}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"5","monotonicTimeUs":"0","transcript":{"kind":"TRANSCRIPT_KIND_FINAL","text":""}}}
+{"finalize":{}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"6","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_LISTENING","current":"SESSION_STATE_FINALIZING"}}}
+{"provider_closed":{"expected":true}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"7","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_FINALIZING","current":"SESSION_STATE_STOPPED"}}}

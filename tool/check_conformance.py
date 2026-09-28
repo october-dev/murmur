@@ -51,6 +51,21 @@ SOURCE_CAPABILITIES = {
     "SOURCE_CAPABILITY_OUTPUT_AUDIO", "SOURCE_CAPABILITY_BACKGROUND_CAPTURE",
     "SOURCE_CAPABILITY_INPUT_MUTE", "SOURCE_CAPABILITY_SPEAKER_VERIFICATION",
 }
+PROVIDER_CAPABILITIES = {
+    "partialTranscripts", "warmGate", "gracefulFinalize", "realAudioReadiness", "amplitude", "rejectedFinal",
+}
+SCENARIO_TIMEOUTS = {"startup", "endpoint", "finalize", "shutdown", "warmHold"}
+# Driver steps and the argument fields each one requires; `emit` carries a RuntimeEvent.
+SCENARIO_STEPS: dict[str, set[str]] = {
+    "start": {"mode"}, "release": set(), "finalize": set(), "stop": set(),
+    "connect_ok": set(), "connect_fail": {"error"},
+    "provider_open_ok": set(), "provider_open_fail": {"error"},
+    "frame": {"seq"}, "partial": {"text"}, "final": {"text"}, "rejected": {"text"},
+    "readiness": {"live"}, "amplitude": {"value"},
+    "provider_closed": {"expected"}, "provider_failed": {"error"}, "provider_flushed": set(),
+    "advanceMs": {"ms"},
+}
+SCENARIO_OPTIONAL = {"frame": {"silent"}}
 KNOWN_FIELDS = {
     "RuntimeEvent": {"protocol", "sessionId", "sequence", "monotonicTimeUs"} | RUNTIME_ARMS,
     "SessionControl": {"protocol", "sessionId", "requestSequence"} | SESSION_ARMS,
@@ -255,9 +270,99 @@ def validate_manifest(manifest: Any) -> list[dict[str, Any]]:
     return fixture_sets
 
 
+def valid_error(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and isinstance(value.get("code"), str) and bool(value["code"])
+        and isinstance(value.get("message"), str)
+        and isinstance(value.get("retryable"), bool)
+    )
+
+
+def validate_scenario_manifest(manifest: dict[str, Any]) -> list[dict[str, Any]]:
+    assert manifest.get("scenarioManifestVersion") == 1, "unsupported scenario manifest version"
+    timeouts = manifest.get("scenarioTimeoutsMs")
+    assert isinstance(timeouts, dict) and timeouts.keys() == SCENARIO_TIMEOUTS, "scenarioTimeoutsMs must name every wait"
+    assert all(isinstance(value, int) and value > 0 for value in timeouts.values()), "scenario timeouts must be positive"
+    scenario_sets = manifest.get("scenarioSets")
+    assert isinstance(scenario_sets, list) and scenario_sets, "scenarioSets must be non-empty"
+    names: set[str] = set()
+    for item in scenario_sets:
+        assert isinstance(item, dict), "scenario set must be an object"
+        required = {"name", "path", "steps", "providerCapabilities", "utterances"}
+        assert required <= item.keys(), f"scenario set is missing {required - item.keys()}"
+        assert isinstance(item["name"], str) and item["name"] not in names, "scenario names must be unique"
+        names.add(item["name"])
+        assert isinstance(item["steps"], int) and item["steps"] > 0, f"invalid step count in {item['name']}"
+        capabilities = item["providerCapabilities"]
+        assert isinstance(capabilities, list) and set(capabilities) <= PROVIDER_CAPABILITIES, (
+            f"unknown provider capability in {item['name']}"
+        )
+        utterances = item["utterances"]
+        assert isinstance(utterances, list) and all(
+            isinstance(text, str) and "synthetic" in text.lower() for text in utterances
+        ), f"utterances must be synthetic text in {item['name']}"
+    return scenario_sets
+
+
+def validate_scenario(scenario: dict[str, Any], protocol: dict[str, Any]) -> None:
+    """Check step vocabulary and the emit contract: per-session 1-based sequences and a monotonic clock."""
+    path = ROOT / "conformance" / scenario["path"]
+    lines = [line for line in path.read_text(encoding="utf-8").splitlines() if line]
+    assert len(lines) == scenario["steps"], f"incorrect step count in {path}"
+    sequences: dict[str, int] = {}
+    clock = 0
+    for line_number, line in enumerate(lines, start=1):
+        location = f"{path}:{line_number}"
+        step = json.loads(line)
+        assert isinstance(step, dict) and len(step) == 1, f"{location}: step must have exactly one kind"
+        kind, args = next(iter(step.items()))
+        assert isinstance(args, dict), f"{location}: step arguments must be an object"
+        if kind == "emit":
+            assert not diagnose("RuntimeEvent", args), f"{location}: {sorted(diagnose('RuntimeEvent', args))}"
+            assert args["protocol"] == protocol, f"{location}: protocol mismatch"
+            session = args["sessionId"]
+            expected = sequences.get(session, 0) + 1
+            assert int(args["sequence"]) == expected, f"{location}: expected sequence {expected}"
+            sequences[session] = expected
+            assert int(args["monotonicTimeUs"]) == clock * 1000, f"{location}: monotonicTimeUs must equal the clock"
+            if "transcript" in args and args["transcript"]["text"]:
+                assert "synthetic" in args["transcript"]["text"].lower(), f"{location}: non-synthetic text"
+            continue
+        assert kind in SCENARIO_STEPS, f"{location}: unknown step {kind}"
+        required = SCENARIO_STEPS[kind]
+        allowed = required | SCENARIO_OPTIONAL.get(kind, set())
+        assert required <= args.keys() <= allowed, f"{location}: {kind} takes {sorted(allowed)}"
+        if kind == "start":
+            assert args["mode"] in CAPTURE_MODES - {"CAPTURE_MODE_UNSPECIFIED", "CAPTURE_MODE_WAKE_PHRASE"}, (
+                f"{location}: unsupported mode"
+            )
+        if "error" in required:
+            assert valid_error(args["error"]), f"{location}: error needs code, message, and retryable"
+        if "text" in required:
+            assert isinstance(args["text"], str), f"{location}: text must be a string"
+            assert not args["text"] or "synthetic" in args["text"].lower(), f"{location}: non-synthetic text"
+        if kind == "frame":
+            assert isinstance(args["seq"], int) and args["seq"] > 0, f"{location}: seq must be positive"
+            assert isinstance(args.get("silent", False), bool), f"{location}: silent must be a boolean"
+        if kind in {"readiness", "provider_closed"}:
+            assert isinstance(next(iter(args.values())), bool), f"{location}: {kind} takes a boolean"
+        if kind == "amplitude":
+            value = args["value"]
+            assert isinstance(value, (int, float)) and not isinstance(value, bool) and 0 <= value <= 1, (
+                f"{location}: amplitude must be between 0 and 1"
+            )
+        if kind == "advanceMs":
+            assert isinstance(args["ms"], int) and args["ms"] > 0, f"{location}: ms must be positive"
+            clock += args["ms"]
+
+
 def main() -> None:
     manifest = json.loads((ROOT / "conformance/manifest.json").read_text(encoding="utf-8"))
     fixture_sets = validate_manifest(manifest)
+    scenario_sets = validate_scenario_manifest(manifest)
+    for scenario in scenario_sets:
+        validate_scenario(scenario, manifest["protocol"])
     protocol = manifest["protocol"]
     for fixture_set in fixture_sets:
         path = ROOT / "conformance" / fixture_set["path"]
@@ -315,9 +420,11 @@ def main() -> None:
     assert connector["protocolMajor"] == protocol["major"], "connector protocol major mismatch"
     assert (ROOT / connector["implementation"]["path"]).is_dir(), "connector implementation path missing"
     total_lines = sum(fixture_set["lines"] for fixture_set in fixture_sets)
+    total_steps = sum(scenario["steps"] for scenario in scenario_sets)
     print(
         "Murmur protocol fixtures and connector manifests are consistent "
-        f"({len(fixture_sets)} sets, {total_lines} lines)."
+        f"({len(fixture_sets)} sets, {total_lines} lines; "
+        f"{len(scenario_sets)} scenarios, {total_steps} steps)."
     )
 
 

@@ -1,0 +1,6 @@
+{"start":{"mode":"CAPTURE_MODE_TAP_TO_SPEAK"}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"1","monotonicTimeUs":"0","sessionStateChanged":{"previous":"SESSION_STATE_IDLE","current":"SESSION_STATE_STARTING"}}}
+{"advanceMs":{"ms":1000}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"2","monotonicTimeUs":"1000000","error":{"code":"startup_timeout","message":"The source or provider did not start in time.","retryable":true}}}
+{"emit":{"protocol":{"major":1,"minor":0},"sessionId":"session-1","sequence":"3","monotonicTimeUs":"1000000","sessionStateChanged":{"previous":"SESSION_STATE_STARTING","current":"SESSION_STATE_ERROR"}}}
+{"connect_ok":{}}

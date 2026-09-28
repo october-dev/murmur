@@ -36,6 +36,66 @@ major. A message whose only arm is unknown is rejected because it has no known
 arm. Accepted fixtures are canonical: default-valued fields are omitted.
 An explicitly present default-valued known field in a checked-in fixture must preserve its presence when round-tripped.
 
+## Lifecycle scenarios
+
+`scenarioSets` freeze the capture-coordinator lifecycle that every SDK must
+reproduce. `scenarioManifestVersion` identifies this shape independently of
+`manifestVersion`, and the message-per-line `fixtureSets` runners ignore it.
+Each scenario is one JSON Lines file of ordered steps. A step is an object with
+exactly one key, the step kind, whose value is an object of arguments.
+
+Input steps drive the in-process connector and provider boundary, which
+`RuntimeEvent` cannot express. A runner wires a coordinator to a scriptable
+connector and provider, applies each input step, and settles asynchronous work
+before the next step:
+
+| Step | Arguments | Meaning |
+| --- | --- | --- |
+| `start` | `mode` (`CAPTURE_MODE_TAP_TO_SPEAK`, `CAPTURE_MODE_HOLD_TO_TALK`, `CAPTURE_MODE_HANDS_FREE`) | Call `start` for the synthetic source |
+| `release`, `finalize`, `stop` | none | Call the coordinator API |
+| `connect_ok` | none | Complete the pending connect with an idle session whose `start` succeeds |
+| `connect_fail` | `error` `{code, message, retryable}` | Fail the pending connect |
+| `provider_open_ok` | none | Complete the pending provider open |
+| `provider_open_fail` | `error` | Fail the pending provider open |
+| `frame` | `seq`, optional `silent` | Emit one 10 ms frame from the newest session, the README sine wave or silence |
+| `partial`, `final`, `rejected` | `text` | Deliver a transcript chunk from the newest provider session |
+| `readiness` | `live` | Deliver a provider readiness event |
+| `amplitude` | `value` in [0, 1] | Deliver a provider amplitude event |
+| `provider_closed` | `expected` | Deliver a closed event; when `expected`, also acknowledge a pending finalize |
+| `provider_failed` | `error` | Deliver a provider failure event |
+| `provider_flushed` | none | Acknowledge the pending warm-gate flush |
+| `advanceMs` | `ms` | Advance the scenario clock; the only clock directive |
+
+Every pending connect, open, finalize, or flush must exist when a step
+completes or fails it, and a `frame` step must find a listening session.
+
+`emit` steps are the outputs. Each carries one `murmur.v1` RuntimeEvent that
+the coordinator must emit next, with no Dart-only fields. A runner fails when
+an emitted event differs from the next `emit`, when an event arrives before a
+non-`emit` step, or when events remain after the last step. The emit contract
+pins the envelope so every SDK matches byte for byte:
+
+- `sequence` is 1-based per session and increments by exactly one per emitted
+  event; a superseded session keeps its own counter and a new generation
+  starts a new session.
+- `monotonicTimeUs` is the scenario clock at emit. The clock starts at 0 and
+  moves only on `advanceMs`.
+- Session identifiers are `session-1`, `session-2`, and so on, one per
+  generation.
+- The coordinator writes `live`, `retryable`, and `text` even when they hold
+  default values, because consumers read them as booleans and text; `metadata`
+  is omitted when empty.
+- The first transition of every generation is `SESSION_STATE_IDLE` to
+  `SESSION_STATE_STARTING`. No `STOPPED` to `IDLE` event is manufactured.
+
+Each manifest entry names the scenario, its path, `steps` count,
+`providerCapabilities` (`partialTranscripts`, `warmGate`, `gracefulFinalize`,
+`realAudioReadiness`, `amplitude`, `rejectedFinal`), and the `utterances` the
+coordinator must deliver, in order, by the end of the scenario. All scenarios
+share `scenarioTimeoutsMs` for the startup, endpoint, finalize, shutdown, and
+warm-hold waits. The repository checker validates every `emit` body with the
+same rules as the message fixtures, the step vocabulary, and the emit contract.
+
 ## Compatibility profile
 
 | Concern | Wire (protobuf / ProtoJSON) | Murmur profile (fixture-enforced) | SDK policy |
