@@ -1,0 +1,2 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-batch-failure","sequence":"1","monotonicTimeUs":"1000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_ACTIVE"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-batch-failure","sequence":"2","monotonicTimeUs":"2000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_FAILED","error":{"code":"provider_timeout","message":"Synthetic provider did not respond.","retryable":true}}}

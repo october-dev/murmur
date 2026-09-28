@@ -9,18 +9,29 @@ PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(PACKAGE_ROOT / "src"))
 
-from murmur_protocol import AudioFrame, RuntimeEvent, SessionControl, VoiceSource  # noqa: E402
+from murmur_protocol import (  # noqa: E402
+    AudioFrame,
+    EngineControl,
+    EngineEvent,
+    RuntimeEvent,
+    SessionControl,
+    VoiceSource,
+)
 
 PARSERS = {
     "RuntimeEvent": RuntimeEvent.from_dict,
     "SessionControl": SessionControl.from_dict,
     "AudioFrame": AudioFrame.from_dict,
     "VoiceSource": VoiceSource.from_dict,
+    "EngineEvent": EngineEvent.from_dict,
+    "EngineControl": EngineControl.from_dict,
 }
 ORDER_FIELDS = {
     "RuntimeEvent": "sequence",
     "SessionControl": "request_sequence",
     "AudioFrame": "sequence",
+    "EngineEvent": "sequence",
+    "EngineControl": "request_sequence",
 }
 
 

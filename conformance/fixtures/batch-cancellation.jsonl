@@ -1,0 +1,2 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-batch-cancel","sequence":"1","monotonicTimeUs":"1000","batchProgress":{"processedAudioMs":250}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-batch-cancel","sequence":"2","monotonicTimeUs":"2000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_CANCELLED"}}

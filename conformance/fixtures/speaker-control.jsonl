@@ -1,0 +1,4 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-speaker","requestSequence":"1","start":{"mode":"CAPTURE_MODE_HANDS_FREE","engineId":"engine-synthetic-1"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-speaker","requestSequence":"2","speakerVerification":{"mode":"SPEAKER_VERIFICATION_MODE_ENFORCED"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-speaker","requestSequence":"3","speakerVerification":{"mode":"SPEAKER_VERIFICATION_MODE_BYPASSED"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-speaker","requestSequence":"4","speakerVerification":{"mode":"SPEAKER_VERIFICATION_MODE_DISABLED"}}

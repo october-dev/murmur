@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package murmur.v1;
+
+import "murmur/v1/common.proto";
+
+option java_multiple_files = true;
+option java_package = "dev.murmur.protocol.v1";
+option swift_prefix = "MRM";
+
+// Requests speech output. Requires the `speech_output` capability.
+//
+// Speech output is single-flight per engine: a new request cancels the active
+// output, which then reports CANCELLED.
+message SpeakRequest {
+  // Required, host-assigned identifier that correlates status events.
+  string output_id = 1;
+  // Required text to speak.
+  string text = 2;
+  // When false (the default), playback is half duplex: every live
+  // engine-bound session on the engine reports the SPEECH_OUTPUT input-gate
+  // cause during playback and ECHO_CLEARANCE for the echo tail. True requires
+  // the `echo_cancellation` capability and leaves recognition input open.
+  bool full_duplex = 3;
+  // Echo tail duration in milliseconds after playback stops; 0 means the
+  // engine default. Ignored when full_duplex is true.
+  uint32 echo_clearance_ms = 4;
+}
+
+// Cancels a speech output. Idempotent: cancelling an unknown or finished
+// output has no effect.
+message CancelSpeech {
+  // Required identifier of the output to cancel.
+  string output_id = 1;
+}
+
+// The lifecycle of one accepted speech output. COMPLETED, CANCELLED, and
+// FAILED are terminal, and each accepted output reaches exactly one of them.
+enum SpeechOutputState {
+  SPEECH_OUTPUT_STATE_UNSPECIFIED = 0;
+  // Accepted; audio is being synthesized or buffered.
+  SPEECH_OUTPUT_STATE_PREPARING = 1;
+  // Audio is playing.
+  SPEECH_OUTPUT_STATE_SPEAKING = 2;
+  // Playback stopped; recognition input stays closed for the echo tail.
+  SPEECH_OUTPUT_STATE_ECHO_CLEARING = 3;
+  // Playback finished and the echo tail elapsed.
+  SPEECH_OUTPUT_STATE_COMPLETED = 4;
+  // Cancelled by CancelSpeech or a newer SpeakRequest.
+  SPEECH_OUTPUT_STATE_CANCELLED = 5;
+  // Stopped with a typed error.
+  SPEECH_OUTPUT_STATE_FAILED = 6;
+}
+
+// A speech-output lifecycle event.
+//
+// If playback began, every terminal state follows ECHO_CLEARING and is
+// emitted only once the output's input-gate cause is removed. An output that
+// ends before playback began terminates immediately and never gates input.
+message SpeechOutputStatus {
+  // Identifier from the SpeakRequest.
+  string output_id = 1;
+  // Required; never UNSPECIFIED.
+  SpeechOutputState state = 2;
+  // Present exactly when state is FAILED.
+  MurmurError error = 3;
+}

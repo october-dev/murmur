@@ -1,0 +1,12 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"1","monotonicTimeUs":"1000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_SYNTHETIC_BOGUS"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"2","monotonicTimeUs":"2000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_UNSPECIFIED"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"3","monotonicTimeUs":"3000","providerStatus":{"providerId":"provider-synthetic"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"4","monotonicTimeUs":"4000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_SYNTHETIC_BOGUS"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"5","monotonicTimeUs":"5000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_UNSPECIFIED"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"6","monotonicTimeUs":"6000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_HOST","INPUT_GATE_CAUSE_HOST"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"7","monotonicTimeUs":"7000","inputGateStatus":{"closedBy":"INPUT_GATE_CAUSE_HOST"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"8","monotonicTimeUs":"8000","wakePhrase":{"phraseId":"phrase-synthetic-1","stage":"WAKE_PHRASE_STAGE_SYNTHETIC_BOGUS"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"9","monotonicTimeUs":"9000","wakePhrase":{"phraseId":"phrase-synthetic-1"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"10","monotonicTimeUs":"10000","wakePhrase":{"phraseId":"phrase-synthetic-1","stage":"WAKE_PHRASE_STAGE_DETECTED","confidence":1.5}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"11","monotonicTimeUs":"11000","wakePhrase":{"phraseId":"phrase-synthetic-1","stage":"WAKE_PHRASE_STAGE_DETECTED","confidence":"0.5"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"12","monotonicTimeUs":"12000","transcript":{"kind":"TRANSCRIPT_KIND_FINAL","text":"synthetic unknown result","speakerVerification":"SPEAKER_VERIFICATION_RESULT_SYNTHETIC_BOGUS"}}

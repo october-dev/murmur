@@ -93,6 +93,8 @@ Object _parse(String message, Map<String, Object?> input) => switch (message) {
   'SessionControl' => SessionControl.fromJson(input),
   'AudioFrame' => AudioFrame.fromJson(input),
   'VoiceSource' => VoiceSource.fromJson(input),
+  'EngineEvent' => EngineEvent.fromJson(input),
+  'EngineControl' => EngineControl.fromJson(input),
   _ => throw FormatException('unknown message $message'),
 };
 
@@ -101,6 +103,8 @@ Map<String, Object?> _serialize(Object value) => switch (value) {
   final SessionControl control => control.toJson(),
   final AudioFrame frame => frame.toJson(),
   final VoiceSource source => source.toJson(),
+  final EngineEvent event => event.toJson(),
+  final EngineControl control => control.toJson(),
   _ => throw FormatException('unknown parsed type ${value.runtimeType}'),
 };
 
@@ -108,6 +112,8 @@ BigInt? _orderingKey(Object value) => switch (value) {
   final RuntimeEvent event => event.sequence,
   final SessionControl control => control.requestSequence,
   final AudioFrame frame => frame.sequence,
+  final EngineEvent event => event.sequence,
+  final EngineControl control => control.requestSequence,
   _ => null,
 };
 

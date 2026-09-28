@@ -43,6 +43,23 @@ enum CaptureMode {
   final String protoJsonName;
 }
 
+/// The speaker-verification policy requested for an engine-bound session.
+enum SpeakerVerificationMode {
+  /// Verification is off; bypass never changes it.
+  disabled('SPEAKER_VERIFICATION_MODE_DISABLED'),
+
+  /// Finals are verified and a mismatch is reported as a rejected final.
+  enforced('SPEAKER_VERIFICATION_MODE_ENFORCED'),
+
+  /// Verification is skipped for the current utterance only.
+  bypassed('SPEAKER_VERIFICATION_MODE_BYPASSED');
+
+  const SpeakerVerificationMode(this.protoJsonName);
+
+  /// The `murmur.v1` ProtoJSON enum name.
+  final String protoJsonName;
+}
+
 /// A validated `murmur.v1` audio format.
 final class AudioFormat {
   /// Creates an audio format.
@@ -123,7 +140,12 @@ sealed class SessionCommand {
 /// Requests that a session start capture.
 final class StartSession extends SessionCommand {
   /// Creates a start command containing only the supplied fields.
-  const StartSession({this.source, this.mode, this.requestedFormat});
+  const StartSession({
+    this.source,
+    this.mode,
+    this.requestedFormat,
+    this.engineId,
+  });
 
   /// The source to capture, or `null` when selected out of band.
   final VoiceSource? source;
@@ -133,6 +155,9 @@ final class StartSession extends SessionCommand {
 
   /// The requested format, or `null` when the connector should negotiate it.
   final AudioFormat? requestedFormat;
+
+  /// The engine serving this session, or `null` for an unbound session.
+  final String? engineId;
 
   @override
   String get protoJsonField => 'start';
@@ -151,6 +176,10 @@ final class StartSession extends SessionCommand {
     final format = requestedFormat;
     if (format != null) {
       result['requestedFormat'] = format.toJson();
+    }
+    final engine = engineId;
+    if (engine != null) {
+      result['engineId'] = engine;
     }
     return result;
   }
@@ -219,6 +248,73 @@ final class FinalizeSession extends SessionCommand {
   Map<String, Object?> toJson() => const {};
 }
 
+/// Sets the speaker-verification mode of an engine-bound session.
+final class SetSpeakerVerification extends SessionCommand {
+  /// Creates a speaker-verification command.
+  const SetSpeakerVerification({required this.mode});
+
+  /// The requested mode.
+  final SpeakerVerificationMode mode;
+
+  @override
+  String get protoJsonField => 'speakerVerification';
+
+  @override
+  Map<String, Object?> toJson() => {'mode': mode.protoJsonName};
+}
+
+/// Starts a batch transcription of the audio frames later submitted to the
+/// session.
+final class StartBatchTranscription extends SessionCommand {
+  /// Creates a batch start command.
+  ///
+  /// [engineId] must be non-empty, an Opus [format] must declare a positive
+  /// frame duration, and [totalAudioMs], when present, must be a uint32.
+  StartBatchTranscription({
+    required this.engineId,
+    required this.format,
+    this.totalAudioMs,
+  }) {
+    requireNonEmptyString(engineId, 'startBatch.engineId');
+    if (format.encoding == AudioEncoding.opus &&
+        (format.frameDurationMs ?? 0) < 1) {
+      throw const FormatException(
+        'startBatch.format.frameDurationMs is required for Opus',
+      );
+    }
+    final total = totalAudioMs;
+    if (total != null) {
+      parseUint32(total, 'startBatch.totalAudioMs');
+    }
+  }
+
+  /// The engine that transcribes the batch.
+  final String engineId;
+
+  /// The format of every submitted audio frame.
+  final AudioFormat format;
+
+  /// The submitted duration in milliseconds, or `null` when omitted
+  /// (unknown).
+  final int? totalAudioMs;
+
+  @override
+  String get protoJsonField => 'startBatch';
+
+  @override
+  Map<String, Object?> toJson() {
+    final result = <String, Object?>{
+      'engineId': engineId,
+      'format': format.toJson(),
+    };
+    final total = totalAudioMs;
+    if (total != null) {
+      result['totalAudioMs'] = total;
+    }
+    return result;
+  }
+}
+
 /// A typed `murmur.v1.SessionControl` wire message.
 final class SessionControl {
   /// Creates a session-control message.
@@ -250,7 +346,14 @@ final class SessionControl {
 
   /// Parses a session-control message from a ProtoJSON object.
   factory SessionControl.fromJson(Map<String, Object?> json) {
-    const commandFields = ['start', 'stop', 'inputGate', 'finalize'];
+    const commandFields = [
+      'start',
+      'stop',
+      'inputGate',
+      'finalize',
+      'speakerVerification',
+      'startBatch',
+    ];
     final present = commandFields
         .where(json.containsKey)
         .toList(growable: false);
@@ -356,6 +459,15 @@ AudioEncoding _audioEncodingFromWire(Object? value) {
   throw const FormatException('encoding must be a known non-unspecified name');
 }
 
+SpeakerVerificationMode _speakerVerificationModeFromWire(Object? value) {
+  for (final mode in SpeakerVerificationMode.values) {
+    if (mode.protoJsonName == value) return mode;
+  }
+  throw const FormatException(
+    'speakerVerification.mode must be a known non-unspecified name',
+  );
+}
+
 CaptureMode _captureModeFromWire(Object? value) {
   for (final mode in CaptureMode.values) {
     if (mode.protoJsonName == value) return mode;
@@ -380,6 +492,9 @@ SessionCommand _sessionCommandFromJson(
               requireObject(body['requestedFormat'], 'start.requestedFormat'),
             )
           : null,
+      engineId: body.containsKey('engineId')
+          ? requireNonEmptyString(body['engineId'], 'start.engineId')
+          : null,
     ),
     'stop' => StopSession(
       reason: body.containsKey('reason')
@@ -395,6 +510,18 @@ SessionCommand _sessionCommandFromJson(
           : null,
     ),
     'finalize' => const FinalizeSession(),
+    'speakerVerification' => SetSpeakerVerification(
+      mode: _speakerVerificationModeFromWire(body['mode']),
+    ),
+    'startBatch' => StartBatchTranscription(
+      engineId: requireNonEmptyString(body['engineId'], 'startBatch.engineId'),
+      format: AudioFormat.fromJson(
+        requireObject(body['format'], 'startBatch.format'),
+      ),
+      totalAudioMs: body.containsKey('totalAudioMs')
+          ? parseUint32(body['totalAudioMs'], 'startBatch.totalAudioMs')
+          : null,
+    ),
     _ => throw FormatException('unknown session command $field'),
   };
 }

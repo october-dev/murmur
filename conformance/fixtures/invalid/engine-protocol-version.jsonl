@@ -1,0 +1,3 @@
+{"protocol":{"major":1,"minor":1},"engineId":"","sequence":"1","monotonicTimeUs":"1000","speechOutput":{"outputId":"output-synthetic-1","state":"SPEECH_OUTPUT_STATE_SPEAKING"}}
+{"protocol":{"major":1,"minor":1},"engineId":" ","sequence":"2","monotonicTimeUs":"2000","speechOutput":{"outputId":"output-synthetic-1","state":"SPEECH_OUTPUT_STATE_SPEAKING"}}
+{"protocol":{"major":1,"minor":1},"sequence":"3","monotonicTimeUs":"3000","speechOutput":{"outputId":"output-synthetic-1","state":"SPEECH_OUTPUT_STATE_SPEAKING"},"sessionId":"session-invalid"}

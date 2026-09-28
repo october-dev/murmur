@@ -4,7 +4,11 @@ import test from 'node:test'
 
 import {
   audioFrameToJson,
+  engineControlToJson,
+  engineEventToJson,
   parseAudioFrame,
+  parseEngineControl,
+  parseEngineEvent,
   parseRuntimeEvent,
   parseSessionControl,
   parseVoiceSource,
@@ -12,13 +16,15 @@ import {
   sessionControlToJson,
   voiceSourceToJson,
   type AudioFrame,
+  type EngineControl,
+  type EngineEvent,
   type RuntimeEvent,
   type SessionControl,
   type VoiceSource
 } from '../src/index.ts'
 
-type Message = 'RuntimeEvent' | 'SessionControl' | 'AudioFrame' | 'VoiceSource'
-type Parsed = RuntimeEvent | SessionControl | AudioFrame | VoiceSource
+type Message = 'RuntimeEvent' | 'SessionControl' | 'AudioFrame' | 'VoiceSource' | 'EngineEvent' | 'EngineControl'
+type Parsed = RuntimeEvent | SessionControl | AudioFrame | VoiceSource | EngineEvent | EngineControl
 interface FixtureSet {
   name: string
   message: Message
@@ -42,6 +48,8 @@ function parse(message: Message, input: unknown): Parsed {
     case 'SessionControl': return parseSessionControl(input)
     case 'AudioFrame': return parseAudioFrame(input)
     case 'VoiceSource': return parseVoiceSource(input)
+    case 'EngineEvent': return parseEngineEvent(input)
+    case 'EngineControl': return parseEngineControl(input)
   }
 }
 
@@ -51,6 +59,8 @@ function serialize(message: Message, value: Parsed): Record<string, unknown> {
     case 'SessionControl': return sessionControlToJson(value as SessionControl)
     case 'AudioFrame': return audioFrameToJson(value as AudioFrame)
     case 'VoiceSource': return voiceSourceToJson(value as VoiceSource)
+    case 'EngineEvent': return engineEventToJson(value as EngineEvent)
+    case 'EngineControl': return engineControlToJson(value as EngineControl)
   }
 }
 
@@ -60,6 +70,8 @@ function orderingKey(message: Message, value: Parsed): bigint | undefined {
     case 'SessionControl': return (value as SessionControl).requestSequence
     case 'AudioFrame': return (value as AudioFrame).sequence
     case 'VoiceSource': return undefined
+    case 'EngineEvent': return (value as EngineEvent).sequence
+    case 'EngineControl': return (value as EngineControl).requestSequence
   }
 }
 

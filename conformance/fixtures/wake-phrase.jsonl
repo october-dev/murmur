@@ -1,0 +1,5 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-wake","sequence":"1","monotonicTimeUs":"1000","wakePhrase":{"phraseId":"phrase-synthetic-1","stage":"WAKE_PHRASE_STAGE_DETECTED","confidence":0.625}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-wake","sequence":"2","monotonicTimeUs":"2000","wakePhrase":{"phraseId":"phrase-synthetic-1","stage":"WAKE_PHRASE_STAGE_DISMISSED","confidence":0.625}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-wake","sequence":"3","monotonicTimeUs":"3000","wakePhrase":{"phraseId":"phrase-synthetic-1","stage":"WAKE_PHRASE_STAGE_DETECTED","confidence":0.875}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-wake","sequence":"4","monotonicTimeUs":"4000","wakePhrase":{"phraseId":"phrase-synthetic-1","stage":"WAKE_PHRASE_STAGE_ACTIVATED","confidence":0.875}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-wake","sequence":"5","monotonicTimeUs":"5000","sessionStateChanged":{"previous":"SESSION_STATE_STARTING","current":"SESSION_STATE_LISTENING"}}

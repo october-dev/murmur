@@ -1,0 +1,3 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-batch-empty","sequence":"1","monotonicTimeUs":"1000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_ACTIVE"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-batch-empty","sequence":"2","monotonicTimeUs":"2000","batchProgress":{"processedAudioMs":500,"totalAudioMs":500}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-batch-empty","sequence":"3","monotonicTimeUs":"3000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_FINALIZED"}}

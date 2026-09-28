@@ -1,0 +1,7 @@
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"1","voicePack":{"packId":"pack-synthetic-1","action":"VOICE_PACK_ACTION_SYNTHETIC_BOGUS"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"2","voicePack":{"packId":"pack-synthetic-1","action":"VOICE_PACK_ACTION_UNSPECIFIED"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"3","voicePack":{"packId":"pack-synthetic-1"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"4","speak":{"outputId":"output-synthetic-1","text":"synthetic reply","fullDuplex":"true"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"5","speak":{"outputId":"output-synthetic-1","text":"synthetic reply","echoClearanceMs":-1}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"6","speak":{"outputId":"output-synthetic-1","text":"synthetic reply","echoClearanceMs":1.5}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"7","cancelSpeech":[]}

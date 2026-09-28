@@ -1,0 +1,8 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"1","speakerVerification":{"mode":"SPEAKER_VERIFICATION_MODE_SYNTHETIC_BOGUS"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"2","speakerVerification":{"mode":"SPEAKER_VERIFICATION_MODE_UNSPECIFIED"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"3","speakerVerification":{}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"4","startBatch":{"engineId":"engine-synthetic-1"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"5","startBatch":{"engineId":"engine-synthetic-1","format":{"sampleRateHz":16000,"channels":1,"encoding":"AUDIO_ENCODING_SYNTHETIC_BOGUS","frameDurationMs":10}}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"6","startBatch":{"engineId":"engine-synthetic-1","format":{"sampleRateHz":48000,"channels":1,"encoding":"AUDIO_ENCODING_OPUS"}}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"7","startBatch":{"engineId":"engine-synthetic-1","format":{"sampleRateHz":48000,"channels":1,"encoding":"AUDIO_ENCODING_OPUS","frameDurationMs":0}}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"8","startBatch":{"engineId":"engine-synthetic-1","format":{"sampleRateHz":16000,"channels":1,"encoding":"AUDIO_ENCODING_PCM_S16LE","frameDurationMs":10},"totalAudioMs":-1}}

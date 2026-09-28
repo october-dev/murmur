@@ -1,0 +1,12 @@
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"1","monotonicTimeUs":"1000","speechOutput":{"outputId":"output-synthetic-1","state":"SPEECH_OUTPUT_STATE_PREPARING"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"2","monotonicTimeUs":"2000","speechOutput":{"outputId":"output-synthetic-1","state":"SPEECH_OUTPUT_STATE_SPEAKING"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"3","monotonicTimeUs":"3000","speechOutput":{"outputId":"output-synthetic-1","state":"SPEECH_OUTPUT_STATE_ECHO_CLEARING"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"4","monotonicTimeUs":"4000","speechOutput":{"outputId":"output-synthetic-1","state":"SPEECH_OUTPUT_STATE_COMPLETED"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"5","monotonicTimeUs":"5000","speechOutput":{"outputId":"output-synthetic-2","state":"SPEECH_OUTPUT_STATE_SPEAKING"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"6","monotonicTimeUs":"6000","speechOutput":{"outputId":"output-synthetic-2","state":"SPEECH_OUTPUT_STATE_ECHO_CLEARING"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"7","monotonicTimeUs":"7000","speechOutput":{"outputId":"output-synthetic-2","state":"SPEECH_OUTPUT_STATE_CANCELLED"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"8","monotonicTimeUs":"8000","speechOutput":{"outputId":"output-synthetic-3","state":"SPEECH_OUTPUT_STATE_SPEAKING"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"9","monotonicTimeUs":"9000","speechOutput":{"outputId":"output-synthetic-3","state":"SPEECH_OUTPUT_STATE_ECHO_CLEARING"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"10","monotonicTimeUs":"10000","speechOutput":{"outputId":"output-synthetic-3","state":"SPEECH_OUTPUT_STATE_FAILED","error":{"code":"speech_output_timeout","message":"Synthetic playback watchdog expired.","retryable":true}}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"11","monotonicTimeUs":"11000","speechOutput":{"outputId":"output-synthetic-4","state":"SPEECH_OUTPUT_STATE_PREPARING"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","sequence":"12","monotonicTimeUs":"12000","speechOutput":{"outputId":"output-synthetic-4","state":"SPEECH_OUTPUT_STATE_CANCELLED"}}

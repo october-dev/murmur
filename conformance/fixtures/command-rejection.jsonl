@@ -1,0 +1,2 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-rejection","sequence":"1","monotonicTimeUs":"1000","error":{"code":"capability_unsupported","message":"Synthetic engine cannot transcribe batches.","metadata":{"capability":"batch_transcription","request_sequence":"1"}}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-rejection","sequence":"2","monotonicTimeUs":"2000","error":{"code":"invalid_state","message":"Synthetic session is not engine-bound.","metadata":{"request_sequence":"2"}}}

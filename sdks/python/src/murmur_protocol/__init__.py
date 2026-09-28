@@ -1,5 +1,9 @@
 from .models import (
     AudioFrame,
+    EngineCommandKind,
+    EngineControl,
+    EngineEvent,
+    EnginePayloadKind,
     PayloadKind,
     ProtocolVersion,
     RuntimeEvent,
@@ -11,6 +15,10 @@ from .models import (
 
 __all__ = [
     "AudioFrame",
+    "EngineCommandKind",
+    "EngineControl",
+    "EngineEvent",
+    "EnginePayloadKind",
     "PayloadKind",
     "ProtocolVersion",
     "RuntimeEvent",

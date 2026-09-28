@@ -1,0 +1,3 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"1","startBatch":{"format":{"sampleRateHz":16000,"channels":1,"encoding":"AUDIO_ENCODING_PCM_S16LE","frameDurationMs":10}}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"2","startBatch":{"engineId":" ","format":{"sampleRateHz":16000,"channels":1,"encoding":"AUDIO_ENCODING_PCM_S16LE","frameDurationMs":10}}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","requestSequence":"3","start":{"mode":"CAPTURE_MODE_HANDS_FREE","engineId":""}}

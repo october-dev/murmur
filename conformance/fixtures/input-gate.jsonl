@@ -1,0 +1,14 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"1","monotonicTimeUs":"1000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_SPEECH_OUTPUT"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"2","monotonicTimeUs":"2000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_ECHO_CLEARANCE"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"3","monotonicTimeUs":"3000","inputGateStatus":{}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"4","monotonicTimeUs":"4000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_HOST"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"5","monotonicTimeUs":"5000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_HOST","INPUT_GATE_CAUSE_SPEECH_OUTPUT"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"6","monotonicTimeUs":"6000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_HOST","INPUT_GATE_CAUSE_ECHO_CLEARANCE"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"7","monotonicTimeUs":"7000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_HOST"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"8","monotonicTimeUs":"8000","inputGateStatus":{}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"9","monotonicTimeUs":"9000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_ECHO_CLEARANCE"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"10","monotonicTimeUs":"10000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_ECHO_CLEARANCE","INPUT_GATE_CAUSE_INTERRUPTION"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"11","monotonicTimeUs":"11000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_INTERRUPTION"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"12","monotonicTimeUs":"12000","inputGateStatus":{}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"13","monotonicTimeUs":"13000","inputGateStatus":{"closedBy":["INPUT_GATE_CAUSE_FINALIZATION"]}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-gate","sequence":"14","monotonicTimeUs":"14000","inputGateStatus":{}}

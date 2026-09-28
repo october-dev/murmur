@@ -1,0 +1,2 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"1","monotonicTimeUs":"1000","wakePhrase":{"stage":"WAKE_PHRASE_STAGE_DETECTED"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"2","monotonicTimeUs":"2000","wakePhrase":{"phraseId":"","stage":"WAKE_PHRASE_STAGE_DETECTED"}}

@@ -1,0 +1,4 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"1","monotonicTimeUs":"1000","batchProgress":{"processedAudioMs":1501,"totalAudioMs":1500}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"2","monotonicTimeUs":"2000","batchProgress":{"processedAudioMs":1.5}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"3","monotonicTimeUs":"3000","batchProgress":{"processedAudioMs":-1}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-invalid","sequence":"4","monotonicTimeUs":"4000","batchProgress":{"totalAudioMs":4294967296}}

@@ -14,6 +14,9 @@ enum TranscriptKind {
   TRANSCRIPT_KIND_UNSPECIFIED = 0;
   TRANSCRIPT_KIND_PARTIAL = 1;
   TRANSCRIPT_KIND_FINAL = 2;
+  // A final segment the engine refused to accept. Its text may be shown but
+  // must never be dispatched. When refused by speaker verification,
+  // speaker_verification says why.
   TRANSCRIPT_KIND_REJECTED = 3;
 }
 
@@ -31,11 +34,120 @@ message AudioLevel {
   float amplitude = 1;
 }
 
+// The speaker-verification outcome for a final segment. Absent or
+// UNSPECIFIED means not evaluated.
+enum SpeakerVerificationResult {
+  SPEAKER_VERIFICATION_RESULT_UNSPECIFIED = 0;
+  // The enrolled speaker was verified. Only on FINAL.
+  SPEAKER_VERIFICATION_RESULT_ACCEPTED = 1;
+  // Verification was bypassed for this utterance. Only on FINAL.
+  SPEAKER_VERIFICATION_RESULT_BYPASSED = 2;
+  // Verification could not decide. On FINAL under a fail-open policy, on
+  // REJECTED under a fail-closed policy.
+  SPEAKER_VERIFICATION_RESULT_UNCERTAIN = 3;
+  // A different speaker was detected. Only on REJECTED.
+  SPEAKER_VERIFICATION_RESULT_REJECTED = 4;
+}
+
+// One recognized word of a batch transcript, on the submitted-media timeline
+// (see StartBatchTranscription). The word covers
+// [start_offset_ms, end_offset_ms): start rounds down, end rounds up, and
+// start_offset_ms <= end_offset_ms.
+message TranscriptWord {
+  string text = 1;
+  uint32 start_offset_ms = 2;
+  uint32 end_offset_ms = 3;
+  // Normalized 0.0 through 1.0.
+  float confidence = 4;
+}
+
 message Transcript {
   TranscriptKind kind = 1;
   string text = 2;
   string provider_id = 3;
   float confidence = 4;
+  // Word timings, ordered by non-decreasing start. Emitted only in batch
+  // sessions and only by engines with the `word_timings` capability.
+  repeated TranscriptWord words = 5;
+  // Allowed per kind: PARTIAL and UNSPECIFIED carry none; FINAL carries none,
+  // ACCEPTED, BYPASSED, or UNCERTAIN; REJECTED carries none, REJECTED, or
+  // UNCERTAIN.
+  SpeakerVerificationResult speaker_verification = 6;
+}
+
+// The lifecycle of one provider session, streaming or batch. FINALIZED,
+// CANCELLED, and FAILED are terminal, and each accepted provider session
+// reaches exactly one of them.
+enum ProviderState {
+  PROVIDER_STATE_UNSPECIFIED = 0;
+  PROVIDER_STATE_STARTING = 1;
+  PROVIDER_STATE_ACTIVE = 2;
+  // Input is closed and already accepted audio is being decoded.
+  PROVIDER_STATE_FINALIZING = 3;
+  // Every final for accepted audio has already been emitted.
+  PROVIDER_STATE_FINALIZED = 4;
+  // Stopped by stop; never graceful.
+  PROVIDER_STATE_CANCELLED = 5;
+  // Stopped with a typed error.
+  PROVIDER_STATE_FAILED = 6;
+}
+
+message ProviderStatus {
+  string provider_id = 1;
+  // Required; never UNSPECIFIED.
+  ProviderState state = 2;
+  // Present exactly when state is FAILED.
+  MurmurError error = 3;
+}
+
+// A reason recognition input is closed.
+enum InputGateCause {
+  INPUT_GATE_CAUSE_UNSPECIFIED = 0;
+  // The host closed the gate with SetInputGate.
+  INPUT_GATE_CAUSE_HOST = 1;
+  // The session is finalizing accepted audio.
+  INPUT_GATE_CAUSE_FINALIZATION = 2;
+  // Half-duplex speech output is playing.
+  INPUT_GATE_CAUSE_SPEECH_OUTPUT = 3;
+  // The echo tail after half-duplex speech output.
+  INPUT_GATE_CAUSE_ECHO_CLEARANCE = 4;
+  // The microphone is interrupted.
+  INPUT_GATE_CAUSE_INTERRUPTION = 5;
+}
+
+// The effective recognition-input gate, emitted whenever its set of causes
+// changes. Each holder adds and removes only its own cause, so input reopens
+// only when no cause remains.
+message InputGateStatus {
+  // Distinct active causes, in no significant order. Empty means open.
+  repeated InputGateCause closed_by = 1;
+}
+
+enum WakePhraseStage {
+  WAKE_PHRASE_STAGE_UNSPECIFIED = 0;
+  // A candidate wake phrase was heard.
+  WAKE_PHRASE_STAGE_DETECTED = 1;
+  // The detection activated capture.
+  WAKE_PHRASE_STAGE_ACTIVATED = 2;
+  // The detection was discarded by false-positive policy.
+  WAKE_PHRASE_STAGE_DISMISSED = 3;
+}
+
+// A wake-phrase event in a CAPTURE_MODE_WAKE_PHRASE session.
+message WakePhraseEvent {
+  // Required identifier of a host-configured phrase; never captured speech.
+  string phrase_id = 1;
+  // Required; never UNSPECIFIED.
+  WakePhraseStage stage = 2;
+  // Normalized 0.0 through 1.0.
+  float confidence = 3;
+}
+
+// Batch progress on the submitted-media timeline, in milliseconds.
+message BatchProgress {
+  uint32 processed_audio_ms = 1;
+  // 0 means unknown. When non-zero, processed_audio_ms must not exceed it.
+  uint32 total_audio_ms = 2;
 }
 
 message RuntimeEvent {
@@ -49,9 +161,17 @@ message RuntimeEvent {
     CaptureReadiness capture_readiness = 11;
     AudioLevel audio_level = 12;
     Transcript transcript = 13;
+    // A generic session error. A rejected SessionControl command is reported
+    // here with metadata["request_sequence"] set to its request_sequence.
     MurmurError error = 14;
     IntentProposal intent_proposal = 15;
     ConfirmationRequest confirmation_request = 16;
     ActionResult action_result = 17;
+    // Provider lifecycle and graceful-finalization outcome, streaming or
+    // batch.
+    ProviderStatus provider_status = 18;
+    InputGateStatus input_gate_status = 19;
+    WakePhraseEvent wake_phrase = 20;
+    BatchProgress batch_progress = 21;
   }
 }

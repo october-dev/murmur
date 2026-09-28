@@ -1,0 +1,5 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-provider","sequence":"1","monotonicTimeUs":"1000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_STARTING"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-provider","sequence":"2","monotonicTimeUs":"2000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_ACTIVE"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-provider","sequence":"3","monotonicTimeUs":"3000","transcript":{"kind":"TRANSCRIPT_KIND_FINAL","text":"synthetic provider final","providerId":"provider-synthetic","confidence":0.75}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-provider","sequence":"4","monotonicTimeUs":"4000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_FINALIZING"}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-provider","sequence":"5","monotonicTimeUs":"5000","providerStatus":{"providerId":"provider-synthetic","state":"PROVIDER_STATE_FINALIZED"}}

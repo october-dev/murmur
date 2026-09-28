@@ -46,6 +46,11 @@ message StartSession {
   VoiceSource source = 1;
   CaptureMode mode = 2;
   AudioFormat requested_format = 3;
+  // Optional engine that serves this session. When set, the session is
+  // engine-bound: commands are gated by that engine's capabilities and it
+  // receives the engine's half-duplex input-gate causes. When empty, the
+  // session keeps unbound v1 behavior.
+  string engine_id = 4;
 }
 
 message StopSession {
@@ -60,6 +65,49 @@ message SetInputGate {
 
 message FinalizeSession {}
 
+// Speaker-verification policy for an engine-bound session.
+enum SpeakerVerificationMode {
+  SPEAKER_VERIFICATION_MODE_UNSPECIFIED = 0;
+  // Verification is off until explicitly enforced; bypass never changes it.
+  SPEAKER_VERIFICATION_MODE_DISABLED = 1;
+  // Finals are verified; a rejected final is reported with
+  // TRANSCRIPT_KIND_REJECTED.
+  SPEAKER_VERIFICATION_MODE_ENFORCED = 2;
+  // Skip verification for the current utterance only. Legal only while the
+  // mode is ENFORCED; the engine restores ENFORCED after that utterance's
+  // accepted tail is finalized and on every stop or error path.
+  SPEAKER_VERIFICATION_MODE_BYPASSED = 3;
+}
+
+// Sets the speaker-verification mode. Requires an engine-bound session whose
+// engine advertises the `speaker_verification` capability; an unbound session
+// or an illegal bypass is rejected with `invalid_state`.
+message SetSpeakerVerification {
+  // Required; never UNSPECIFIED.
+  SpeakerVerificationMode mode = 1;
+}
+
+// Starts a batch transcription on this session. Requires the
+// `batch_transcription` capability.
+//
+// Flow: start_batch, AudioFrame messages in the declared format, finalize
+// (end of input), then zero or more batch_progress and FINAL transcript
+// events, then provider_status FINALIZED. stop cancels (CANCELLED); a failure
+// reports FAILED with an error. Zero transcripts is a valid empty result.
+//
+// Offsets use the submitted-media timeline in milliseconds: sample 0 is the
+// first sample of the first submitted AudioFrame, and frames are contiguous by
+// sample count whether or not the provider uses every sample.
+message StartBatchTranscription {
+  // Required engine that transcribes the batch.
+  string engine_id = 1;
+  // Required format of every submitted AudioFrame. frame_duration_ms is
+  // required for Opus because it defines each frame's duration.
+  AudioFormat format = 2;
+  // Total submitted duration in milliseconds, when known; 0 means unknown.
+  uint32 total_audio_ms = 3;
+}
+
 message SessionControl {
   ProtocolVersion protocol = 1;
   string session_id = 2;
@@ -70,6 +118,8 @@ message SessionControl {
     StopSession stop = 11;
     SetInputGate input_gate = 12;
     FinalizeSession finalize = 13;
+    SetSpeakerVerification speaker_verification = 14;
+    StartBatchTranscription start_batch = 15;
   }
 }
 

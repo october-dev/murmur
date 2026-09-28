@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package murmur.v1;
+
+import "murmur/v1/common.proto";
+
+option java_multiple_files = true;
+option java_package = "dev.murmur.protocol.v1";
+option swift_prefix = "MRM";
+
+// The state of a voice pack or of one of its components.
+enum VoicePackState {
+  VOICE_PACK_STATE_UNSPECIFIED = 0;
+  // Nothing is installed and no preparation is running.
+  VOICE_PACK_STATE_NOT_INSTALLED = 1;
+  // Content is being fetched, verified, or loaded.
+  VOICE_PACK_STATE_PREPARING = 2;
+  // Installed content is being verified and damaged content re-fetched.
+  VOICE_PACK_STATE_REPAIRING = 3;
+  // Installed, verified, and loadable.
+  VOICE_PACK_STATE_READY = 4;
+  // Preparation or repair stopped with a typed error.
+  VOICE_PACK_STATE_FAILED = 5;
+  // The pack or component cannot run on this engine or platform.
+  VOICE_PACK_STATE_UNSUPPORTED = 6;
+}
+
+// The engine function a voice-pack component serves.
+enum VoicePackComponentKind {
+  VOICE_PACK_COMPONENT_KIND_UNSPECIFIED = 0;
+  VOICE_PACK_COMPONENT_KIND_TRANSCRIPTION = 1;
+  VOICE_PACK_COMPONENT_KIND_VOICE_ACTIVITY = 2;
+  VOICE_PACK_COMPONENT_KIND_SPEECH_OUTPUT = 3;
+  VOICE_PACK_COMPONENT_KIND_WAKE_PHRASE = 4;
+  VOICE_PACK_COMPONENT_KIND_SPEAKER_VERIFICATION = 5;
+}
+
+// Diagnostic state of one installable unit of a voice pack. Component states
+// never authorize use of a pack that is not READY.
+message VoicePackComponent {
+  // Engine-assigned identifier, stable for the pack. Never a filesystem path
+  // or URL.
+  string component_id = 1;
+  // Required; never UNSPECIFIED.
+  VoicePackComponentKind kind = 2;
+  // Required; never UNSPECIFIED.
+  VoicePackState state = 3;
+  // Whether the pack can become READY only when this component is READY.
+  bool required = 4;
+  // Bytes fetched or verified so far.
+  uint64 bytes_completed = 5;
+  // Expected byte count; 0 means unknown. When non-zero, bytes_completed must
+  // not exceed it.
+  uint64 bytes_total = 6;
+  // Present exactly when state is FAILED.
+  MurmurError error = 7;
+}
+
+// A full snapshot of one voice pack, emitted when it changes and when a
+// voice-pack request is received. A snapshot is keyed by pack_id and does not
+// identify which request caused it.
+//
+// A pack is READY exactly when every required, supported component is READY.
+message VoicePackStatus {
+  // Engine-assigned pack identifier. Never a filesystem path or URL.
+  string pack_id = 1;
+  // Required; never UNSPECIFIED.
+  VoicePackState state = 2;
+  // Every component of the pack. Empty when the engine does not report them.
+  repeated VoicePackComponent components = 3;
+  // Aggregate bytes fetched or verified so far.
+  uint64 bytes_completed = 4;
+  // Aggregate expected byte count; 0 means unknown. When non-zero,
+  // bytes_completed must not exceed it.
+  uint64 bytes_total = 5;
+  // Present exactly when state is FAILED.
+  MurmurError error = 6;
+}
+
+// What a voice-pack request asks the engine to do.
+enum VoicePackAction {
+  VOICE_PACK_ACTION_UNSPECIFIED = 0;
+  // Install and load the pack. Idempotent and single-flight per pack; a no-op
+  // when the pack is already READY.
+  VOICE_PACK_ACTION_PREPARE = 1;
+  // Allowed after FAILED with a retryable error. Invalidates the failed
+  // components and prepares again.
+  VOICE_PACK_ACTION_RETRY = 2;
+  // Verify every component and re-fetch damaged ones. The engine may also
+  // repair automatically (bounded, never looping), reported as REPAIRING.
+  VOICE_PACK_ACTION_REPAIR = 3;
+}
+
+// Requests an action on a voice pack. Requires the `voice_packs` capability.
+// Progress and outcome are reported through VoicePackStatus snapshots.
+message VoicePackRequest {
+  // Required pack identifier.
+  string pack_id = 1;
+  // Required; never UNSPECIFIED.
+  VoicePackAction action = 2;
+}

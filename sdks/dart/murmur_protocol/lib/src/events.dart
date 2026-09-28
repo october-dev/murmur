@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'protocol.dart';
+import 'validation.dart';
 
 enum RuntimePayloadKind {
   sessionStateChanged('sessionStateChanged'),
@@ -10,7 +11,11 @@ enum RuntimePayloadKind {
   error('error'),
   intentProposal('intentProposal'),
   confirmationRequest('confirmationRequest'),
-  actionResult('actionResult');
+  actionResult('actionResult'),
+  providerStatus('providerStatus'),
+  inputGateStatus('inputGateStatus'),
+  wakePhrase('wakePhrase'),
+  batchProgress('batchProgress');
 
   const RuntimePayloadKind(this.protoJsonField);
 
@@ -106,17 +111,109 @@ final class RuntimeEvent {
   String toJsonString() => jsonEncode(toJson());
 }
 
+const _transcriptKinds = {
+  'TRANSCRIPT_KIND_UNSPECIFIED',
+  'TRANSCRIPT_KIND_PARTIAL',
+  'TRANSCRIPT_KIND_FINAL',
+  'TRANSCRIPT_KIND_REJECTED',
+};
+const _speakerVerificationResults = {
+  'SPEAKER_VERIFICATION_RESULT_UNSPECIFIED',
+  'SPEAKER_VERIFICATION_RESULT_ACCEPTED',
+  'SPEAKER_VERIFICATION_RESULT_BYPASSED',
+  'SPEAKER_VERIFICATION_RESULT_UNCERTAIN',
+  'SPEAKER_VERIFICATION_RESULT_REJECTED',
+};
+
+/// Speaker-verification results each transcript kind may carry besides an
+/// absent or UNSPECIFIED result.
+const _speakerResultsByKind = <String, Set<String>>{
+  'TRANSCRIPT_KIND_UNSPECIFIED': {},
+  'TRANSCRIPT_KIND_PARTIAL': {},
+  'TRANSCRIPT_KIND_FINAL': {
+    'SPEAKER_VERIFICATION_RESULT_ACCEPTED',
+    'SPEAKER_VERIFICATION_RESULT_BYPASSED',
+    'SPEAKER_VERIFICATION_RESULT_UNCERTAIN',
+  },
+  'TRANSCRIPT_KIND_REJECTED': {
+    'SPEAKER_VERIFICATION_RESULT_REJECTED',
+    'SPEAKER_VERIFICATION_RESULT_UNCERTAIN',
+  },
+};
+const _providerStates = {
+  'PROVIDER_STATE_UNSPECIFIED',
+  'PROVIDER_STATE_STARTING',
+  'PROVIDER_STATE_ACTIVE',
+  'PROVIDER_STATE_FINALIZING',
+  'PROVIDER_STATE_FINALIZED',
+  'PROVIDER_STATE_CANCELLED',
+  'PROVIDER_STATE_FAILED',
+};
+const _inputGateCauses = {
+  'INPUT_GATE_CAUSE_UNSPECIFIED',
+  'INPUT_GATE_CAUSE_HOST',
+  'INPUT_GATE_CAUSE_FINALIZATION',
+  'INPUT_GATE_CAUSE_SPEECH_OUTPUT',
+  'INPUT_GATE_CAUSE_ECHO_CLEARANCE',
+  'INPUT_GATE_CAUSE_INTERRUPTION',
+};
+const _wakePhraseStages = {
+  'WAKE_PHRASE_STAGE_UNSPECIFIED',
+  'WAKE_PHRASE_STAGE_DETECTED',
+  'WAKE_PHRASE_STAGE_ACTIVATED',
+  'WAKE_PHRASE_STAGE_DISMISSED',
+};
+
+void _validateTranscript(Map<String, Object?> payload) {
+  final kind = requireEnumName(
+    payload['kind'],
+    _transcriptKinds,
+    'transcript.kind',
+  );
+  if (payload['text'] is! String) {
+    throw const FormatException('transcript requires kind and text');
+  }
+  if (payload.containsKey('speakerVerification')) {
+    final result = requireEnumName(
+      payload['speakerVerification'],
+      _speakerVerificationResults,
+      'transcript.speakerVerification',
+    );
+    if (isEnumSet(payload, 'speakerVerification') &&
+        !_speakerResultsByKind[kind]!.contains(result)) {
+      throw FormatException('$kind cannot carry $result');
+    }
+  }
+  final words = requireList(
+    fieldOr(payload, 'words', const <Object?>[]),
+    'transcript.words',
+  );
+  var previousStart = 0;
+  for (final value in words) {
+    final word = requireObject(value, 'transcript.words[]');
+    if (word['text'] is! String) {
+      throw const FormatException('word.text must be a string');
+    }
+    final start = parseUint32(
+      fieldOr(word, 'startOffsetMs', 0),
+      'startOffsetMs',
+    );
+    final end = parseUint32(fieldOr(word, 'endOffsetMs', 0), 'endOffsetMs');
+    if (start > end || start < previousStart) {
+      throw const FormatException(
+        'words must be ordered and end at or after their start',
+      );
+    }
+    if (word.containsKey('confidence')) {
+      validateUnitInterval(word['confidence'], 'word.confidence');
+    }
+    previousStart = start;
+  }
+}
+
 void _validatePayload(RuntimePayloadKind kind, Map<String, Object?> payload) {
   if (kind == RuntimePayloadKind.transcript) {
-    const kinds = {
-      'TRANSCRIPT_KIND_UNSPECIFIED',
-      'TRANSCRIPT_KIND_PARTIAL',
-      'TRANSCRIPT_KIND_FINAL',
-      'TRANSCRIPT_KIND_REJECTED',
-    };
-    if (!kinds.contains(payload['kind']) || payload['text'] is! String) {
-      throw const FormatException('transcript requires kind and text');
-    }
+    _validateTranscript(payload);
   }
   if (kind == RuntimePayloadKind.audioLevel) {
     final amplitude = payload['amplitude'];
@@ -143,5 +240,65 @@ void _validatePayload(RuntimePayloadKind kind, Map<String, Object?> payload) {
         'sessionStateChanged requires known previous and current states',
       );
     }
+  }
+  if (kind == RuntimePayloadKind.providerStatus) {
+    final state = requireSpecifiedEnumName(
+      payload['state'],
+      _providerStates,
+      'providerStatus.state',
+    );
+    validateOutcome(
+      payload,
+      'providerStatus',
+      failed: state == 'PROVIDER_STATE_FAILED',
+    );
+  }
+  if (kind == RuntimePayloadKind.inputGateStatus) {
+    final causes = requireList(
+      fieldOr(payload, 'closedBy', const <Object?>[]),
+      'inputGateStatus.closedBy',
+    );
+    final distinct = causes
+        .map(
+          (cause) => requireSpecifiedEnumName(
+            cause,
+            _inputGateCauses,
+            'inputGateStatus.closedBy',
+          ),
+        )
+        .toSet();
+    if (distinct.length != causes.length) {
+      throw const FormatException(
+        'inputGateStatus.closedBy must not repeat a cause',
+      );
+    }
+  }
+  if (kind == RuntimePayloadKind.wakePhrase) {
+    requireNonEmptyString(payload['phraseId'], 'wakePhrase.phraseId');
+    requireSpecifiedEnumName(
+      payload['stage'],
+      _wakePhraseStages,
+      'wakePhrase.stage',
+    );
+    if (payload.containsKey('confidence')) {
+      validateUnitInterval(payload['confidence'], 'wakePhrase.confidence');
+    }
+  }
+  if (kind == RuntimePayloadKind.batchProgress) {
+    validateProgress(
+      BigInt.from(
+        parseUint32(
+          fieldOr(payload, 'processedAudioMs', 0),
+          'batchProgress.processedAudioMs',
+        ),
+      ),
+      BigInt.from(
+        parseUint32(
+          fieldOr(payload, 'totalAudioMs', 0),
+          'batchProgress.totalAudioMs',
+        ),
+      ),
+      'batchProgress',
+    );
   }
 }

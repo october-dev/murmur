@@ -1,0 +1,5 @@
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"1","voicePack":{"action":"VOICE_PACK_ACTION_PREPARE"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"2","speak":{"outputId":"","text":"synthetic reply"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"3","speak":{"outputId":"output-synthetic-1","text":""}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"4","speak":{"outputId":"output-synthetic-1"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-invalid","requestSequence":"5","cancelSpeech":{}}

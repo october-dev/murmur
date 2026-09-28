@@ -2,7 +2,7 @@
 final class ProtocolVersion {
   const ProtocolVersion({required this.major, required this.minor});
 
-  static const current = ProtocolVersion(major: 1, minor: 0);
+  static const current = ProtocolVersion(major: 1, minor: 1);
 
   final int major;
   final int minor;

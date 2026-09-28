@@ -1,0 +1,2 @@
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-batch","requestSequence":"1","startBatch":{"engineId":"engine-synthetic-1","format":{"sampleRateHz":16000,"channels":1,"encoding":"AUDIO_ENCODING_PCM_S16LE","frameDurationMs":10},"totalAudioMs":1500}}
+{"protocol":{"major":1,"minor":1},"sessionId":"session-test-batch","requestSequence":"2","finalize":{}}

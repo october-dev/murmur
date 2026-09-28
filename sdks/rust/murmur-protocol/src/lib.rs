@@ -11,8 +11,27 @@ const RUNTIME_ARMS: &[&str] = &[
     "intentProposal",
     "confirmationRequest",
     "actionResult",
+    "providerStatus",
+    "inputGateStatus",
+    "wakePhrase",
+    "batchProgress",
 ];
-const SESSION_ARMS: &[&str] = &["start", "stop", "inputGate", "finalize"];
+const SESSION_ARMS: &[&str] = &[
+    "start",
+    "stop",
+    "inputGate",
+    "finalize",
+    "speakerVerification",
+    "startBatch",
+];
+const ENGINE_EVENT_ARMS: &[&str] = &[
+    "engineStatus",
+    "voicePackStatus",
+    "microphoneStatus",
+    "speechOutput",
+    "error",
+];
+const ENGINE_CONTROL_ARMS: &[&str] = &["voicePack", "speak", "cancelSpeech"];
 const TRANSCRIPT_KINDS: &[&str] = &[
     "TRANSCRIPT_KIND_UNSPECIFIED",
     "TRANSCRIPT_KIND_PARTIAL",
@@ -58,6 +77,141 @@ const SOURCE_CAPABILITIES: &[&str] = &[
     "SOURCE_CAPABILITY_INPUT_MUTE",
     "SOURCE_CAPABILITY_SPEAKER_VERIFICATION",
 ];
+// Required discriminators reject the *_UNSPECIFIED name; optional enums treat
+// it as absent.
+const ENGINE_LOCALITIES: &[&str] = &[
+    "ENGINE_LOCALITY_UNSPECIFIED",
+    "ENGINE_LOCALITY_ON_DEVICE",
+    "ENGINE_LOCALITY_REMOTE",
+];
+const ENGINE_PLATFORMS: &[&str] = &[
+    "ENGINE_PLATFORM_UNSPECIFIED",
+    "ENGINE_PLATFORM_MACOS",
+    "ENGINE_PLATFORM_WINDOWS",
+    "ENGINE_PLATFORM_LINUX",
+    "ENGINE_PLATFORM_IOS",
+    "ENGINE_PLATFORM_ANDROID",
+];
+const ENGINE_READINESS: &[&str] = &[
+    "ENGINE_READINESS_UNSPECIFIED",
+    "ENGINE_READINESS_NOT_READY",
+    "ENGINE_READINESS_PREPARING",
+    "ENGINE_READINESS_READY",
+    "ENGINE_READINESS_FAILED",
+];
+const VOICE_PACK_STATES: &[&str] = &[
+    "VOICE_PACK_STATE_UNSPECIFIED",
+    "VOICE_PACK_STATE_NOT_INSTALLED",
+    "VOICE_PACK_STATE_PREPARING",
+    "VOICE_PACK_STATE_REPAIRING",
+    "VOICE_PACK_STATE_READY",
+    "VOICE_PACK_STATE_FAILED",
+    "VOICE_PACK_STATE_UNSUPPORTED",
+];
+const VOICE_PACK_COMPONENT_KINDS: &[&str] = &[
+    "VOICE_PACK_COMPONENT_KIND_UNSPECIFIED",
+    "VOICE_PACK_COMPONENT_KIND_TRANSCRIPTION",
+    "VOICE_PACK_COMPONENT_KIND_VOICE_ACTIVITY",
+    "VOICE_PACK_COMPONENT_KIND_SPEECH_OUTPUT",
+    "VOICE_PACK_COMPONENT_KIND_WAKE_PHRASE",
+    "VOICE_PACK_COMPONENT_KIND_SPEAKER_VERIFICATION",
+];
+const VOICE_PACK_ACTIONS: &[&str] = &[
+    "VOICE_PACK_ACTION_UNSPECIFIED",
+    "VOICE_PACK_ACTION_PREPARE",
+    "VOICE_PACK_ACTION_RETRY",
+    "VOICE_PACK_ACTION_REPAIR",
+];
+const MICROPHONE_PERMISSIONS: &[&str] = &[
+    "MICROPHONE_PERMISSION_UNSPECIFIED",
+    "MICROPHONE_PERMISSION_NOT_DETERMINED",
+    "MICROPHONE_PERMISSION_GRANTED",
+    "MICROPHONE_PERMISSION_DENIED",
+    "MICROPHONE_PERMISSION_RESTRICTED",
+];
+const MICROPHONE_ROUTES: &[&str] = &[
+    "MICROPHONE_ROUTE_UNSPECIFIED",
+    "MICROPHONE_ROUTE_BUILT_IN",
+    "MICROPHONE_ROUTE_WIRED",
+    "MICROPHONE_ROUTE_BLUETOOTH",
+    "MICROPHONE_ROUTE_USB",
+    "MICROPHONE_ROUTE_VIRTUAL",
+];
+const MICROPHONE_READINESS: &[&str] = &[
+    "MICROPHONE_READINESS_UNSPECIFIED",
+    "MICROPHONE_READINESS_UNAVAILABLE",
+    "MICROPHONE_READINESS_WARMING",
+    "MICROPHONE_READINESS_READY",
+    "MICROPHONE_READINESS_INTERRUPTED",
+];
+const MICROPHONE_INTERRUPTIONS: &[&str] = &[
+    "MICROPHONE_INTERRUPTION_UNSPECIFIED",
+    "MICROPHONE_INTERRUPTION_SYSTEM",
+    "MICROPHONE_INTERRUPTION_OTHER_APPLICATION",
+    "MICROPHONE_INTERRUPTION_DEVICE_REMOVED",
+];
+const SPEECH_OUTPUT_STATES: &[&str] = &[
+    "SPEECH_OUTPUT_STATE_UNSPECIFIED",
+    "SPEECH_OUTPUT_STATE_PREPARING",
+    "SPEECH_OUTPUT_STATE_SPEAKING",
+    "SPEECH_OUTPUT_STATE_ECHO_CLEARING",
+    "SPEECH_OUTPUT_STATE_COMPLETED",
+    "SPEECH_OUTPUT_STATE_CANCELLED",
+    "SPEECH_OUTPUT_STATE_FAILED",
+];
+const PROVIDER_STATES: &[&str] = &[
+    "PROVIDER_STATE_UNSPECIFIED",
+    "PROVIDER_STATE_STARTING",
+    "PROVIDER_STATE_ACTIVE",
+    "PROVIDER_STATE_FINALIZING",
+    "PROVIDER_STATE_FINALIZED",
+    "PROVIDER_STATE_CANCELLED",
+    "PROVIDER_STATE_FAILED",
+];
+const INPUT_GATE_CAUSES: &[&str] = &[
+    "INPUT_GATE_CAUSE_UNSPECIFIED",
+    "INPUT_GATE_CAUSE_HOST",
+    "INPUT_GATE_CAUSE_FINALIZATION",
+    "INPUT_GATE_CAUSE_SPEECH_OUTPUT",
+    "INPUT_GATE_CAUSE_ECHO_CLEARANCE",
+    "INPUT_GATE_CAUSE_INTERRUPTION",
+];
+const WAKE_PHRASE_STAGES: &[&str] = &[
+    "WAKE_PHRASE_STAGE_UNSPECIFIED",
+    "WAKE_PHRASE_STAGE_DETECTED",
+    "WAKE_PHRASE_STAGE_ACTIVATED",
+    "WAKE_PHRASE_STAGE_DISMISSED",
+];
+const SPEAKER_VERIFICATION_MODES: &[&str] = &[
+    "SPEAKER_VERIFICATION_MODE_UNSPECIFIED",
+    "SPEAKER_VERIFICATION_MODE_DISABLED",
+    "SPEAKER_VERIFICATION_MODE_ENFORCED",
+    "SPEAKER_VERIFICATION_MODE_BYPASSED",
+];
+const SPEAKER_VERIFICATION_RESULTS: &[&str] = &[
+    "SPEAKER_VERIFICATION_RESULT_UNSPECIFIED",
+    "SPEAKER_VERIFICATION_RESULT_ACCEPTED",
+    "SPEAKER_VERIFICATION_RESULT_BYPASSED",
+    "SPEAKER_VERIFICATION_RESULT_UNCERTAIN",
+    "SPEAKER_VERIFICATION_RESULT_REJECTED",
+];
+
+/// Speaker-verification results a transcript kind may carry besides an absent
+/// or UNSPECIFIED result.
+fn speaker_results_for_kind(kind: &str) -> &'static [&'static str] {
+    match kind {
+        "TRANSCRIPT_KIND_FINAL" => &[
+            "SPEAKER_VERIFICATION_RESULT_ACCEPTED",
+            "SPEAKER_VERIFICATION_RESULT_BYPASSED",
+            "SPEAKER_VERIFICATION_RESULT_UNCERTAIN",
+        ],
+        "TRANSCRIPT_KIND_REJECTED" => &[
+            "SPEAKER_VERIFICATION_RESULT_REJECTED",
+            "SPEAKER_VERIFICATION_RESULT_UNCERTAIN",
+        ],
+        _ => &[],
+    }
+}
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -66,7 +220,7 @@ pub struct ProtocolVersion {
     pub minor: u32,
 }
 
-pub const CURRENT_PROTOCOL: ProtocolVersion = ProtocolVersion { major: 1, minor: 0 };
+pub const CURRENT_PROTOCOL: ProtocolVersion = ProtocolVersion { major: 1, minor: 1 };
 
 pub fn is_supported(protocol: ProtocolVersion) -> bool {
     protocol.major == CURRENT_PROTOCOL.major
@@ -96,6 +250,10 @@ pub enum RuntimePayload {
     IntentProposal(Map<String, Value>),
     ConfirmationRequest(Map<String, Value>),
     ActionResult(Map<String, Value>),
+    ProviderStatus(Map<String, Value>),
+    InputGateStatus(Map<String, Value>),
+    WakePhrase(Map<String, Value>),
+    BatchProgress(Map<String, Value>),
 }
 
 #[derive(Deserialize)]
@@ -115,7 +273,7 @@ impl TryFrom<RawRuntimeEvent> for RuntimeEvent {
     type Error = String;
 
     fn try_from(mut raw: RawRuntimeEvent) -> Result<Self, Self::Error> {
-        validate_envelope(raw.protocol, &raw.session_id)?;
+        validate_envelope(raw.protocol, &raw.session_id, "sessionId")?;
         let (arm, body) = take_exactly_one(&mut raw.remainder, RUNTIME_ARMS, "runtime payload")?;
         validate_runtime_payload(arm, &body)?;
         let payload = match arm {
@@ -127,6 +285,10 @@ impl TryFrom<RawRuntimeEvent> for RuntimeEvent {
             "intentProposal" => RuntimePayload::IntentProposal(body),
             "confirmationRequest" => RuntimePayload::ConfirmationRequest(body),
             "actionResult" => RuntimePayload::ActionResult(body),
+            "providerStatus" => RuntimePayload::ProviderStatus(body),
+            "inputGateStatus" => RuntimePayload::InputGateStatus(body),
+            "wakePhrase" => RuntimePayload::WakePhrase(body),
+            "batchProgress" => RuntimePayload::BatchProgress(body),
             _ => unreachable!(),
         };
         Ok(Self {
@@ -157,6 +319,8 @@ pub enum SessionCommand {
     Stop(Map<String, Value>),
     InputGate(Map<String, Value>),
     Finalize(Map<String, Value>),
+    SpeakerVerification(Map<String, Value>),
+    StartBatch(Map<String, Value>),
 }
 
 #[derive(Deserialize)]
@@ -174,7 +338,7 @@ impl TryFrom<RawSessionControl> for SessionControl {
     type Error = String;
 
     fn try_from(mut raw: RawSessionControl) -> Result<Self, Self::Error> {
-        validate_envelope(raw.protocol, &raw.session_id)?;
+        validate_envelope(raw.protocol, &raw.session_id, "sessionId")?;
         let (arm, body) = take_exactly_one(&mut raw.remainder, SESSION_ARMS, "session command")?;
         validate_session_body(arm, &body)?;
         let command = match arm {
@@ -182,6 +346,8 @@ impl TryFrom<RawSessionControl> for SessionControl {
             "stop" => SessionCommand::Stop(body),
             "inputGate" => SessionCommand::InputGate(body),
             "finalize" => SessionCommand::Finalize(body),
+            "speakerVerification" => SessionCommand::SpeakerVerification(body),
+            "startBatch" => SessionCommand::StartBatch(body),
             _ => unreachable!(),
         };
         Ok(Self {
@@ -225,7 +391,7 @@ impl TryFrom<RawAudioFrame> for AudioFrame {
     type Error = String;
 
     fn try_from(raw: RawAudioFrame) -> Result<Self, Self::Error> {
-        validate_envelope(raw.protocol, &raw.session_id)?;
+        validate_envelope(raw.protocol, &raw.session_id, "sessionId")?;
         validate_audio_format(&raw.format)?;
         if !valid_base64(&raw.payload_base64) {
             return Err("payload must use valid base64 grammar".into());
@@ -237,6 +403,121 @@ impl TryFrom<RawAudioFrame> for AudioFrame {
             monotonic_time_us: raw.monotonic_time_us,
             format: raw.format,
             payload_base64: raw.payload_base64,
+        })
+    }
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", try_from = "RawEngineEvent")]
+pub struct EngineEvent {
+    pub protocol: ProtocolVersion,
+    pub engine_id: String,
+    #[serde(with = "uint64_string")]
+    pub sequence: u64,
+    #[serde(with = "uint64_string")]
+    pub monotonic_time_us: u64,
+    #[serde(flatten)]
+    pub payload: EnginePayload,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum EnginePayload {
+    EngineStatus(Map<String, Value>),
+    VoicePackStatus(Map<String, Value>),
+    MicrophoneStatus(Map<String, Value>),
+    SpeechOutput(Map<String, Value>),
+    Error(Map<String, Value>),
+}
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct RawEngineEvent {
+    protocol: ProtocolVersion,
+    engine_id: String,
+    #[serde(with = "uint64_string")]
+    sequence: u64,
+    #[serde(with = "uint64_string")]
+    monotonic_time_us: u64,
+    #[serde(flatten)]
+    remainder: Map<String, Value>,
+}
+
+impl TryFrom<RawEngineEvent> for EngineEvent {
+    type Error = String;
+
+    fn try_from(mut raw: RawEngineEvent) -> Result<Self, Self::Error> {
+        validate_envelope(raw.protocol, &raw.engine_id, "engineId")?;
+        let (arm, body) =
+            take_exactly_one(&mut raw.remainder, ENGINE_EVENT_ARMS, "engine payload")?;
+        validate_engine_payload(arm, &body)?;
+        let payload = match arm {
+            "engineStatus" => EnginePayload::EngineStatus(body),
+            "voicePackStatus" => EnginePayload::VoicePackStatus(body),
+            "microphoneStatus" => EnginePayload::MicrophoneStatus(body),
+            "speechOutput" => EnginePayload::SpeechOutput(body),
+            "error" => EnginePayload::Error(body),
+            _ => unreachable!(),
+        };
+        Ok(Self {
+            protocol: raw.protocol,
+            engine_id: raw.engine_id,
+            sequence: raw.sequence,
+            monotonic_time_us: raw.monotonic_time_us,
+            payload,
+        })
+    }
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", try_from = "RawEngineControl")]
+pub struct EngineControl {
+    pub protocol: ProtocolVersion,
+    pub engine_id: String,
+    #[serde(with = "uint64_string")]
+    pub request_sequence: u64,
+    #[serde(flatten)]
+    pub command: EngineCommand,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum EngineCommand {
+    VoicePack(Map<String, Value>),
+    Speak(Map<String, Value>),
+    CancelSpeech(Map<String, Value>),
+}
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct RawEngineControl {
+    protocol: ProtocolVersion,
+    engine_id: String,
+    #[serde(with = "uint64_string")]
+    request_sequence: u64,
+    #[serde(flatten)]
+    remainder: Map<String, Value>,
+}
+
+impl TryFrom<RawEngineControl> for EngineControl {
+    type Error = String;
+
+    fn try_from(mut raw: RawEngineControl) -> Result<Self, Self::Error> {
+        validate_envelope(raw.protocol, &raw.engine_id, "engineId")?;
+        let (arm, body) =
+            take_exactly_one(&mut raw.remainder, ENGINE_CONTROL_ARMS, "engine command")?;
+        validate_engine_command(arm, &body)?;
+        let command = match arm {
+            "voicePack" => EngineCommand::VoicePack(body),
+            "speak" => EngineCommand::Speak(body),
+            "cancelSpeech" => EngineCommand::CancelSpeech(body),
+            _ => unreachable!(),
+        };
+        Ok(Self {
+            protocol: raw.protocol,
+            engine_id: raw.engine_id,
+            request_sequence: raw.request_sequence,
+            command,
         })
     }
 }
@@ -286,12 +567,16 @@ impl TryFrom<RawVoiceSource> for VoiceSource {
     }
 }
 
-fn validate_envelope(protocol: ProtocolVersion, session_id: &str) -> Result<(), String> {
+fn validate_envelope(
+    protocol: ProtocolVersion,
+    routing_id: &str,
+    field: &str,
+) -> Result<(), String> {
     if !is_supported(protocol) {
         return Err(format!("unsupported protocol major {}", protocol.major));
     }
-    if session_id.trim().is_empty() {
-        return Err("sessionId must be non-empty".into());
+    if routing_id.trim().is_empty() {
+        return Err(format!("{field} must be non-empty"));
     }
     Ok(())
 }
@@ -332,14 +617,142 @@ fn value_enum<'a>(body: &'a Map<String, Value>, field: &str) -> Result<&'a str, 
         .ok_or_else(|| format!("{field} must be an enum name"))
 }
 
+fn required_enum<'a>(
+    body: &'a Map<String, Value>,
+    field: &str,
+    values: &[&str],
+) -> Result<&'a str, String> {
+    let value = value_enum(body, field)?;
+    require_enum(value, values, field)?;
+    if value.ends_with("_UNSPECIFIED") {
+        return Err(format!("{field} must not be unspecified"));
+    }
+    Ok(value)
+}
+
+fn optional_enum(body: &Map<String, Value>, field: &str, values: &[&str]) -> Result<(), String> {
+    if body.contains_key(field) {
+        require_enum(value_enum(body, field)?, values, field)?;
+    }
+    Ok(())
+}
+
+/// Whether an optional enum is set; an explicit *_UNSPECIFIED name counts as absent.
+fn is_set(body: &Map<String, Value>, field: &str) -> bool {
+    body.get(field).is_some_and(|value| {
+        !value
+            .as_str()
+            .is_some_and(|name| name.ends_with("_UNSPECIFIED"))
+    })
+}
+
+fn non_empty_string<'a>(body: &'a Map<String, Value>, field: &str) -> Result<&'a str, String> {
+    body.get(field)
+        .and_then(Value::as_str)
+        .filter(|value| !value.trim().is_empty())
+        .ok_or_else(|| format!("{field} must be a non-empty string"))
+}
+
+fn array_field<'a>(body: &'a Map<String, Value>, field: &str) -> Result<&'a [Value], String> {
+    match body.get(field) {
+        None => Ok(&[]),
+        Some(value) => value
+            .as_array()
+            .map(Vec::as_slice)
+            .ok_or_else(|| format!("{field} must be an array")),
+    }
+}
+
+fn object_value<'a>(value: &'a Value, field: &str) -> Result<&'a Map<String, Value>, String> {
+    value
+        .as_object()
+        .ok_or_else(|| format!("{field} must be an object"))
+}
+
+fn optional_uint32(body: &Map<String, Value>, field: &str) -> Result<u64, String> {
+    if body.contains_key(field) {
+        uint32_field(body, field)
+    } else {
+        Ok(0)
+    }
+}
+
+fn optional_uint64(body: &Map<String, Value>, field: &str) -> Result<u64, String> {
+    match body.get(field) {
+        None => Ok(0),
+        Some(value) => value
+            .as_str()
+            .filter(|text| !text.is_empty() && text.bytes().all(|byte| byte.is_ascii_digit()))
+            .and_then(|text| text.parse().ok())
+            .ok_or_else(|| format!("{field} must be an ASCII uint64 string")),
+    }
+}
+
+fn validate_unit_interval(body: &Map<String, Value>, field: &str) -> Result<(), String> {
+    if let Some(value) = body.get(field) {
+        let number = value
+            .as_f64()
+            .ok_or_else(|| format!("{field} must be a number"))?;
+        if !(0.0..=1.0).contains(&number) {
+            return Err(format!("{field} must be between 0 and 1"));
+        }
+    }
+    Ok(())
+}
+
+fn validate_outcome(
+    body: &Map<String, Value>,
+    failed: bool,
+    error_allowed: bool,
+) -> Result<(), String> {
+    match body.get("error") {
+        Some(error) if !error.is_object() => Err("error must be an object".into()),
+        Some(_) if !failed && !error_allowed => Err("error is only allowed when failed".into()),
+        None if failed => Err("error is required when failed".into()),
+        _ => Ok(()),
+    }
+}
+
+fn validate_progress(completed: u64, total: u64) -> Result<(), String> {
+    if total > 0 && completed > total {
+        return Err("progress exceeds its total".into());
+    }
+    Ok(())
+}
+
+fn validate_transcript(body: &Map<String, Value>) -> Result<(), String> {
+    let kind = value_enum(body, "kind")?;
+    require_enum(kind, TRANSCRIPT_KINDS, "transcript.kind")?;
+    if !body.get("text").is_some_and(Value::is_string) {
+        return Err("transcript.text must be a string".into());
+    }
+    optional_enum(body, "speakerVerification", SPEAKER_VERIFICATION_RESULTS)?;
+    if is_set(body, "speakerVerification") {
+        let result = value_enum(body, "speakerVerification")?;
+        if !speaker_results_for_kind(kind).contains(&result) {
+            return Err(format!("{kind} cannot carry {result}"));
+        }
+    }
+    let mut previous_start = 0;
+    for value in array_field(body, "words")? {
+        let word = object_value(value, "transcript.words[]")?;
+        if !word.get("text").is_some_and(Value::is_string) {
+            return Err("word.text must be a string".into());
+        }
+        let start = optional_uint32(word, "startOffsetMs")?;
+        let end = optional_uint32(word, "endOffsetMs")?;
+        if start > end || start < previous_start {
+            return Err("words must be ordered and end at or after their start".into());
+        }
+        validate_unit_interval(word, "confidence")?;
+        previous_start = start;
+    }
+    Ok(())
+}
+
 fn validate_runtime_payload(arm: &str, body: &Map<String, Value>) -> Result<(), String> {
     match arm {
-        "transcript" => {
-            require_enum(value_enum(body, "kind")?, TRANSCRIPT_KINDS, "transcript.kind")?;
-            if !body.get("text").is_some_and(Value::is_string) {
-                return Err("transcript.text must be a string".into());
-            }
-        }
+        "transcript" => validate_transcript(body)?,
         "audioLevel" => {
             let amplitude = body
                 .get("amplitude")
@@ -353,7 +766,113 @@ fn validate_runtime_payload(arm: &str, body: &Map<String, Value>) -> Result<(), 
             require_enum(value_enum(body, "previous")?, SESSION_STATES, "previous")?;
             require_enum(value_enum(body, "current")?, SESSION_STATES, "current")?;
         }
+        "providerStatus" => {
+            let state = required_enum(body, "state", PROVIDER_STATES)?;
+            validate_outcome(body, state == "PROVIDER_STATE_FAILED", false)?;
+        }
+        "inputGateStatus" => {
+            let mut causes = Vec::new();
+            for cause in array_field(body, "closedBy")? {
+                let name = cause.as_str().ok_or("closedBy must contain enum names")?;
+                require_enum(name, INPUT_GATE_CAUSES, "closedBy")?;
+                if name.ends_with("_UNSPECIFIED") || causes.contains(&name) {
+                    return Err("closedBy must contain distinct specified causes".into());
+                }
+                causes.push(name);
+            }
+        }
+        "wakePhrase" => {
+            non_empty_string(body, "phraseId")?;
+            required_enum(body, "stage", WAKE_PHRASE_STAGES)?;
+            validate_unit_interval(body, "confidence")?;
+        }
+        "batchProgress" => validate_progress(
+            optional_uint32(body, "processedAudioMs")?,
+            optional_uint32(body, "totalAudioMs")?,
+        )?,
         _ => {}
+    }
+    Ok(())
+}
+
+fn validate_engine_payload(arm: &str, body: &Map<String, Value>) -> Result<(), String> {
+    match arm {
+        "engineStatus" => {
+            let engine = object_value(body.get("engine").unwrap_or(&Value::Null), "engine")?;
+            let readiness = required_enum(body, "readiness", ENGINE_READINESS)?;
+            if required_enum(engine, "locality", ENGINE_LOCALITIES)? == "ENGINE_LOCALITY_ON_DEVICE"
+            {
+                required_enum(engine, "platform", ENGINE_PLATFORMS)?;
+            } else {
+                optional_enum(engine, "platform", ENGINE_PLATFORMS)?;
+            }
+            for token in array_field(engine, "capabilities")? {
+                if !token.as_str().is_some_and(|name| !name.trim().is_empty()) {
+                    return Err("capabilities must be non-empty strings".into());
+                }
+            }
+            validate_outcome(
+                body,
+                readiness == "ENGINE_READINESS_FAILED",
+                readiness == "ENGINE_READINESS_NOT_READY",
+            )?;
+        }
+        "voicePackStatus" => {
+            non_empty_string(body, "packId")?;
+            validate_voice_pack_item(body)?;
+            for value in array_field(body, "components")? {
+                let component = object_value(value, "component")?;
+                non_empty_string(component, "componentId")?;
+                required_enum(component, "kind", VOICE_PACK_COMPONENT_KINDS)?;
+                validate_voice_pack_item(component)?;
+            }
+        }
+        "microphoneStatus" => {
+            non_empty_string(body, "sourceId")?;
+            required_enum(body, "permission", MICROPHONE_PERMISSIONS)?;
+            let readiness = required_enum(body, "readiness", MICROPHONE_READINESS)?;
+            optional_enum(body, "route", MICROPHONE_ROUTES)?;
+            optional_enum(body, "interruption", MICROPHONE_INTERRUPTIONS)?;
+            if is_set(body, "interruption") != (readiness == "MICROPHONE_READINESS_INTERRUPTED") {
+                return Err("interruption is set exactly when interrupted".into());
+            }
+        }
+        "speechOutput" => {
+            non_empty_string(body, "outputId")?;
+            let state = required_enum(body, "state", SPEECH_OUTPUT_STATES)?;
+            validate_outcome(body, state == "SPEECH_OUTPUT_STATE_FAILED", false)?;
+        }
+        _ => {}
+    }
+    Ok(())
+}
+
+fn validate_voice_pack_item(item: &Map<String, Value>) -> Result<(), String> {
+    let state = required_enum(item, "state", VOICE_PACK_STATES)?;
+    validate_outcome(item, state == "VOICE_PACK_STATE_FAILED", false)?;
+    validate_progress(
+        optional_uint64(item, "bytesCompleted")?,
+        optional_uint64(item, "bytesTotal")?,
+    )
+}
+
+fn validate_engine_command(arm: &str, body: &Map<String, Value>) -> Result<(), String> {
+    match arm {
+        "voicePack" => {
+            non_empty_string(body, "packId")?;
+            required_enum(body, "action", VOICE_PACK_ACTIONS)?;
+        }
+        "speak" => {
+            non_empty_string(body, "outputId")?;
+            non_empty_string(body, "text")?;
+            if body.contains_key("fullDuplex") && !body["fullDuplex"].is_boolean() {
+                return Err("fullDuplex must be a boolean".into());
+            }
+            optional_uint32(body, "echoClearanceMs")?;
+        }
+        _ => {
+            non_empty_string(body, "outputId")?;
+        }
     }
     Ok(())
 }
@@ -386,6 +905,26 @@ fn validate_session_body(arm: &str, body: &Map<String, Value>) -> Result<(), Str
                         .ok_or("start.requestedFormat must be an object")?,
                 )?;
             }
+            if body.contains_key("engineId") {
+                non_empty_string(body, "engineId")?;
+            }
+        }
+        "speakerVerification" => {
+            required_enum(body, "mode", SPEAKER_VERIFICATION_MODES)?;
+        }
+        "startBatch" => {
+            non_empty_string(body, "engineId")?;
+            let format = object_value(
+                body.get("format").unwrap_or(&Value::Null),
+                "startBatch.format",
+            )?;
+            validate_audio_format(format)?;
+            if format["encoding"] == "AUDIO_ENCODING_OPUS"
+                && optional_uint32(format, "frameDurationMs")? < 1
+            {
+                return Err("startBatch.format.frameDurationMs is required for Opus".into());
+            }
+            optional_uint32(body, "totalAudioMs")?;
         }
         _ => {}
     }
@@ -488,6 +1027,8 @@ mod tests {
         Session(SessionControl),
         Audio(AudioFrame),
         Source(VoiceSource),
+        Engine(EngineEvent),
+        EngineControl(EngineControl),
     }
 
     impl Parsed {
@@ -497,6 +1038,8 @@ mod tests {
                 "SessionControl" => serde_json::from_value(value).map(Self::Session),
                 "AudioFrame" => serde_json::from_value(value).map(Self::Audio),
                 "VoiceSource" => serde_json::from_value(value).map(Self::Source),
+                "EngineEvent" => serde_json::from_value(value).map(Self::Engine),
+                "EngineControl" => serde_json::from_value(value).map(Self::EngineControl),
                 _ => panic!("unknown fixture message {message}"),
             }
         }
@@ -507,6 +1050,8 @@ mod tests {
                 Self::Session(value) => Some(value.request_sequence),
                 Self::Audio(value) => Some(value.sequence),
                 Self::Source(_) => None,
+                Self::Engine(value) => Some(value.sequence),
+                Self::EngineControl(value) => Some(value.request_sequence),
             }
         }
 
@@ -516,6 +1061,8 @@ mod tests {
                 Self::Session(value) => serde_json::to_value(value),
                 Self::Audio(value) => serde_json::to_value(value),
                 Self::Source(value) => serde_json::to_value(value),
+                Self::Engine(value) => serde_json::to_value(value),
+                Self::EngineControl(value) => serde_json::to_value(value),
             }
             .expect("parsed fixture must serialize")
         }

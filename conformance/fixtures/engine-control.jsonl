@@ -1,0 +1,6 @@
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","requestSequence":"1","voicePack":{"packId":"pack-synthetic-1","action":"VOICE_PACK_ACTION_PREPARE"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","requestSequence":"2","voicePack":{"packId":"pack-synthetic-1","action":"VOICE_PACK_ACTION_RETRY"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","requestSequence":"3","voicePack":{"packId":"pack-synthetic-1","action":"VOICE_PACK_ACTION_REPAIR"}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","requestSequence":"4","speak":{"outputId":"output-synthetic-1","text":"synthetic spoken reply","echoClearanceMs":250}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","requestSequence":"5","speak":{"outputId":"output-synthetic-2","text":"synthetic full-duplex reply","fullDuplex":true}}
+{"protocol":{"major":1,"minor":1},"engineId":"engine-synthetic-1","requestSequence":"6","cancelSpeech":{"outputId":"output-synthetic-2"}}

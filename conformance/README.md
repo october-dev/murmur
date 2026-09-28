@@ -8,9 +8,13 @@ or real identifiers.
 ## Manifest and runner contract
 
 `manifest.json` is the only fixture index. `manifestVersion` identifies this
-manifest shape; `protocol` identifies the current wire contract. Every member
-of `fixtureSets` supplies a unique `name`, an explicit `message`, a path, line
-count, and either `expect: accept` or `expect: reject`.
+manifest shape; `protocol` identifies the current wire contract, now 1.1. Every
+member of `fixtureSets` supplies a unique `name`, an explicit `message`
+(`RuntimeEvent`, `SessionControl`, `AudioFrame`, `VoiceSource`, `EngineEvent`,
+or `EngineControl`), a path, line count, and either `expect: accept` or
+`expect: reject`. Every line of an accepted set carries the manifest protocol,
+except forward-compatible sets, which use a newer minor of the same major. All
+lines of a set share one routing identifier (`sessionId` or `engineId`).
 
 Reject sets also declare a stable `reason`, a `rejection` phase (`parse` or
 `order`), and optionally `rejectLine` (one-based, default 1). For parse
@@ -18,14 +22,21 @@ rejections every line at or after `rejectLine` must fail parsing. For order
 rejections every line must parse, lines before `rejectLine` must strictly
 increase, and each line from `rejectLine` onward must fail only that ordering
 predicate. Reason values are `missing-payload`, `ambiguous-oneof`,
-`missing-session-command`, `ambiguous-session-command`, `invalid-enum`,
-`sequence-order`, `invalid-uint64`, `unsupported-protocol-major`,
-`invalid-protocol-version`, and `invalid-audio-frame`.
+`missing-session-command`, `ambiguous-session-command`,
+`missing-engine-command`, `ambiguous-engine-command`, `invalid-enum`,
+`invalid-identifier`, `invalid-progress`, `invalid-word-timing`,
+`invalid-outcome`, `sequence-order`, `invalid-uint64`,
+`unsupported-protocol-major`, `invalid-protocol-version`, and
+`invalid-audio-frame`. The repository checker diagnoses each rejected line with
+exactly its set's reason; SDK runners assert only that the line is rejected.
+A missing or empty envelope `sessionId` or `engineId` is diagnosed as
+`invalid-protocol-version`. EngineEvent reuses `missing-payload` and
+`ambiguous-oneof`.
 
 Accept sets may declare slash-separated `unknownFields`. A runner parses each
-line, computes its ordering key (`sequence` for RuntimeEvent and AudioFrame,
-`requestSequence` for SessionControl, none for VoiceSource), and checks the
-expected result. Accepted values are serialized and compared structurally with
+line, computes its ordering key (`sequence` for RuntimeEvent, AudioFrame, and
+EngineEvent, `requestSequence` for SessionControl and EngineControl, none for
+VoiceSource), and checks the expected result. Accepted values are serialized and compared structurally with
 the input after every declared unknown path has been removed from both values.
 Parse success is asserted separately. Failure messages use
 `<sdk> · <set> · line N · <reason or error>` and round-trip failures end in
@@ -45,7 +56,8 @@ An explicitly present default-valued known field in a checked-in fixture must pr
 | protocol | Version fields are uint32 | Major must equal 1; every non-negative uint32 minor is accepted | Envelope parsers always enforce support |
 | oneof | One selected arm | Exactly one known arm is required | Error representation is language-specific |
 | unknown fields | Rejected by ProtoJSON parsers by default | Ignored within a supported major | SDKs need not preserve them |
-| enums | ProtoJSON accepts names and integers | Validated fields accept known string names only; integers are rejected | Unvalidated opaque bodies remain unchanged |
+| enums | ProtoJSON accepts names and integers | Validated fields accept known string names only; integers are rejected. Required discriminators also reject `*_UNSPECIFIED`; optional enums treat an explicit `*_UNSPECIFIED` as absent | Unvalidated opaque bodies remain unchanged |
+| capabilities | Repeated string | Non-empty strings; unknown tokens are accepted and preserved | Negotiation ignores unknown tokens |
 | bytes | Base64 string | Standard or URL-safe base64 grammar below | SDKs keep the encoded string and need not decode bytes |
 | ordering | Application concern | Keys in an accepted set must strictly increase | No sequence-tracking API is required |
 | defaults | Usually emitted implicitly by binary encoding | Omit defaults in canonical JSON; VoiceSource omits empty capabilities and metadata | SDKs may always emit required envelope fields |
@@ -57,6 +69,55 @@ mode, source, and requested format. AudioFrame validates its format and payload.
 VoiceSource requires non-empty identifiers and display names, a known transport,
 known capabilities, and string-to-string metadata. Intent, confirmation,
 action-result, error, and all other body data remain opaque and are echoed.
+
+Protocol 1.1 adds these single-message rules. "Required" enums reject omission
+and `*_UNSPECIFIED`; every "present", "absent", and "exactly when" rule counts
+an explicit `*_UNSPECIFIED` as absent. "Error exactly when FAILED" means an
+error object is required in `FAILED` and forbidden in every other state.
+
+| Payload | Rule | Reason |
+| --- | --- | --- |
+| `engineStatus` | `engine` object; required `engine.locality` and `readiness`; `engine.platform` required when ON_DEVICE, known when present otherwise; `capabilities` an array of non-empty strings | `invalid-enum` |
+| `engineStatus` | error required when FAILED, allowed when NOT_READY, forbidden otherwise | `invalid-outcome` |
+| `voicePackStatus` | non-empty `packId` and component `componentId` | `invalid-identifier` |
+| `voicePackStatus` | required pack `state`, component `kind` and `state`; `components` an array of objects | `invalid-enum` |
+| `voicePackStatus` | byte counts are uint64 strings | `invalid-uint64` |
+| `voicePackStatus` | completed at most total when total is non-zero, for the pack and each component | `invalid-progress` |
+| `voicePackStatus` | error exactly when FAILED, for the pack and each component | `invalid-outcome` |
+| `microphoneStatus` | non-empty `sourceId` | `invalid-identifier` |
+| `microphoneStatus` | required `permission` and `readiness`; known `route` when present; `interruption` known, and set exactly when readiness is INTERRUPTED | `invalid-enum` |
+| `speechOutput` | non-empty `outputId`; required `state`; error exactly when FAILED | `invalid-identifier`, `invalid-enum`, `invalid-outcome` |
+| `voicePack` command | non-empty `packId`; required `action` | `invalid-identifier`, `invalid-enum` |
+| `speak` command | non-empty `outputId` and `text`; boolean `fullDuplex` and uint32 `echoClearanceMs` when present | `invalid-identifier`, `invalid-enum` |
+| `cancelSpeech` command | non-empty `outputId` | `invalid-identifier` |
+| `providerStatus` | required `state`; error exactly when FAILED | `invalid-enum`, `invalid-outcome` |
+| `inputGateStatus` | `closedBy`, when present, an array of distinct required causes | `invalid-enum` |
+| `wakePhrase` | non-empty `phraseId`; required `stage`; `confidence` in [0, 1] when present | `invalid-identifier`, `invalid-enum` |
+| `batchProgress` | uint32 fields; processed at most total when total is non-zero | `invalid-progress` |
+| `transcript` | `words` an array of objects with string `text`, uint32 offsets, start at most end, non-decreasing start, and `confidence` in [0, 1] when present | `invalid-word-timing` |
+| `transcript` | `speakerVerification` known and allowed for the kind (table below) | `invalid-enum` |
+| `start` command | `engineId` non-empty when present | `invalid-identifier` |
+| `speakerVerification` command | required `mode` | `invalid-enum` |
+| `startBatch` command | non-empty `engineId` | `invalid-identifier` |
+| `startBatch` command | valid `format` with `frameDurationMs` of at least 1 for Opus; uint32 `totalAudioMs` when present | `invalid-enum` |
+
+Speaker-verification results allowed per transcript kind:
+
+| `kind` | Allowed `speakerVerification` |
+| --- | --- |
+| `TRANSCRIPT_KIND_UNSPECIFIED` | absent |
+| `TRANSCRIPT_KIND_PARTIAL` | absent |
+| `TRANSCRIPT_KIND_FINAL` | absent, `ACCEPTED`, `BYPASSED`, `UNCERTAIN` |
+| `TRANSCRIPT_KIND_REJECTED` | absent, `REJECTED`, `UNCERTAIN` |
+
+`Transcript.kind` keeps its v1 rule: it must be present, and an explicit
+`TRANSCRIPT_KIND_UNSPECIFIED` stays accepted.
+
+Validation is per message; lifecycle order and cross-stream timing are
+documented in `spec/README.md`, not validated. Command rejections are
+`MurmurError` bodies correlated by `metadata.request_sequence`; error bodies
+remain opaque, so that key is exercised by accepted fixtures only. Transcript
+text, word text, and `speak.text` in fixtures must contain `synthetic`.
 
 Base64 validation counts trailing `=` characters as padding (at most two).
 After stripping padding, a length remainder of one modulo four is invalid. If

@@ -1,5 +1,6 @@
 library;
 
+export 'src/engine.dart';
 export 'src/events.dart';
 export 'src/protocol.dart';
 export 'src/runtime.dart';

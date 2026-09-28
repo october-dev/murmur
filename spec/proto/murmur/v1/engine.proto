@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+package murmur.v1;
+
+import "murmur/v1/common.proto";
+import "murmur/v1/speech_output.proto";
+import "murmur/v1/voice_pack.proto";
+
+option java_multiple_files = true;
+option java_package = "dev.murmur.protocol.v1";
+option swift_prefix = "MRM";
+
+// Where user audio is processed.
+enum EngineLocality {
+  ENGINE_LOCALITY_UNSPECIFIED = 0;
+  ENGINE_LOCALITY_ON_DEVICE = 1;
+  ENGINE_LOCALITY_REMOTE = 2;
+}
+
+// The operating system the engine instance runs on.
+enum EnginePlatform {
+  ENGINE_PLATFORM_UNSPECIFIED = 0;
+  ENGINE_PLATFORM_MACOS = 1;
+  ENGINE_PLATFORM_WINDOWS = 2;
+  ENGINE_PLATFORM_LINUX = 3;
+  ENGINE_PLATFORM_IOS = 4;
+  ENGINE_PLATFORM_ANDROID = 5;
+}
+
+// Identity and capabilities of an engine. The engine identifier is the
+// envelope engine_id.
+message EngineDescriptor {
+  // Human-readable name, safe for display; not stable API.
+  string display_name = 1;
+  // Engine implementation version, for diagnostics.
+  string version = 2;
+  // Required; never UNSPECIFIED.
+  EngineLocality locality = 3;
+  // Required when locality is ON_DEVICE; optional when REMOTE.
+  EnginePlatform platform = 4;
+  // Stable capability tokens. Absence means unsupported, and readiness is not
+  // capability. Receivers ignore unknown tokens for negotiation and preserve
+  // them. Documented tokens: streaming_transcription, graceful_finalization,
+  // batch_transcription, word_timings, speech_output, echo_cancellation,
+  // wake_phrase, speaker_verification, voice_packs.
+  repeated string capabilities = 5;
+}
+
+// Whether an engine can serve requests.
+enum EngineReadiness {
+  ENGINE_READINESS_UNSPECIFIED = 0;
+  // Cannot serve requests yet; error may carry the reason, for example
+  // voice_pack_required.
+  ENGINE_READINESS_NOT_READY = 1;
+  // Loading or preparing what it needs.
+  ENGINE_READINESS_PREPARING = 2;
+  // Can serve requests for its advertised capabilities.
+  ENGINE_READINESS_READY = 3;
+  // Stopped with a typed error.
+  ENGINE_READINESS_FAILED = 4;
+}
+
+// A full snapshot of an engine, emitted when anything in it changes.
+message EngineStatus {
+  // Required.
+  EngineDescriptor engine = 1;
+  // Required; never UNSPECIFIED.
+  EngineReadiness readiness = 2;
+  // Required when readiness is FAILED; optional reason when NOT_READY.
+  MurmurError error = 3;
+}
+
+// Operating-system microphone permission.
+enum MicrophonePermission {
+  MICROPHONE_PERMISSION_UNSPECIFIED = 0;
+  MICROPHONE_PERMISSION_NOT_DETERMINED = 1;
+  MICROPHONE_PERMISSION_GRANTED = 2;
+  MICROPHONE_PERMISSION_DENIED = 3;
+  // Blocked by policy; the user cannot grant it.
+  MICROPHONE_PERMISSION_RESTRICTED = 4;
+}
+
+// The kind of route that carries microphone audio. This enum is validated and
+// fails closed, so a new route is emitted only behind a capability token.
+enum MicrophoneRoute {
+  MICROPHONE_ROUTE_UNSPECIFIED = 0;
+  MICROPHONE_ROUTE_BUILT_IN = 1;
+  MICROPHONE_ROUTE_WIRED = 2;
+  MICROPHONE_ROUTE_BLUETOOTH = 3;
+  MICROPHONE_ROUTE_USB = 4;
+  MICROPHONE_ROUTE_VIRTUAL = 5;
+}
+
+// Device-level readiness. Distinct from CaptureReadiness.live, which reports
+// real audio flowing in a session.
+enum MicrophoneReadiness {
+  MICROPHONE_READINESS_UNSPECIFIED = 0;
+  MICROPHONE_READINESS_UNAVAILABLE = 1;
+  // Opening or switching route; audio may not be meaningful yet.
+  MICROPHONE_READINESS_WARMING = 2;
+  MICROPHONE_READINESS_READY = 3;
+  // Temporarily taken away; interruption says why.
+  MICROPHONE_READINESS_INTERRUPTED = 4;
+}
+
+// Why a microphone is interrupted.
+enum MicrophoneInterruption {
+  MICROPHONE_INTERRUPTION_UNSPECIFIED = 0;
+  // The operating system took the input, for example for a call.
+  MICROPHONE_INTERRUPTION_SYSTEM = 1;
+  MICROPHONE_INTERRUPTION_OTHER_APPLICATION = 2;
+  MICROPHONE_INTERRUPTION_DEVICE_REMOVED = 3;
+}
+
+// A full snapshot of one microphone source. Device names and raw device
+// identifiers are forbidden.
+message MicrophoneStatus {
+  // Required; the VoiceSource.source_id of the microphone.
+  string source_id = 1;
+  // Required; never UNSPECIFIED.
+  MicrophonePermission permission = 2;
+  // Required; never UNSPECIFIED.
+  MicrophoneReadiness readiness = 3;
+  // Optional; UNSPECIFIED means unknown.
+  MicrophoneRoute route = 4;
+  // Set exactly when readiness is INTERRUPTED.
+  MicrophoneInterruption interruption = 5;
+}
+
+// An engine-scoped event. engine_id is the routing key and ordering scope:
+// sequence strictly increases per engine_id.
+message EngineEvent {
+  ProtocolVersion protocol = 1;
+  // Required engine identifier.
+  string engine_id = 2;
+  uint64 sequence = 3;
+  uint64 monotonic_time_us = 4;
+
+  oneof payload {
+    EngineStatus engine_status = 10;
+    VoicePackStatus voice_pack_status = 11;
+    MicrophoneStatus microphone_status = 12;
+    SpeechOutputStatus speech_output = 13;
+    // A generic engine error. A rejected EngineControl command is reported
+    // here with metadata["request_sequence"] set to its request_sequence.
+    MurmurError error = 14;
+  }
+}
+
+// An engine-scoped command. engine_id is the routing key and ordering scope:
+// request_sequence strictly increases per engine_id.
+message EngineControl {
+  ProtocolVersion protocol = 1;
+  // Required engine identifier.
+  string engine_id = 2;
+  uint64 request_sequence = 3;
+
+  oneof command {
+    VoicePackRequest voice_pack = 10;
+    SpeakRequest speak = 11;
+    CancelSpeech cancel_speech = 12;
+  }
+}
