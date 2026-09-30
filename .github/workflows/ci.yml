@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - run: make check-protocol check-conformance
+      - run: make check-protocol check-conformance check-licensing
 
   dart-and-flutter:
     runs-on: ubuntu-latest

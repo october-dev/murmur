@@ -89,3 +89,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## Engine dependencies and model artifacts
+
+Murmur does not currently distribute any native engine dependency, model
+weight, voice, tokenizer, or phonemizer. The inventory, terms, and review state
+live in [licensing/manifest.json](licensing/manifest.json) and
+[licensing/README.md](licensing/README.md). An artifact's full notice is added
+here before it may be packaged; `make check-licensing` enforces this.

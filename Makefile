@@ -1,8 +1,8 @@
 PROTO_FILES := $(shell find spec/proto -name '*.proto' -type f | sort)
 
-.PHONY: check check-protocol check-conformance check-dart check-flutter check-flutter-plugin check-typescript check-python check-rust
+.PHONY: check check-protocol check-conformance check-licensing check-dart check-flutter check-flutter-plugin check-typescript check-python check-rust
 
-check: check-protocol check-conformance check-dart check-flutter check-flutter-plugin check-typescript check-python check-rust
+check: check-protocol check-conformance check-licensing check-dart check-flutter check-flutter-plugin check-typescript check-python check-rust
 
 check-protocol:
 	@descriptor="$$(mktemp)"; \
@@ -11,6 +11,10 @@ check-protocol:
 
 check-conformance:
 	python3 tool/check_conformance.py
+
+check-licensing:
+	python3 tool/check_licensing.py
+	python3 -m unittest discover -s tool -p 'test_check_licensing.py' -v
 
 check-dart:
 	cd sdks/dart/murmur_protocol && dart pub get && dart format --output=none --set-exit-if-changed . && dart analyze && dart test

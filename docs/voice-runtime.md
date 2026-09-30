@@ -181,8 +181,12 @@ atomic pack manager instead of making each screen infer readiness.
   preparation
 - unsupported components are explicit rather than reported as ready
 
-Individual engine adapters remain responsible for their upstream licenses,
-model terms, supported platforms, and redistribution rules.
+Packs resolve only entries approved in [licensing/](../licensing/README.md),
+verify each file's hash and size before activation, and present terms as each
+entry's `terms.download.presentation` requires before the first network
+request. An engine adapter's license never stands in for the terms of the
+models, voices, tokenizers, or phonemizers it loads, and each adapter still
+documents its supported platforms.
 
 ## Speech feedback and interruption
 
@@ -226,8 +230,8 @@ regressing.
 - subscription, trial, entitlement, and usage-metering policy
 - private services, endpoints, analytics, and account identifiers
 - host UI components, IPC names, and application state
-- native engines or model assets whose licenses and redistribution terms have
-  not been reviewed for Murmur
+- native engines or model assets that are not approved in
+  [licensing/manifest.json](../licensing/manifest.json)
 - constants tuned to one product without a public configuration and test basis
 
 Murmur can define adapters for these capabilities without making any one

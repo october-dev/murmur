@@ -1,0 +1,3771 @@
+{
+  "manifestVersion": 1,
+  "artifacts": [
+    {
+      "id": "fluidaudio",
+      "kind": "engine",
+      "name": "FluidAudio",
+      "version": "v0.17.4",
+      "source": "https://github.com/FluidInference/FluidAudio",
+      "revision": "21493f8dac5a97e65742e6ff26f42f164c2fda0f",
+      "downloads": [],
+      "paths": [],
+      "configuration": "FluidAudio v0.17.4 `FluidAudio` library product through SwiftPM with default traits (NemoTextProcessing linked), macOS 14+ on arm64; uses Parakeet TDT v3 ASR, Silero VAD, Kokoro ANE English TTS, and speaker embeddings (#42). The Swift runtime, libc++, and system frameworks come from macOS and are not packaged. Provisional until #42 confirms it.",
+      "requires": [
+        "nemo-text-processing",
+        "fastcluster",
+        "vbx",
+        "japanese-g2p",
+        "luxtts-en-us-g2p-lexicon"
+      ],
+      "usedBy": [
+        "#42"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/FluidInference/FluidAudio/blob/21493f8dac5a97e65742e6ff26f42f164c2fda0f/LICENSE"
+      },
+      "upstream": [
+        {
+          "name": "modelscope/FunASR (Swift ports: FSMN-VAD decision logic, Paraformer CIF)",
+          "source": "https://github.com/modelscope/FunASR",
+          "revision": "55203a99956fb2b18f9c1ed9cc7cd78ce29a9a52",
+          "license": "MIT",
+          "evidence": "https://github.com/modelscope/FunASR/blob/55203a99956fb2b18f9c1ed9cc7cd78ce29a9a52/LICENSE"
+        },
+        {
+          "name": "NVIDIA/NeMo (Swift ports: Sortformer and Nemotron-3 state updaters, CTC word spotter)",
+          "source": "https://github.com/NVIDIA/NeMo",
+          "revision": "cf724ac337d1ebc7d0dda1e23fb80916f52927a5",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/NVIDIA/NeMo/blob/cf724ac337d1ebc7d0dda1e23fb80916f52927a5/LICENSE"
+        },
+        {
+          "name": "hexgrad/misaki (Swift ports: zh_frontend ZH_MAP, English lexicon rules)",
+          "source": "https://github.com/hexgrad/misaki",
+          "revision": "fba1236595f2d2bf21d414ba6e57d25256afada3",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/hexgrad/misaki/blob/fba1236595f2d2bf21d414ba6e57d25256afada3/LICENSE"
+        },
+        {
+          "name": "k2-fsa/ZipVoice (Swift ports: EnglishTextNormalizer, VocosFbank mel frontend used by LuxTTS)",
+          "source": "https://github.com/k2-fsa/ZipVoice",
+          "revision": "2f7326fbfe999a3ad179e3f1af82a424d4a62819",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/k2-fsa/ZipVoice/blob/2f7326fbfe999a3ad179e3f1af82a424d4a62819/LICENSE"
+        },
+        {
+          "name": "resemble-ai/chatterbox (Swift port: AlignmentStreamAnalyzer)",
+          "source": "https://github.com/resemble-ai/chatterbox",
+          "revision": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+          "license": "MIT",
+          "evidence": "https://github.com/resemble-ai/chatterbox/blob/5de7a54aa4e5e2baadb0182dde554908b48b85c2/LICENSE"
+        },
+        {
+          "name": "yl4579/StyleTTS2 (Swift port: TextCleaner symbol table)",
+          "source": "https://github.com/yl4579/StyleTTS2",
+          "revision": "5cedc71c333f8d8b8551ca59378bdcc7af4c9529",
+          "license": "MIT",
+          "evidence": "https://github.com/yl4579/StyleTTS2/blob/5cedc71c333f8d8b8551ca59378bdcc7af4c9529/LICENSE"
+        },
+        {
+          "name": "FluidInference/mobius (conversion references the Swift ports mirror)",
+          "source": "https://github.com/FluidInference/mobius",
+          "revision": "864ef8050f2f281d0761de26e3a03108f9f1ce73",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/FluidInference/mobius/blob/864ef8050f2f281d0761de26e3a03108f9f1ce73/LICENSE"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text and FluidAudio copyright notice; the texts in its ThirdPartyLicenses/ folder for linked components; MIT notices for FunASR, Chatterbox, and StyleTTS2, and Apache-2.0 notices for NeMo, misaki, ZipVoice, and mobius, whose code the library ports.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "SDK code license only: it does not cover any model, voice, tokenizer, or G2P asset the SDK downloads. `requires` lists what the named configuration compiles or links. The SwiftPM `.process(\"TTS/LuxTts/G2p/Resources\")` rule bundles LuxTTS G2P data into every build, so the engine cannot be approved while that entry is blocked. FluidAudio's model downloader fetches Hugging Face `main` for every repository except speaker-diarization-coreml, so #42 must fetch model files from this manifest's pinned revisions rather than from FluidAudio's default. `upstream` records the projects whose code the library source says it ports (every such file is compiled into the library regardless of which feature is used); these are not listed in FluidAudio's ThirdPartyLicenses/, and each hop cites that project's license at the commit inspected on 2026-09-28, because FluidAudio does not record the upstream revision it ported.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "nemo-text-processing",
+      "kind": "native-library",
+      "name": "NemoTextProcessing (text-processing-rs)",
+      "version": "v0.3.1",
+      "source": "https://github.com/FluidInference/text-processing-rs",
+      "revision": "46ebddcea5e1ff673c2cb5256a1b6b0e6c4ff527",
+      "downloads": [
+        {
+          "url": "https://github.com/FluidInference/text-processing-rs/releases/download/v0.3.1/NemoTextProcessing.xcframework.zip",
+          "sha256": "5fa8c10d4ec26c1bb2413125f351a7222a4c68a23b74476680fbada7e26fc6aa",
+          "size": 87267919,
+          "platform": "apple"
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [
+        "rust-crate-adler2-2.0.1",
+        "rust-crate-anyhow-1.0.103",
+        "rust-crate-bimap-0.6.3",
+        "rust-crate-bitflags-2.13.0",
+        "rust-crate-cfg-if-1.0.4",
+        "rust-crate-crc32fast-1.5.0",
+        "rust-crate-either-1.16.0",
+        "rust-crate-flate2-1.1.9",
+        "rust-crate-generic-array-1.4.3",
+        "rust-crate-getrandom-0.3.4",
+        "rust-crate-itertools-0.14.0",
+        "rust-crate-lazy-static-1.5.0",
+        "rust-crate-libc-0.2.186",
+        "rust-crate-memchr-2.8.3",
+        "rust-crate-minimal-lexical-0.2.1",
+        "rust-crate-miniz-oxide-0.8.9",
+        "rust-crate-nom-7.1.3",
+        "rust-crate-num-traits-0.2.19",
+        "rust-crate-ordered-float-5.3.0",
+        "rust-crate-ppv-lite86-0.2.21",
+        "rust-crate-rand-0.9.4",
+        "rust-crate-rand-chacha-0.9.0",
+        "rust-crate-rand-core-0.9.5",
+        "rust-crate-rustfst-1.3.1",
+        "rust-crate-serde-1.0.228",
+        "rust-crate-serde-core-1.0.228",
+        "rust-crate-simd-adler32-0.3.9",
+        "rust-crate-superslice-1.0.0",
+        "rust-crate-typenum-1.20.1",
+        "rust-crate-zerocopy-0.8.53",
+        "rust-std"
+      ],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/FluidInference/text-processing-rs/blob/46ebddcea5e1ff673c2cb5256a1b6b0e6c4ff527/LICENSE"
+      },
+      "upstream": [
+        {
+          "name": "NVIDIA NeMo Text Processing grammars",
+          "source": "https://github.com/NVIDIA/NeMo-text-processing",
+          "revision": "1f1263579fe57ba7ed783cad3dddee710fcc5064",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/NVIDIA/NeMo-text-processing/blob/1f1263579fe57ba7ed783cad3dddee710fcc5064/LICENSE"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text; NVIDIA NeMo Text Processing notice; plus the notices of every `requires` entry, all statically linked.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Prebuilt Rust staticlib xcframework that FluidAudio's `.binaryTarget` links, built by build-xcframework.sh with `--features ffi,fst-engine` for seven Apple targets. `requires` is the exact linked closure: the 30 crates from `cargo tree --locked -e normal,no-proc-macro` over those targets (build scripts and proc-macros excluded), plus the Rust standard library. Verified against the release binary: every crate version in its panic locations is in that closure, and every slice was built by rustc 1.98.1 (48a229ce). The SwiftPM checksum equals the GitHub release asset digest. FluidAudio's ThirdPartyLicenses file names v0.3.0 while Package.swift pins the v0.3.1 asset, and Cargo.toml at the v0.3.1 tag still reads 0.3.0. The binary is not a reproducible build of the source commit, so the closure is established from Cargo.lock plus binary inspection.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "rust-std",
+      "kind": "native-library",
+      "name": "Rust standard library (std, core, alloc, std_detect, panic_unwind, unwind)",
+      "version": "1.98.1",
+      "source": "https://github.com/rust-lang/rust",
+      "revision": "48a229ceaefd4985c50990b14116b6d856af0985",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [
+        "rust-compiler-builtins",
+        "rust-crate-addr2line-0.25.1",
+        "rust-crate-gimli-0.32.3",
+        "rust-crate-hashbrown-0.17.1",
+        "rust-crate-libc-0.2.185",
+        "rust-crate-memchr-2.7.6",
+        "rust-crate-object-0.37.3",
+        "rust-crate-rustc-demangle-0.1.27",
+        "rust-crate-adler2-2.0.1",
+        "rust-crate-cfg-if-1.0.4",
+        "rust-crate-miniz-oxide-0.8.9"
+      ],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-lang/rust/blob/48a229ceaefd4985c50990b14116b6d856af0985/COPYRIGHT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected), per the Rust project's COPYRIGHT file.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into every NemoTextProcessing slice: the release binary's /rustc/48a229ce…/library paths and its `rustc version 1.98.1 (48a229cea 2026-09-01)` string identify the toolchain (tag 1.98.1 resolves to this commit). `requires` lists compiler-builtins and the crates.io dependencies std links on Apple targets per library/Cargo.lock at this commit.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "rust-compiler-builtins",
+      "kind": "native-library",
+      "name": "compiler-builtins (Rust)",
+      "version": "1.98.1",
+      "source": "https://github.com/rust-lang/rust/tree/48a229ceaefd4985c50990b14116b6d856af0985/library/compiler-builtins",
+      "revision": "48a229ceaefd4985c50990b14116b6d856af0985",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "rust-std"
+      ],
+      "license": {
+        "code": "MIT AND Apache-2.0 WITH LLVM-exception AND (MIT OR Apache-2.0)",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-lang/rust/blob/48a229ceaefd4985c50990b14116b6d856af0985/library/compiler-builtins/LICENSE.txt"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "MIT license text, Apache-2.0 with LLVM exception (compiler-rt-derived code), per LICENSE.txt.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://llvm.org/LICENSE.txt"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Split from rust-std because its terms differ: it carries LLVM compiler-rt-derived code under Apache-2.0 WITH LLVM-exception and a MIT libm port (license field of library/compiler-builtins/compiler-builtins/Cargo.toml at this commit).",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "fastcluster",
+      "kind": "native-library",
+      "name": "fastcluster (FluidAudio FastClusterWrapper)",
+      "version": "vendored in FluidAudio v0.17.4",
+      "source": "https://github.com/FluidInference/FluidAudio/tree/21493f8dac5a97e65742e6ff26f42f164c2fda0f/Sources/FastClusterWrapper",
+      "revision": "21493f8dac5a97e65742e6ff26f42f164c2fda0f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": "BSD-2-Clause",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/FluidInference/FluidAudio/blob/21493f8dac5a97e65742e6ff26f42f164c2fda0f/ThirdPartyLicenses/fastcluster-LICENSE.md"
+      },
+      "upstream": [
+        {
+          "name": "fastcluster",
+          "source": "https://github.com/fastcluster/fastcluster",
+          "revision": "9d0e48609283edaae90593a6967d3f2217786d2d",
+          "license": "BSD-2-Clause",
+          "evidence": "https://github.com/fastcluster/fastcluster/blob/9d0e48609283edaae90593a6967d3f2217786d2d/LICENSE"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "BSD-2-Clause copyright notice (Daniel Müllner; Google Inc.) and license text in binary distributions.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/bsd-2-clause"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "C++ source vendored in FluidAudio and compiled into every build. Pinned by the FluidAudio commit; the upstream fastcluster release it was copied from is not recorded upstream.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "vbx",
+      "kind": "native-library",
+      "name": "VBx clustering (FluidAudio Swift port)",
+      "version": "vendored in FluidAudio v0.17.4",
+      "source": "https://github.com/FluidInference/FluidAudio/tree/21493f8dac5a97e65742e6ff26f42f164c2fda0f/Sources/FluidAudio/Diarizer/Offline/Clustering",
+      "revision": "21493f8dac5a97e65742e6ff26f42f164c2fda0f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/FluidInference/FluidAudio/blob/21493f8dac5a97e65742e6ff26f42f164c2fda0f/ThirdPartyLicenses/vbx-LICENSE.md"
+      },
+      "upstream": [
+        {
+          "name": "BUT Speech@FIT VBx",
+          "source": "https://github.com/BUTSpeechFIT/VBx",
+          "revision": "57466e6e245d5cdfe2e88ee6503702ace3ffdd03",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/BUTSpeechFIT/VBx/blob/57466e6e245d5cdfe2e88ee6503702ace3ffdd03/README.md"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text and the BUT Speech@FIT copyright notice.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Swift port compiled into every FluidAudio build. Upstream VBx states Apache-2.0 in its README and has no LICENSE file at the repository root.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "japanese-g2p",
+      "kind": "native-library",
+      "name": "Japanese G2P frontend code (FluidAudio Kokoro ANE)",
+      "version": "vendored in FluidAudio v0.17.4",
+      "source": "https://github.com/FluidInference/FluidAudio/tree/21493f8dac5a97e65742e6ff26f42f164c2fda0f/Sources/FluidAudio/TTS/KokoroAne/G2P/Japanese",
+      "revision": "21493f8dac5a97e65742e6ff26f42f164c2fda0f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": "Apache-2.0 AND MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/FluidInference/FluidAudio/blob/21493f8dac5a97e65742e6ff26f42f164c2fda0f/ThirdPartyLicenses/JapaneseG2P-LICENSE.md"
+      },
+      "upstream": [
+        {
+          "name": "hexgrad/misaki cutlet.py and num2kana.py",
+          "source": "https://github.com/hexgrad/misaki",
+          "revision": "fba1236595f2d2bf21d414ba6e57d25256afada3",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/hexgrad/misaki/blob/fba1236595f2d2bf21d414ba6e57d25256afada3/LICENSE"
+        },
+        {
+          "name": "polm/cutlet",
+          "source": "https://github.com/polm/cutlet",
+          "revision": "e97e15c287b0d6a0d936cae4219f85afd47aa509",
+          "license": "MIT",
+          "evidence": "https://github.com/polm/cutlet/blob/e97e15c287b0d6a0d936cae4219f85afd47aa509/LICENSE"
+        },
+        {
+          "name": "Greatdane/Convert-Numbers-to-Japanese",
+          "source": "https://github.com/Greatdane/Convert-Numbers-to-Japanese",
+          "revision": "c01b072e8d52c89c307dcbcb69958d05e953d4c1",
+          "license": "MIT",
+          "evidence": "https://github.com/Greatdane/Convert-Numbers-to-Japanese/blob/c01b072e8d52c89c307dcbcb69958d05e953d4c1/LICENSE"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 (misaki) and MIT (cutlet, Convert-Numbers-to-Japanese) notices.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Swift port compiled into every FluidAudio build. Only the code is covered here. The Japanese G2P data (trimmed unidic-lite, ja_words.txt) is downloaded from kokoro-82m-coreml/ANE-ja, is not in the #42 English configuration, and is therefore not listed and not approved.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "luxtts-en-us-g2p-lexicon",
+      "kind": "phonemizer",
+      "name": "LuxTTS English G2P lexicon (FluidAudio bundled resource)",
+      "version": "vendored in FluidAudio v0.17.4",
+      "source": "https://github.com/FluidInference/FluidAudio/tree/21493f8dac5a97e65742e6ff26f42f164c2fda0f/Sources/FluidAudio/TTS/LuxTts/G2p/Resources",
+      "revision": "21493f8dac5a97e65742e6ff26f42f164c2fda0f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "NOASSERTION",
+        "name": null,
+        "evidence": null
+      },
+      "upstream": [
+        {
+          "name": "espeak-ng pronunciations (harvested oracle output)",
+          "source": "https://github.com/espeak-ng/espeak-ng",
+          "revision": "ba90c8e9f440ad544f674a790bb5f53878b6ffc5",
+          "license": "GPL-3.0-or-later",
+          "evidence": "https://github.com/espeak-ng/espeak-ng/blob/ba90c8e9f440ad544f674a790bb5f53878b6ffc5/COPYING"
+        }
+      ],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked: `luxtts_en_us_lexicon.tsv.zz` and `luxtts_en_us_g2p_aux.json` are processed into every FluidAudio build, and LuxTtsG2p.swift describes them as harvested by probing espeak-ng. FluidAudio's ThirdPartyLicenses/ does not cover them and no data license is stated. Resolve through legal review of espeak-derived data, or an upstream change that makes the resource optional, before FluidAudio can be approved.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "parakeet-tdt-0.6b-v3-coreml",
+      "kind": "model",
+      "name": "Parakeet TDT 0.6B v3 Core ML",
+      "version": "v3",
+      "source": "https://huggingface.co/FluidInference/parakeet-tdt-0.6b-v3-coreml",
+      "revision": "7dd20fe6b1797d35f5e3307e8b1732d9a178edfe",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [
+        "parakeet-tdt-0.6b-v3-vocab"
+      ],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "CC-BY-4.0",
+        "name": null,
+        "evidence": "https://huggingface.co/FluidInference/parakeet-tdt-0.6b-v3-coreml/blob/7dd20fe6b1797d35f5e3307e8b1732d9a178edfe/README.md"
+      },
+      "upstream": [
+        {
+          "name": "nvidia/parakeet-tdt-0.6b-v3",
+          "source": "https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3",
+          "revision": "541d1f99c6b0c3cd0b11a95167540bb8edefd82b",
+          "license": "CC-BY-4.0",
+          "evidence": "https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3/blob/541d1f99c6b0c3cd0b11a95167540bb8edefd82b/README.md"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Credit NVIDIA (parakeet-tdt-0.6b-v3) and FluidInference (Core ML conversion), link CC-BY-4.0, and state that the files are modified conversions.",
+        "download": {
+          "access": "public",
+          "presentation": "link"
+        },
+        "termsUrl": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "distribution": "user-download",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "FluidAudio v0.17.4 loads Preprocessor.mlmodelc, Encoder.mlmodelc (int8 default), Decoder.mlmodelc, and JointDecisionv3.mlmodelc. Public, ungated download. downloads[] with per-file byte hashes and sizes must be recorded before approval.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "parakeet-tdt-0.6b-v3-vocab",
+      "kind": "tokenizer",
+      "name": "Parakeet TDT 0.6B v3 vocabulary",
+      "version": "v3",
+      "source": "https://huggingface.co/FluidInference/parakeet-tdt-0.6b-v3-coreml",
+      "revision": "7dd20fe6b1797d35f5e3307e8b1732d9a178edfe",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "CC-BY-4.0",
+        "name": null,
+        "evidence": "https://huggingface.co/FluidInference/parakeet-tdt-0.6b-v3-coreml/blob/7dd20fe6b1797d35f5e3307e8b1732d9a178edfe/README.md"
+      },
+      "upstream": [
+        {
+          "name": "nvidia/parakeet-tdt-0.6b-v3 SentencePiece tokenizer",
+          "source": "https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3",
+          "revision": "541d1f99c6b0c3cd0b11a95167540bb8edefd82b",
+          "license": "CC-BY-4.0",
+          "evidence": "https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3/blob/541d1f99c6b0c3cd0b11a95167540bb8edefd82b/README.md"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Credit NVIDIA and FluidInference and link CC-BY-4.0.",
+        "download": {
+          "access": "public",
+          "presentation": "link"
+        },
+        "termsUrl": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "distribution": "user-download",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "parakeet_vocab.json at the pinned revision.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "parakeet-realtime-eou-120m-coreml",
+      "kind": "model",
+      "name": "Parakeet Realtime EOU 120M Core ML",
+      "version": "v1",
+      "source": "https://huggingface.co/FluidInference/parakeet-realtime-eou-120m-coreml",
+      "revision": "40a23f4c0b333aa17ad8c0f2ea47ec2347f2f355",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [
+        "parakeet-realtime-eou-120m-vocab"
+      ],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "other",
+        "name": "NVIDIA Open Model License Agreement",
+        "evidence": "https://huggingface.co/FluidInference/parakeet-realtime-eou-120m-coreml/blob/40a23f4c0b333aa17ad8c0f2ea47ec2347f2f355/README.md"
+      },
+      "upstream": [
+        {
+          "name": "nvidia/parakeet_realtime_eou_120m-v1",
+          "source": "https://huggingface.co/nvidia/parakeet_realtime_eou_120m-v1",
+          "revision": "a7e2b4629593dce0ec19f600e00e9904353fda2d",
+          "license": "other",
+          "licenseName": "NVIDIA Open Model License Agreement",
+          "evidence": null
+        }
+      ],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked: the model card names the NVIDIA Open Model License but links a mutable nvidia.com page; the exact agreement text and version have not been captured, so redistribution, commercial-use, and modification terms are unknown. FluidAudio v0.17.4 (StreamingEouAsrManager) loads streaming_encoder.mlmodelc, decoder.mlmodelc, and joint_decision.mlmodelc from the 160ms/, 320ms/, or 1280ms/ directory, plus that directory's vocab.json (a separate entry). #42 streaming must wait for these terms to be captured and reviewed, or use TDT v3 chunking.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "parakeet-realtime-eou-120m-vocab",
+      "kind": "tokenizer",
+      "name": "Parakeet Realtime EOU 120M vocabulary",
+      "version": "v1",
+      "source": "https://huggingface.co/FluidInference/parakeet-realtime-eou-120m-coreml",
+      "revision": "40a23f4c0b333aa17ad8c0f2ea47ec2347f2f355",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "other",
+        "name": "NVIDIA Open Model License Agreement",
+        "evidence": "https://huggingface.co/FluidInference/parakeet-realtime-eou-120m-coreml/blob/40a23f4c0b333aa17ad8c0f2ea47ec2347f2f355/README.md"
+      },
+      "upstream": [
+        {
+          "name": "nvidia/parakeet_realtime_eou_120m-v1 SentencePiece tokenizer",
+          "source": "https://huggingface.co/nvidia/parakeet_realtime_eou_120m-v1",
+          "revision": "a7e2b4629593dce0ec19f600e00e9904353fda2d",
+          "license": "other",
+          "licenseName": "NVIDIA Open Model License Agreement",
+          "evidence": null
+        }
+      ],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked with its model: the NVIDIA Open Model License text is not captured. FluidAudio loads <variant>/vocab.json; 160ms/vocab.json, 320ms/vocab.json, 1280ms/vocab.json, and the root vocab.json are the same git blob (462081190dbb331a0dde13e99d5cfa99b302f0a7, 17,437 bytes) at the pinned revision. The root tokenizer.model is not loaded by FluidAudio and is not listed.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "silero-vad-coreml",
+      "kind": "model",
+      "name": "Silero VAD Core ML",
+      "version": "v6.2.1 (unified 256 ms)",
+      "source": "https://huggingface.co/FluidInference/silero-vad-coreml",
+      "revision": "b419383c55c110e2c9271fa6ee0ea83d03c70d96",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "MIT",
+        "name": null,
+        "evidence": "https://huggingface.co/FluidInference/silero-vad-coreml/blob/b419383c55c110e2c9271fa6ee0ea83d03c70d96/README.md"
+      },
+      "upstream": [
+        {
+          "name": "onnx-community/silero-vad",
+          "source": "https://huggingface.co/onnx-community/silero-vad",
+          "revision": "e71cae966052b992a7eca6b17738916ce0eca4ec",
+          "license": "MIT",
+          "evidence": "https://huggingface.co/onnx-community/silero-vad/blob/e71cae966052b992a7eca6b17738916ce0eca4ec/README.md"
+        },
+        {
+          "name": "snakers4/silero-vad",
+          "source": "https://github.com/snakers4/silero-vad",
+          "revision": "7e30209a3e901f9842f81b225f3e93d8199902b1",
+          "license": "MIT",
+          "evidence": "https://github.com/snakers4/silero-vad/blob/7e30209a3e901f9842f81b225f3e93d8199902b1/LICENSE"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "MIT copyright notice and license text for Silero VAD.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "FluidAudio v0.17.4 loads silero-vad-unified-256ms-v6.2.1.mlmodelc. Small and MIT-licensed, so classified as a bundle candidate. It cannot be approved until downloads[] records the byte hash and size of every file in that .mlmodelc at the pinned revision (the checker requires downloads for any approved content bundle), and legal approval is recorded.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "kokoro-82m-coreml-ane",
+      "kind": "model",
+      "name": "Kokoro 82M Core ML (ANE, English)",
+      "version": "v1.0",
+      "source": "https://huggingface.co/FluidInference/kokoro-82m-coreml",
+      "revision": "006395f65025af251858b1ab0a7178a6a1e73f9f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [
+        "kokoro-82m-ane-vocab",
+        "kokoro-voice-af-heart",
+        "kokoro-english-lexicon",
+        "kokoro-english-g2p"
+      ],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "Apache-2.0",
+        "name": null,
+        "evidence": "https://huggingface.co/FluidInference/kokoro-82m-coreml/blob/006395f65025af251858b1ab0a7178a6a1e73f9f/ANE/LICENSE"
+      },
+      "upstream": [
+        {
+          "name": "hexgrad/Kokoro-82M",
+          "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+          "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+          "license": "Apache-2.0",
+          "evidence": "https://huggingface.co/hexgrad/Kokoro-82M/blob/f3ff3571791e39611d31c381e3a41a3af07b4987/README.md"
+        },
+        {
+          "name": "laishere/kokoro-coreml",
+          "source": "https://github.com/laishere/kokoro-coreml",
+          "revision": "484907db6a8347a6afb6e7b86850ea2878c6a3fb",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/laishere/kokoro-coreml/blob/484907db6a8347a6afb6e7b86850ea2878c6a3fb/LICENSE"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text; credit hexgrad (Kokoro-82M), laishere (kokoro-coreml), and FluidInference.",
+        "download": {
+          "access": "public",
+          "presentation": "link"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "user-download",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "The seven ANE/ .mlmodelc stages FluidAudio v0.17.4 names (KokoroAlbert, KokoroPostAlbert, KokoroAlignment, KokoroProsody, KokoroNoise_v2, KokoroVocoder, KokoroTail_v2). Cannot be approved while kokoro-english-lexicon and kokoro-english-g2p are blocked.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "kokoro-82m-ane-vocab",
+      "kind": "tokenizer",
+      "name": "Kokoro 82M ANE phoneme vocabulary",
+      "version": "v1.0",
+      "source": "https://huggingface.co/FluidInference/kokoro-82m-coreml",
+      "revision": "006395f65025af251858b1ab0a7178a6a1e73f9f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "Apache-2.0",
+        "name": null,
+        "evidence": "https://huggingface.co/FluidInference/kokoro-82m-coreml/blob/006395f65025af251858b1ab0a7178a6a1e73f9f/ANE/LICENSE"
+      },
+      "upstream": [
+        {
+          "name": "hexgrad/Kokoro-82M",
+          "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+          "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+          "license": "Apache-2.0",
+          "evidence": "https://huggingface.co/hexgrad/Kokoro-82M/blob/f3ff3571791e39611d31c381e3a41a3af07b4987/README.md"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text; credit hexgrad.",
+        "download": {
+          "access": "public",
+          "presentation": "link"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "user-download",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "ANE/vocab.json at the pinned revision.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "kokoro-voice-af-heart",
+      "kind": "voice",
+      "name": "Kokoro voice af_heart",
+      "version": "v1.0",
+      "source": "https://huggingface.co/FluidInference/kokoro-82m-coreml",
+      "revision": "006395f65025af251858b1ab0a7178a6a1e73f9f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "Apache-2.0",
+        "name": null,
+        "evidence": "https://huggingface.co/FluidInference/kokoro-82m-coreml/blob/006395f65025af251858b1ab0a7178a6a1e73f9f/ANE/LICENSE"
+      },
+      "upstream": [
+        {
+          "name": "hexgrad/Kokoro-82M voices/af_heart.pt",
+          "source": "https://huggingface.co/hexgrad/Kokoro-82M",
+          "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+          "license": "Apache-2.0",
+          "evidence": "https://huggingface.co/hexgrad/Kokoro-82M/blob/f3ff3571791e39611d31c381e3a41a3af07b4987/README.md"
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text; credit hexgrad.",
+        "download": {
+          "access": "public",
+          "presentation": "link"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "user-download",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "ANE/af_heart.bin, FluidAudio's default English voice. Other voices are not listed and not approved.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "kokoro-english-lexicon",
+      "kind": "phonemizer",
+      "name": "Kokoro English lexicon cache (Misaki)",
+      "version": "v1.0",
+      "source": "https://huggingface.co/FluidInference/kokoro-82m-coreml",
+      "revision": "006395f65025af251858b1ab0a7178a6a1e73f9f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "NOASSERTION",
+        "name": null,
+        "evidence": null
+      },
+      "upstream": [
+        {
+          "name": "hexgrad/misaki us_gold.json and us_silver.json",
+          "source": "https://github.com/hexgrad/misaki",
+          "revision": "fba1236595f2d2bf21d414ba6e57d25256afada3",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/hexgrad/misaki/blob/fba1236595f2d2bf21d414ba6e57d25256afada3/LICENSE"
+        },
+        {
+          "name": "Source dictionaries misaki compiled its English lexicons from (undocumented)",
+          "source": "https://github.com/hexgrad/misaki",
+          "license": "NOASSERTION",
+          "evidence": null
+        }
+      ],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked: us_lexicon_cache.json at the repository root, which FluidAudio documents as the Misaki lexicon. Misaki's repository license covers its code and its own contribution, but misaki does not document the dictionaries its gold and silver lexicons were compiled from, so the data's terms cannot be inherited from the repository license. Trace those sources (or obtain a qualified review) before reclassifying.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "kokoro-english-g2p",
+      "kind": "phonemizer",
+      "name": "Kokoro English BART G2P model",
+      "version": "unversioned",
+      "source": "https://huggingface.co/FluidInference/kokoro-82m-coreml",
+      "revision": "006395f65025af251858b1ab0a7178a6a1e73f9f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "NOASSERTION",
+        "name": null,
+        "evidence": null
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked: G2PEncoder.mlmodelc, G2PDecoder.mlmodelc, and g2p_vocab.json at the repository root. FluidAudio documents them only as a 'BART G2P CoreML model'. Neither the training source nor the weights' license is recorded, and the repository's apache-2.0 tag cannot be assumed to cover separately sourced weights.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "kokoro-spanish-french-g2p",
+      "kind": "phonemizer",
+      "name": "Kokoro Spanish and French lexicon caches",
+      "version": "unversioned",
+      "source": "https://huggingface.co/FluidInference/kokoro-82m-coreml",
+      "revision": "006395f65025af251858b1ab0a7178a6a1e73f9f",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "NOASSERTION",
+        "name": null,
+        "evidence": null
+      },
+      "upstream": [
+        {
+          "name": "ipa-dict fr_FR and es_ES word lists",
+          "source": "https://github.com/open-dict-data/ipa-dict",
+          "revision": "43c3570eb3553bdd19fccd2bd0091534889af023",
+          "license": "MIT",
+          "evidence": "https://github.com/open-dict-data/ipa-dict/blob/43c3570eb3553bdd19fccd2bd0091534889af023/LICENSE"
+        },
+        {
+          "name": "espeak-ng pronunciations (generated output)",
+          "source": "https://github.com/espeak-ng/espeak-ng",
+          "revision": "ba90c8e9f440ad544f674a790bb5f53878b6ffc5",
+          "license": "GPL-3.0-or-later",
+          "evidence": "https://github.com/espeak-ng/espeak-ng/blob/ba90c8e9f440ad544f674a790bb5f53878b6ffc5/COPYING"
+        }
+      ],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked: es_lexicon_cache.json and fr_lexicon_cache.json combine MIT ipa-dict words with pronunciations generated by espeak-ng (GPL-3.0), and the data's license is not stated. They are also outside the #42 English configuration. Recorded because FluidAudio's ThirdPartyLicenses/ lists them; that description (ThirdPartyLicenses/KokoroAneSpanishFrenchG2P-LICENSE.md at FluidAudio 21493f8) is FluidAudio's account, not license evidence inside this repository at the pinned revision.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "pyannote-segmentation-legacy-coreml",
+      "kind": "model",
+      "name": "pyannote_segmentation.mlmodelc (legacy speaker segmentation)",
+      "version": "unversioned",
+      "source": "https://huggingface.co/FluidInference/speaker-diarization-coreml",
+      "revision": "df2625ac79a7ac6b65ad868fee6d80f320da4232",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "NOASSERTION",
+        "name": null,
+        "evidence": null
+      },
+      "upstream": [
+        {
+          "name": "Unrecorded pyannote segmentation checkpoint (the model card cites Plaquet and Bredin 2023)",
+          "source": "https://github.com/pyannote/pyannote-audio",
+          "license": "NOASSERTION",
+          "evidence": null
+        }
+      ],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked: loaded by FluidAudio's online diarizer and speaker-embedding path (ModelNames.Diarizer). NOTICE.md at the pinned revision excludes it from the repository's scoped CC-BY-4.0 ('their original source and licensing must be evaluated separately'); its Core ML metadata records only torch 2.6.0 and coremltools 8.3.0, with no author, license, or source checkpoint. The in-scope Community-1 Segmentation.mlmodelc is a different artifact.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "wespeaker-v2-legacy-coreml",
+      "kind": "model",
+      "name": "wespeaker_v2.mlmodelc (legacy speaker embedding)",
+      "version": "unversioned",
+      "source": "https://huggingface.co/FluidInference/speaker-diarization-coreml",
+      "revision": "df2625ac79a7ac6b65ad868fee6d80f320da4232",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "fluidaudio"
+      ],
+      "license": {
+        "code": null,
+        "content": "NOASSERTION",
+        "name": null,
+        "evidence": null
+      },
+      "upstream": [
+        {
+          "name": "Unrecorded WeSpeaker speaker-embedding checkpoint (the model card cites Wang et al. 2023)",
+          "source": "https://github.com/wenet-e2e/wespeaker",
+          "license": "NOASSERTION",
+          "evidence": null
+        }
+      ],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked: loaded by FluidAudio's speaker-embedding path (ModelNames.Diarizer). NOTICE.md at the pinned revision excludes it from the repository's scoped CC-BY-4.0; its Core ML metadata records only torch 2.6.0 and coremltools 8.3.0 (generated class name wespeaker_int8), with no author, license, or source checkpoint, so neither the WeSpeaker model nor its training data can be identified. The in-scope Community-1 Embedding.mlmodelc is a different artifact.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "sherpa-onnx",
+      "kind": "engine",
+      "name": "sherpa-onnx",
+      "version": "v1.13.8",
+      "source": "https://github.com/k2-fsa/sherpa-onnx",
+      "revision": "11afbd009a7f8c08f4bcf2fc1b265d0df4670fbf",
+      "downloads": [],
+      "paths": [],
+      "configuration": "sherpa-onnx v1.13.8 static libraries with the C API, recognition only: SHERPA_ONNX_ENABLE_TTS=OFF, SHERPA_ONNX_ENABLE_SPEAKER_DIARIZATION=OFF, SHERPA_ONNX_ENABLE_WEBSOCKET=OFF, SHERPA_ONNX_ENABLE_PORTAUDIO=OFF, SHERPA_ONNX_ENABLE_BINARY=OFF, SHERPA_ONNX_ENABLE_PYTHON=OFF, SHERPA_ONNX_ENABLE_GPU=OFF, SHERPA_ONNX_USE_PRE_INSTALLED_ONNXRUNTIME_IF_AVAILABLE=OFF, SHERPA_ONNX_LINK_LIBSTDCPP_STATICALLY=OFF, SHERPA_ONNX_USE_STATIC_CRT=OFF with CMAKE_MSVC_RUNTIME_LIBRARY left unset, CMAKE_BUILD_TYPE=Release; linux x86_64, linux aarch64, windows x64, macOS arm64. C and C++ runtimes are linked dynamically from the target system and are not packaged: glibc, libstdc++, and libgcc_s on Linux; the MSVC /MD runtime (Visual C++ Redistributable, a system prerequisite) on Windows; libSystem and libc++ on macOS. Provisional until #26 confirms it.",
+      "requires": [
+        "onnxruntime",
+        "kaldi-native-fbank",
+        "kaldi-decoder",
+        "simple-sentencepiece",
+        "nlohmann-json"
+      ],
+      "usedBy": [
+        "#26"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/k2-fsa/sherpa-onnx/blob/11afbd009a7f8c08f4bcf2fc1b265d0df4670fbf/LICENSE"
+      },
+      "upstream": [
+        {
+          "name": "kaldi-asr/kaldi (copied/modified: text-utils, parse-options, timer, fst-utils, resample)",
+          "source": "https://github.com/kaldi-asr/kaldi",
+          "revision": "e02e35f0254bb033fab73d1df99fc34123e31d56",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/kaldi-asr/kaldi/blob/e02e35f0254bb033fab73d1df99fc34123e31d56/COPYING"
+        },
+        {
+          "name": "k2-fsa/k2 (copied: csrc/math.h from k2/csrc/utils.h)",
+          "source": "https://github.com/k2-fsa/k2",
+          "revision": "ec31d2c96e04665eadb276ebcfd436892f74b0aa",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/k2-fsa/k2/blob/ec31d2c96e04665eadb276ebcfd436892f74b0aa/LICENSE"
+        },
+        {
+          "name": "k2-fsa/icefall (copied: lodr-fst from icefall/utils/ngram_lm.py)",
+          "source": "https://github.com/k2-fsa/icefall",
+          "revision": "3f848bb6d0acc970c9b294a30ca0a04a7c9c78d1",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/k2-fsa/icefall/blob/3f848bb6d0acc970c9b294a30ca0a04a7c9c78d1/LICENSE"
+        },
+        {
+          "name": "abjadai/catt (adapted: tashkeel-tokenizer from tashkeel_tokenizer.py)",
+          "source": "https://github.com/abjadai/catt",
+          "revision": "8d5330499feb85f6625e6af632141ed2ed6065fd",
+          "license": "Apache-2.0",
+          "evidence": "https://github.com/abjadai/catt/blob/8d5330499feb85f6625e6af632141ed2ed6065fd/LICENSE"
+        },
+        {
+          "name": "ReneNyffenegger/cpp-base64 (adapted: base64-decode.cc)",
+          "source": "https://github.com/ReneNyffenegger/cpp-base64",
+          "revision": "951de609dbe27ce8864dfe47323c4ade96bee86e",
+          "license": "LicenseRef-cpp-base64",
+          "licenseName": "cpp-base64 license (zlib-style), Copyright 2004-2017 René Nyffenegger",
+          "evidence": "https://github.com/ReneNyffenegger/cpp-base64/blob/951de609dbe27ce8864dfe47323c4ade96bee86e/LICENSE"
+        },
+        {
+          "name": "KentonMurray/Buckwalter transliteration table (copied into tashkeel-tokenizer.cc)",
+          "source": "https://github.com/KentonMurray/Buckwalter",
+          "revision": "66e42d8b80112aa370ef9ce2bbecfd9b40286588",
+          "license": "NOASSERTION",
+          "evidence": null
+        },
+        {
+          "name": "StackOverflow answer to question 216823 (copied: string trim helpers in symbol-table.cc)",
+          "source": "https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring",
+          "license": "NOASSERTION",
+          "evidence": null
+        }
+      ],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text and sherpa-onnx copyright notice; Apache-2.0 notices for Kaldi (including its COPYING authorship note), k2, icefall, and CATT; the cpp-base64 notice, retained unaltered in any source distribution, with base64-decode.cc marked as an altered version.",
+        "download": {
+          "access": "public",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "SDK code license only; #26 has not chosen a model, so none is listed. `requires` follows CMakeLists.txt at the pinned commit for the named options. SHERPA_ONNX_USE_PRE_INSTALLED_ONNXRUNTIME_IF_AVAILABLE defaults to ON, which makes cmake/onnxruntime.cmake use any ONNX Runtime found through SHERPA_ONNXRUNTIME_INCLUDE_DIR/SHERPA_ONNXRUNTIME_LIB_DIR or system paths without a hash check; the configuration turns it OFF so only the hash-pinned onnxruntime archives can be linked, and #26's build cross-check must assert it. Every other dependency's local-file fallback is still verified by its CMake URL_HASH. espeak-ng and piper-phonemize are only fetched when TTS is enabled, and hclust-cpp only with speaker diarization. Any other variant needs its own reviewed engine entry. The engine cannot be approved while onnxruntime is blocked. Runtime linkage: sherpa-onnx defaults to SHERPA_ONNX_LINK_LIBSTDCPP_STATICALLY=ON (injecting -static-libstdc++ -static-libgcc on Linux static builds) and SHERPA_ONNX_USE_STATIC_CRT=ON (MSVC /MT); the configuration turns both OFF so no GCC or Microsoft runtime code is linked into Murmur's artifacts, and the Windows onnxruntime archive is therefore the MD variant. Shipping any runtime app-locally would need its own reviewed entry. Blocked: sources compiled in this configuration copy code from projects outside sherpa-onnx's Apache-2.0 license (upstream). Kaldi, k2, icefall, and CATT are Apache-2.0 and cpp-base64 has its own zlib-style notice, but the Buckwalter table's repository has no license and the StackOverflow trim snippet has no pinnable source or recorded license. Those two need a qualified review, or an upstream replacement, before the engine can be classified as a bundle again. websocket-only tee-stream.h (copied from wordaligned.org) is excluded by SHERPA_ONNX_ENABLE_WEBSOCKET=OFF.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "onnxruntime",
+      "kind": "native-library",
+      "name": "ONNX Runtime static libraries (csukuangfj/onnxruntime-libs rebuild)",
+      "version": "v1.28.2",
+      "source": "https://github.com/csukuangfj/onnxruntime-libs",
+      "revision": "5cc3d2e84d9eade2562cf29a93fa3a520a75ca57",
+      "downloads": [
+        {
+          "url": "https://github.com/csukuangfj/onnxruntime-libs/releases/download/v1.28.2/onnxruntime-linux-x64-static_lib-1.28.2-glibc2_17.zip",
+          "sha256": "2dada92465b40a16fb5011956d93eaf90e3091cf621a953e5371a5e6a687794e",
+          "size": 24400093,
+          "platform": "linux-x86_64"
+        },
+        {
+          "url": "https://github.com/csukuangfj/onnxruntime-libs/releases/download/v1.28.2/onnxruntime-linux-aarch64-static_lib-1.28.2-glibc2_17.zip",
+          "sha256": "fba13fa68dbc9305512869bfa74f53a15e7af983c44ba8a9cbecbce5c21b33b3",
+          "size": 22453157,
+          "platform": "linux-aarch64"
+        },
+        {
+          "url": "https://github.com/csukuangfj/onnxruntime-libs/releases/download/v1.28.2/onnxruntime-win-x64-static_lib-MD-Release-1.28.2.tar.bz2",
+          "sha256": "6fdf64a246ff8c46a303f84b7514e94eda63ae8fefa94491b157f9c14449dbaa",
+          "size": 85157422,
+          "platform": "windows-x64"
+        },
+        {
+          "url": "https://github.com/csukuangfj/onnxruntime-libs/releases/download/v1.28.2/onnxruntime-osx-arm64-static_lib-1.28.2.zip",
+          "sha256": "bf6e35dc9440d2899c3d21f52b1045fb99176a6ae822281b7245c5418cc338ab",
+          "size": 20324964,
+          "platform": "macos-arm64"
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "NOASSERTION",
+        "content": null,
+        "name": null,
+        "evidence": null
+      },
+      "upstream": [
+        {
+          "name": "microsoft/onnxruntime",
+          "source": "https://github.com/microsoft/onnxruntime",
+          "revision": "33ca9628233dc8f002435e868d4c2e9f82766ca1",
+          "license": "MIT",
+          "evidence": "https://github.com/microsoft/onnxruntime/blob/33ca9628233dc8f002435e868d4c2e9f82766ca1/LICENSE"
+        }
+      ],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked until the rebuild's provenance is accepted: the redistributing repository declares no license and does not tie the prebuilt archives to a reproducible build of the upstream v1.28.2 commit. Upstream ONNX Runtime is MIT, and its static libraries also embed third-party code covered by ThirdPartyNotices.txt. Hashes and sizes match the GitHub release digests and sherpa-onnx's CMake pins.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "kaldi-native-fbank",
+      "kind": "native-library",
+      "name": "kaldi-native-fbank",
+      "version": "v1.22.3",
+      "source": "https://github.com/csukuangfj/kaldi-native-fbank",
+      "revision": "b09e686fe2084732ddd30d1ef80acfc0f13eaf01",
+      "downloads": [
+        {
+          "url": "https://github.com/csukuangfj/kaldi-native-fbank/archive/refs/tags/v1.22.3.tar.gz",
+          "sha256": "9176cc66fc7ce1edf85cf355b06e320c57db6297df74277f575183468893cf61",
+          "size": 71144
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/csukuangfj/kaldi-native-fbank/blob/b09e686fe2084732ddd30d1ef80acfc0f13eaf01/LICENSE"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Source archive fetched by sherpa-onnx cmake/kaldi-native-fbank.cmake; the hash matches its pin.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "kaldi-decoder",
+      "kind": "native-library",
+      "name": "kaldi-decoder",
+      "version": "v0.3.0",
+      "source": "https://github.com/k2-fsa/kaldi-decoder",
+      "revision": "62fda2d74246a90db9570e46fb16b012f813fae7",
+      "downloads": [
+        {
+          "url": "https://github.com/k2-fsa/kaldi-decoder/archive/refs/tags/v0.3.0.tar.gz",
+          "sha256": "b9f34cfb4fd3b1344100eead79ef4d37aa15962274b9e3056de345021f76a1b0",
+          "size": 51199
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [
+        "kaldifst",
+        "eigen"
+      ],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/k2-fsa/kaldi-decoder/blob/62fda2d74246a90db9570e46fb16b012f813fae7/LICENSE"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Source archive fetched by sherpa-onnx cmake/kaldi-decoder.cmake; the hash matches its pin. Its CMakeLists includes kaldifst (from its own cmake/) and eigen (resolved to sherpa-onnx cmake/eigen.cmake).",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "kaldifst",
+      "kind": "native-library",
+      "name": "kaldifst",
+      "version": "v1.8.0",
+      "source": "https://github.com/k2-fsa/kaldifst",
+      "revision": "ab5bdd013bdf13921e6aeee77db5722ebf9955fb",
+      "downloads": [
+        {
+          "url": "https://github.com/k2-fsa/kaldifst/archive/refs/tags/v1.8.0.tar.gz",
+          "sha256": "3f247b7e5a2409071202f5e2bc6200060f66728c0a3443c03923ad2723e040b3",
+          "size": 172147
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [
+        "openfst"
+      ],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/k2-fsa/kaldifst/blob/ab5bdd013bdf13921e6aeee77db5722ebf9955fb/LICENSE"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Fetched by kaldi-decoder v0.3.0 cmake/kaldifst.cmake; the hash matches its pin. GitHub reports NOASSERTION because the LICENSE file carries OpenFst's legal-notices header over the Apache-2.0 text.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "openfst",
+      "kind": "native-library",
+      "name": "OpenFst (csukuangfj fork)",
+      "version": "v1.8.5-2026-07-09",
+      "source": "https://github.com/csukuangfj/openfst",
+      "revision": "f702a6317d600ac953fdbb4978674c3a28b6115c",
+      "downloads": [
+        {
+          "url": "https://github.com/csukuangfj/openfst/archive/refs/tags/v1.8.5-2026-07-09.tar.gz",
+          "sha256": "2ff712a32952fcb01d351121a6bc8ccf4fdc6b2aa06ce8df2b3095dedd518c0e",
+          "size": 1501685
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/csukuangfj/openfst/blob/f702a6317d600ac953fdbb4978674c3a28b6115c/COPYING"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Source archive fetched through sherpa-onnx cmake/openfst.cmake (included by kaldifst); the hash matches its pin.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "eigen",
+      "kind": "native-library",
+      "name": "Eigen",
+      "version": "5.0.1",
+      "source": "https://gitlab.com/libeigen/eigen",
+      "revision": "bc3b39870ecb690a623a3f49149a358b95c5781d",
+      "downloads": [
+        {
+          "url": "https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.gz",
+          "sha256": "e9c326dc8c05cd1e044c71f30f1b2e34a6161a3b6ecf445d56b53ff1669e3dec",
+          "size": 2967272
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "MPL-2.0 AND BSD-3-Clause AND Apache-2.0 AND Minpack",
+        "content": null,
+        "name": null,
+        "evidence": "https://gitlab.com/libeigen/eigen/-/blob/bc3b39870ecb690a623a3f49149a358b95c5781d/COPYING.README"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "MPL-2.0 notice with a pointer to Eigen's source; BSD-3-Clause, Apache-2.0, and Minpack notices for the files they cover.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.mozilla.org/en-US/MPL/2.0/"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Header-only; fetched by sherpa-onnx cmake/eigen.cmake for kaldi-decoder; the hash matches its pin. MPL-2.0 is file-level copyleft: modified Eigen files must be offered as source.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "simple-sentencepiece",
+      "kind": "native-library",
+      "name": "simple-sentencepiece",
+      "version": "v0.7",
+      "source": "https://github.com/pkufool/simple-sentencepiece",
+      "revision": "62dd423df1d51da5ea06f1c3a046fc04f01b4f39",
+      "downloads": [
+        {
+          "url": "https://github.com/pkufool/simple-sentencepiece/archive/refs/tags/v0.7.tar.gz",
+          "sha256": "1748a822060a35baa9f6609f84efc8eb54dc0e74b9ece3d82367b7119fdc75af",
+          "size": 355335
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/pkufool/simple-sentencepiece/blob/62dd423df1d51da5ea06f1c3a046fc04f01b4f39/LICENSE"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Tokenizer library code fetched by sherpa-onnx cmake/simple-sentencepiece.cmake; the hash matches its pin. Tokenizer data ships with the model #26 chooses.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "nlohmann-json",
+      "kind": "native-library",
+      "name": "nlohmann/json",
+      "version": "v3.12.0",
+      "source": "https://github.com/nlohmann/json",
+      "revision": "55f93686c01528224f448c19128836e7df245f72",
+      "downloads": [
+        {
+          "url": "https://github.com/nlohmann/json/archive/refs/tags/v3.12.0.tar.gz",
+          "sha256": "4b92eb0c06d10683f7447ce9406cb97cd4b453be18d7279320f7b2f025c10187",
+          "size": 9678593
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/nlohmann/json/blob/55f93686c01528224f448c19128836e7df245f72/LICENSE.MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "MIT copyright notice and license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Header-only; fetched by sherpa-onnx cmake/json.cmake unconditionally; the hash matches its pin.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "espeak-ng",
+      "kind": "native-library",
+      "name": "espeak-ng (csukuangfj fork)",
+      "version": "ed530aa",
+      "source": "https://github.com/csukuangfj/espeak-ng",
+      "revision": "ed530aa113046142eb5115cf2fc9157854d0ffe1",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "GPL-3.0-or-later",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/csukuangfj/espeak-ng/blob/ed530aa113046142eb5115cf2fc9157854d0ffe1/COPYING"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked and unreachable from the named sherpa-onnx configuration: only fetched when SHERPA_ONNX_ENABLE_TTS=ON. Statically linking GPL-3.0 code into Murmur's Apache-2.0 distributions is not supported.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "piper-phonemize",
+      "kind": "native-library",
+      "name": "piper-phonemize (csukuangfj fork)",
+      "version": "f3ff95a",
+      "source": "https://github.com/csukuangfj/piper-phonemize",
+      "revision": "f3ff95afc03640bc1399e113e83361192a2fafb4",
+      "downloads": [],
+      "paths": [],
+      "configuration": null,
+      "requires": [
+        "espeak-ng"
+      ],
+      "usedBy": [
+        "#26",
+        "sherpa-onnx"
+      ],
+      "license": {
+        "code": "MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/csukuangfj/piper-phonemize/blob/f3ff95afc03640bc1399e113e83361192a2fafb4/LICENSE.md"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "unknown",
+        "commercialUse": "unknown",
+        "modification": "unknown",
+        "attribution": "",
+        "download": {
+          "access": "unknown",
+          "presentation": "unknown"
+        },
+        "termsUrl": null
+      },
+      "distribution": "blocked",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Blocked and unreachable from the named sherpa-onnx configuration: only fetched when SHERPA_ONNX_ENABLE_TTS=ON. Its own code is MIT, but it requires GPL-3.0 espeak-ng, and GitHub reports the repository as GPL-3.0.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      }
+    },
+    {
+      "id": "rust-crate-adler2-2.0.1",
+      "kind": "native-library",
+      "name": "adler2 (Rust crate)",
+      "version": "2.0.1",
+      "source": "https://crates.io/crates/adler2/2.0.1",
+      "revision": "89a031a0f42eeff31c70dc598b398cbf31f1680f",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/adler2/adler2-2.0.1.crate",
+          "sha256": "320119579fcad9c21884f5c4861d16174d0e06250625266f50fe6898340abefa",
+          "size": 13366
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing",
+        "rust-std"
+      ],
+      "license": {
+        "code": "0BSD OR MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/oyvindln/adler2/blob/89a031a0f42eeff31c70dc598b398cbf31f1680f/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c), as a dependency of miniz_oxide. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/oyvindln/adler2"
+    },
+    {
+      "id": "rust-crate-anyhow-1.0.103",
+      "kind": "native-library",
+      "name": "anyhow (Rust crate)",
+      "version": "1.0.103",
+      "source": "https://crates.io/crates/anyhow/1.0.103",
+      "revision": "5bdb0e24db3994be119d42f18fe2d655e1f68f4a",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/anyhow/anyhow-1.0.103.crate",
+          "sha256": "2a4385e2e34eb35d6b3efe798b9eb88096925d87726c0798709bf56d9ed84af3",
+          "size": 48746
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/dtolnay/anyhow/blob/5bdb0e24db3994be119d42f18fe2d655e1f68f4a/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/dtolnay/anyhow"
+    },
+    {
+      "id": "rust-crate-bimap-0.6.3",
+      "kind": "native-library",
+      "name": "bimap (Rust crate)",
+      "version": "0.6.3",
+      "source": "https://crates.io/crates/bimap/0.6.3",
+      "revision": "8e5a4e224b95857da8a28a7dd4a1a9eec241ef7d",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/bimap/bimap-0.6.3.crate",
+          "sha256": "230c5f1ca6a325a32553f8640d31ac9b49f2411e901e427570154868b46da4f7",
+          "size": 26660
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "Apache-2.0 OR MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/billyrieger/bimap-rs/blob/8e5a4e224b95857da8a28a7dd4a1a9eec241ef7d/LICENSE_MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/billyrieger/bimap-rs"
+    },
+    {
+      "id": "rust-crate-bitflags-2.13.0",
+      "kind": "native-library",
+      "name": "bitflags (Rust crate)",
+      "version": "2.13.0",
+      "source": "https://crates.io/crates/bitflags/2.13.0",
+      "revision": "9253889ee93921055309908c46272bd6c5c6ad99",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/bitflags/bitflags-2.13.0.crate",
+          "sha256": "b4388bee8683e3d04af747c73422af53102d2bd24d9eadb6cbc100baef4b43f8",
+          "size": 51280
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/bitflags/bitflags/blob/9253889ee93921055309908c46272bd6c5c6ad99/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/bitflags/bitflags"
+    },
+    {
+      "id": "rust-crate-cfg-if-1.0.4",
+      "kind": "native-library",
+      "name": "cfg-if (Rust crate)",
+      "version": "1.0.4",
+      "source": "https://crates.io/crates/cfg-if/1.0.4",
+      "revision": "3510ca6abea34cbbc702509a4e50ea9709925eda",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/cfg-if/cfg-if-1.0.4.crate",
+          "sha256": "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801",
+          "size": 9360
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing",
+        "rust-std"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-lang/cfg-if/blob/3510ca6abea34cbbc702509a4e50ea9709925eda/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c); its /rust/deps path appears in the release binary. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-lang/cfg-if"
+    },
+    {
+      "id": "rust-crate-crc32fast-1.5.0",
+      "kind": "native-library",
+      "name": "crc32fast (Rust crate)",
+      "version": "1.5.0",
+      "source": "https://crates.io/crates/crc32fast/1.5.0",
+      "revision": "dbf4f76cd71cdcc57d9164cbd46890d53ce0423c",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/crc32fast/crc32fast-1.5.0.crate",
+          "sha256": "9481c1c90cbf2ac953f07c8d4a58aa3945c425b7185c9154d67a65e4230da511",
+          "size": 40723
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/srijs/rust-crc32fast/blob/dbf4f76cd71cdcc57d9164cbd46890d53ce0423c/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/srijs/rust-crc32fast"
+    },
+    {
+      "id": "rust-crate-either-1.16.0",
+      "kind": "native-library",
+      "name": "either (Rust crate)",
+      "version": "1.16.0",
+      "source": "https://crates.io/crates/either/1.16.0",
+      "revision": "8f4ecd9964ea909a7f989a3668a2710310a0e62f",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/either/either-1.16.0.crate",
+          "sha256": "91622ff5e7162018101f2fea40d6ebf4a78bbe5a49736a2020649edf9693679e",
+          "size": 21248
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rayon-rs/either/blob/8f4ecd9964ea909a7f989a3668a2710310a0e62f/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rayon-rs/either"
+    },
+    {
+      "id": "rust-crate-flate2-1.1.9",
+      "kind": "native-library",
+      "name": "flate2 (Rust crate)",
+      "version": "1.1.9",
+      "source": "https://crates.io/crates/flate2/1.1.9",
+      "revision": "19ddb18bf11199858fbc6504d079448fafd1606e",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/flate2/flate2-1.1.9.crate",
+          "sha256": "843fba2746e448b37e26a819579957415c8cef339bf08564fe8b7ddbd959573c",
+          "size": 82745
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-lang/flate2-rs/blob/19ddb18bf11199858fbc6504d079448fafd1606e/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-lang/flate2-rs"
+    },
+    {
+      "id": "rust-crate-generic-array-1.4.3",
+      "kind": "native-library",
+      "name": "generic-array (Rust crate)",
+      "version": "1.4.3",
+      "source": "https://crates.io/crates/generic-array/1.4.3",
+      "revision": "778e6dd954d2d06e2258c3bf3acea604130b0c99",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/generic-array/generic-array-1.4.3.crate",
+          "sha256": "c2e55f16dcf0e9c00efbe2e655ffe45fc98e7066b52bc92f8a79e64060a79351",
+          "size": 50172
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/fizyk20/generic-array/blob/778e6dd954d2d06e2258c3bf3acea604130b0c99/LICENSE"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/fizyk20/generic-array"
+    },
+    {
+      "id": "rust-crate-getrandom-0.3.4",
+      "kind": "native-library",
+      "name": "getrandom (Rust crate)",
+      "version": "0.3.4",
+      "source": "https://crates.io/crates/getrandom/0.3.4",
+      "revision": "38e4ad38309a85b56eef4fc759535ccfc322ba9a",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/getrandom/getrandom-0.3.4.crate",
+          "sha256": "899def5c37c4fd7b2664648c28120ecec138e4d395b459e5ca34f9cce2dd77fd",
+          "size": 50932
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-random/getrandom/blob/38e4ad38309a85b56eef4fc759535ccfc322ba9a/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-random/getrandom"
+    },
+    {
+      "id": "rust-crate-itertools-0.14.0",
+      "kind": "native-library",
+      "name": "itertools (Rust crate)",
+      "version": "0.14.0",
+      "source": "https://crates.io/crates/itertools/0.14.0",
+      "revision": "a015a6831525ee1637df747d3f530a627d9741bf",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/itertools/itertools-0.14.0.crate",
+          "sha256": "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285",
+          "size": 152715
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-itertools/itertools/blob/a015a6831525ee1637df747d3f530a627d9741bf/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-itertools/itertools"
+    },
+    {
+      "id": "rust-crate-lazy-static-1.5.0",
+      "kind": "native-library",
+      "name": "lazy_static (Rust crate)",
+      "version": "1.5.0",
+      "source": "https://crates.io/crates/lazy_static/1.5.0",
+      "revision": "be7c1c43f264699f956b70ce8e29941bd1e61bde",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/lazy_static/lazy_static-1.5.0.crate",
+          "sha256": "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe",
+          "size": 14025
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-lang-nursery/lazy-static.rs/blob/be7c1c43f264699f956b70ce8e29941bd1e61bde/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-lang-nursery/lazy-static.rs"
+    },
+    {
+      "id": "rust-crate-libc-0.2.186",
+      "kind": "native-library",
+      "name": "libc (Rust crate)",
+      "version": "0.2.186",
+      "source": "https://crates.io/crates/libc/0.2.186",
+      "revision": "42620ffc4109dc32e02f1cae9e63a3f4311b4b71",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/libc/libc-0.2.186.crate",
+          "sha256": "68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66",
+          "size": 821883
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-lang/libc/blob/42620ffc4109dc32e02f1cae9e63a3f4311b4b71/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-lang/libc"
+    },
+    {
+      "id": "rust-crate-memchr-2.8.3",
+      "kind": "native-library",
+      "name": "memchr (Rust crate)",
+      "version": "2.8.3",
+      "source": "https://crates.io/crates/memchr/2.8.3",
+      "revision": "5fdb40c054e1fff359a2f7bdf7f87a13b34b465d",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/memchr/memchr-2.8.3.crate",
+          "sha256": "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98",
+          "size": 99165
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "Unlicense OR MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/BurntSushi/memchr/blob/5fdb40c054e1fff359a2f7bdf7f87a13b34b465d/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/BurntSushi/memchr"
+    },
+    {
+      "id": "rust-crate-minimal-lexical-0.2.1",
+      "kind": "native-library",
+      "name": "minimal-lexical (Rust crate)",
+      "version": "0.2.1",
+      "source": "https://crates.io/crates/minimal-lexical/0.2.1",
+      "revision": "e997c46656ebe83e696b866bd954da1fa3f64eef",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/minimal-lexical/minimal-lexical-0.2.1.crate",
+          "sha256": "68354c5c6bd36d73ff3feceb05efa59b6acb7626617f4962be322a825e61f79a",
+          "size": 94841
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/Alexhuszagh/minimal-lexical/blob/e997c46656ebe83e696b866bd954da1fa3f64eef/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/Alexhuszagh/minimal-lexical"
+    },
+    {
+      "id": "rust-crate-miniz-oxide-0.8.9",
+      "kind": "native-library",
+      "name": "miniz_oxide (Rust crate)",
+      "version": "0.8.9",
+      "source": "https://crates.io/crates/miniz_oxide/0.8.9",
+      "revision": "44e43c7786e379b2b1a7fde4aa0e63be719e583d",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/miniz_oxide/miniz_oxide-0.8.9.crate",
+          "sha256": "1fa76a2c86f704bdb222d66965fb3d63269ce38518b83cb0575fca855ebb6316",
+          "size": 67132
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing",
+        "rust-std"
+      ],
+      "license": {
+        "code": "MIT OR Zlib OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/Frommi/miniz_oxide/blob/44e43c7786e379b2b1a7fde4aa0e63be719e583d/miniz_oxide/LICENSE-MIT.md"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c); its /rust/deps path appears in the release binary. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/Frommi/miniz_oxide"
+    },
+    {
+      "id": "rust-crate-nom-7.1.3",
+      "kind": "native-library",
+      "name": "nom (Rust crate)",
+      "version": "7.1.3",
+      "source": "https://crates.io/crates/nom/7.1.3",
+      "revision": "869f8972a4383b13cf89574fda28cb7dbfd56517",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/nom/nom-7.1.3.crate",
+          "sha256": "d273983c5a657a70a3e8f2a01329822f3b8c8172b73826411a55751e404a0a4a",
+          "size": 117570
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/Geal/nom/blob/869f8972a4383b13cf89574fda28cb7dbfd56517/LICENSE"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/Geal/nom"
+    },
+    {
+      "id": "rust-crate-num-traits-0.2.19",
+      "kind": "native-library",
+      "name": "num-traits (Rust crate)",
+      "version": "0.2.19",
+      "source": "https://crates.io/crates/num-traits/0.2.19",
+      "revision": "7ec3d41d39b28190ec1d42db38021107b3951f3a",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/num-traits/num-traits-0.2.19.crate",
+          "sha256": "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841",
+          "size": 51631
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-num/num-traits/blob/7ec3d41d39b28190ec1d42db38021107b3951f3a/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-num/num-traits"
+    },
+    {
+      "id": "rust-crate-ordered-float-5.3.0",
+      "kind": "native-library",
+      "name": "ordered-float (Rust crate)",
+      "version": "5.3.0",
+      "source": "https://crates.io/crates/ordered-float/5.3.0",
+      "revision": "6cca9b87766aa086e4dde8e646f66aa975bdf757",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/ordered-float/ordered-float-5.3.0.crate",
+          "sha256": "b7d950ca161dc355eaf28f82b11345ed76c6e1f6eb1f4f4479e0323b9e2fbd0e",
+          "size": 34539
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/reem/rust-ordered-float/blob/6cca9b87766aa086e4dde8e646f66aa975bdf757/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/reem/rust-ordered-float"
+    },
+    {
+      "id": "rust-crate-ppv-lite86-0.2.21",
+      "kind": "native-library",
+      "name": "ppv-lite86 (Rust crate)",
+      "version": "0.2.21",
+      "source": "https://crates.io/crates/ppv-lite86/0.2.21",
+      "revision": "000a6cd6bbcb0b091381dc5f8fe6d6efa480b818",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/ppv-lite86/ppv-lite86-0.2.21.crate",
+          "sha256": "85eae3c4ed2f50dcfe72643da4befc30deadb458a9b590d720cde2f2b1e97da9",
+          "size": 22522
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/cryptocorrosion/cryptocorrosion/blob/000a6cd6bbcb0b091381dc5f8fe6d6efa480b818/utils-simd/ppv-lite86/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/cryptocorrosion/cryptocorrosion"
+    },
+    {
+      "id": "rust-crate-rand-0.9.4",
+      "kind": "native-library",
+      "name": "rand (Rust crate)",
+      "version": "0.9.4",
+      "source": "https://crates.io/crates/rand/0.9.4",
+      "revision": "ba4c4c62d5a3dc73a5c975a53d9a139372c011cc",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/rand/rand-0.9.4.crate",
+          "sha256": "44c5af06bb1b7d3216d91932aed5265164bf384dc89cd6ba05cf59a35f5f76ea",
+          "size": 99786
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-random/rand/blob/ba4c4c62d5a3dc73a5c975a53d9a139372c011cc/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-random/rand"
+    },
+    {
+      "id": "rust-crate-rand-chacha-0.9.0",
+      "kind": "native-library",
+      "name": "rand_chacha (Rust crate)",
+      "version": "0.9.0",
+      "source": "https://crates.io/crates/rand_chacha/0.9.0",
+      "revision": "96f8df65ee6b4368d91a006f9c5b4a8050abae49",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/rand_chacha/rand_chacha-0.9.0.crate",
+          "sha256": "d3022b5f1df60f26e1ffddd6c66e8aa15de382ae63b3a0c1bfc0e4d3e3f325cb",
+          "size": 18258
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-random/rand/blob/96f8df65ee6b4368d91a006f9c5b4a8050abae49/rand_chacha/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-random/rand"
+    },
+    {
+      "id": "rust-crate-rand-core-0.9.5",
+      "kind": "native-library",
+      "name": "rand_core (Rust crate)",
+      "version": "0.9.5",
+      "source": "https://crates.io/crates/rand_core/0.9.5",
+      "revision": "a34dab266970cd0986ecbefe6b5b7afa619234f4",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/rand_core/rand_core-0.9.5.crate",
+          "sha256": "76afc826de14238e6e8c374ddcc1fa19e374fd8dd986b0d2af0d02377261d83c",
+          "size": 24129
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-random/rand_core/blob/a34dab266970cd0986ecbefe6b5b7afa619234f4/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json. Its Cargo.toml names rust-random/rand, but the recorded commit exists only in rust-random/rand_core, which is cited as evidence.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-random/rand_core"
+    },
+    {
+      "id": "rust-crate-rustfst-1.3.1",
+      "kind": "native-library",
+      "name": "rustfst (Rust crate)",
+      "version": "1.3.1",
+      "source": "https://crates.io/crates/rustfst/1.3.1",
+      "revision": "8e1391df1ef3dfb85e309dd4ee8af45251d28c9f",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/rustfst/rustfst-1.3.1.crate",
+          "sha256": "3096239ad3664245480c50bf34a6ed45af5f40c0f6258d4b28a4c8082813a519",
+          "size": 213573
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/Garvys/rustfst/blob/8e1391df1ef3dfb85e309dd4ee8af45251d28c9f/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/Garvys/rustfst"
+    },
+    {
+      "id": "rust-crate-serde-1.0.228",
+      "kind": "native-library",
+      "name": "serde (Rust crate)",
+      "version": "1.0.228",
+      "source": "https://crates.io/crates/serde/1.0.228",
+      "revision": "a866b336f14aa57a07f0d0be9f8762746e64ecb4",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/serde/serde-1.0.228.crate",
+          "sha256": "9a8e94ea7f378bd32cbbd37198a4a91436180c5bb472411e48b5ec2e2124ae9e",
+          "size": 83652
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/serde-rs/serde/blob/a866b336f14aa57a07f0d0be9f8762746e64ecb4/serde/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/serde-rs/serde"
+    },
+    {
+      "id": "rust-crate-serde-core-1.0.228",
+      "kind": "native-library",
+      "name": "serde_core (Rust crate)",
+      "version": "1.0.228",
+      "source": "https://crates.io/crates/serde_core/1.0.228",
+      "revision": "a866b336f14aa57a07f0d0be9f8762746e64ecb4",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/serde_core/serde_core-1.0.228.crate",
+          "sha256": "41d385c7d4ca58e59fc732af25c3983b67ac852c1a25000afe1175de458b67ad",
+          "size": 63111
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/serde-rs/serde/blob/a866b336f14aa57a07f0d0be9f8762746e64ecb4/serde_core/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/serde-rs/serde"
+    },
+    {
+      "id": "rust-crate-simd-adler32-0.3.9",
+      "kind": "native-library",
+      "name": "simd-adler32 (Rust crate)",
+      "version": "0.3.9",
+      "source": "https://crates.io/crates/simd-adler32/0.3.9",
+      "revision": "0b94f6a278f5662f24d311c9c1f16bcf272b7f43",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/simd-adler32/simd-adler32-0.3.9.crate",
+          "sha256": "703d5c7ef118737c72f1af64ad2f6f8c5e1921f818cdcb97b8fe6fc69bf66214",
+          "size": 18572
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/mcountryman/simd-adler32/blob/0b94f6a278f5662f24d311c9c1f16bcf272b7f43/LICENSE.md"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/mcountryman/simd-adler32"
+    },
+    {
+      "id": "rust-crate-superslice-1.0.0",
+      "kind": "native-library",
+      "name": "superslice (Rust crate)",
+      "version": "1.0.0",
+      "source": "https://crates.io/crates/superslice/1.0.0",
+      "revision": "3dac9f39997028ef43e58facba4dccd82332303c",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/superslice/superslice-1.0.0.crate",
+          "sha256": "ab16ced94dbd8a46c82fd81e3ed9a8727dac2977ea869d217bcc4ea1f122e81f",
+          "size": 9168
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/alkis/superslice-rs/blob/3dac9f39997028ef43e58facba4dccd82332303c/LICENCE"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Apache-2.0 license text and any NOTICE file.",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; its registry path appears in the release binary's panic locations. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/alkis/superslice-rs"
+    },
+    {
+      "id": "rust-crate-typenum-1.20.1",
+      "kind": "native-library",
+      "name": "typenum (Rust crate)",
+      "version": "1.20.1",
+      "source": "https://crates.io/crates/typenum/1.20.1",
+      "revision": "0db9a0f731981f29266b63586c29fa07e4477b1a",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/typenum/typenum-1.20.1.crate",
+          "sha256": "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20",
+          "size": 105479
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/paholg/typenum/blob/0db9a0f731981f29266b63586c29fa07e4477b1a/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/paholg/typenum"
+    },
+    {
+      "id": "rust-crate-zerocopy-0.8.53",
+      "kind": "native-library",
+      "name": "zerocopy (Rust crate)",
+      "version": "0.8.53",
+      "source": "https://crates.io/crates/zerocopy/0.8.53",
+      "revision": "c8fb1ca16968099ef7c032db4e65c0a45830d188",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/zerocopy/zerocopy-0.8.53.crate",
+          "sha256": "75726053136156d419e285b9b7eddaaea9e3fea6ce32eed44a89901f0bd98de1",
+          "size": 284705
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "nemo-text-processing"
+      ],
+      "license": {
+        "code": "BSD-2-Clause OR Apache-2.0 OR MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/google/zerocopy/blob/c8fb1ca16968099ef7c032db4e65c0a45830d188/zerocopy/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Statically linked into the NemoTextProcessing v0.3.1 xcframework: in the `cargo tree --locked -e normal,no-proc-macro --features ffi,fst-engine` closure over the seven Apple targets of build-xcframework.sh at text-processing-rs 46ebddc; no panic location for it survives in the release binary, as expected for panic-free or fully inlined code. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/google/zerocopy"
+    },
+    {
+      "id": "rust-crate-addr2line-0.25.1",
+      "kind": "native-library",
+      "name": "addr2line (Rust crate)",
+      "version": "0.25.1",
+      "source": "https://crates.io/crates/addr2line/0.25.1",
+      "revision": "f02db009deb9b441818afa49cb1b17453c1e4243",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/addr2line/addr2line-0.25.1.crate",
+          "sha256": "1b5d307320b3181d6d7954e663bd7c774a838b8220fe0593c86d9fb09f498b4b",
+          "size": 43134
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "rust-std"
+      ],
+      "license": {
+        "code": "Apache-2.0 OR MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/gimli-rs/addr2line/blob/f02db009deb9b441818afa49cb1b17453c1e4243/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c); its /rust/deps path appears in the release binary. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/gimli-rs/addr2line"
+    },
+    {
+      "id": "rust-crate-gimli-0.32.3",
+      "kind": "native-library",
+      "name": "gimli (Rust crate)",
+      "version": "0.32.3",
+      "source": "https://crates.io/crates/gimli/0.32.3",
+      "revision": "8bc8e622fcb9be20fc9f03c96bc6335d936b869d",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/gimli/gimli-0.32.3.crate",
+          "sha256": "e629b9b98ef3dd8afe6ca2bd0f89306cec16d43d907889945bc5d6687f2f13c7",
+          "size": 289789
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "rust-std"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/gimli-rs/gimli/blob/8bc8e622fcb9be20fc9f03c96bc6335d936b869d/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c); its /rust/deps path appears in the release binary. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/gimli-rs/gimli"
+    },
+    {
+      "id": "rust-crate-hashbrown-0.17.1",
+      "kind": "native-library",
+      "name": "hashbrown (Rust crate)",
+      "version": "0.17.1",
+      "source": "https://crates.io/crates/hashbrown/0.17.1",
+      "revision": "c62a63a61b7caf2de8f9ecb7b06a66b0ab6bdf3d",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/hashbrown/hashbrown-0.17.1.crate",
+          "sha256": "ed5909b6e89a2db4456e54cd5f673791d7eca6732202bbf2a9cc504fe2f9b84a",
+          "size": 155512
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "rust-std"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-lang/hashbrown/blob/c62a63a61b7caf2de8f9ecb7b06a66b0ab6bdf3d/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c); its /rust/deps path appears in the release binary. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-lang/hashbrown"
+    },
+    {
+      "id": "rust-crate-libc-0.2.185",
+      "kind": "native-library",
+      "name": "libc (Rust crate)",
+      "version": "0.2.185",
+      "source": "https://crates.io/crates/libc/0.2.185",
+      "revision": "71d5bfcc1bda05da1783666fc2cd7d9669c9c4c8",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/libc/libc-0.2.185.crate",
+          "sha256": "52ff2c0fe9bc6cb6b14a0592c2ff4fa9ceb83eea9db979b0487cd054946a2b8f",
+          "size": 821775
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "rust-std"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-lang/libc/blob/71d5bfcc1bda05da1783666fc2cd7d9669c9c4c8/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c); its /rust/deps path appears in the release binary. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-lang/libc"
+    },
+    {
+      "id": "rust-crate-memchr-2.7.6",
+      "kind": "native-library",
+      "name": "memchr (Rust crate)",
+      "version": "2.7.6",
+      "source": "https://crates.io/crates/memchr/2.7.6",
+      "revision": "9ba486e4ba7e865c0510305c5dacba73988d9f31",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/memchr/memchr-2.7.6.crate",
+          "sha256": "f52b00d39961fc5b2736ea853c9cc86238e165017a493d1d5c8eac6bdc4cc273",
+          "size": 97616
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "rust-std"
+      ],
+      "license": {
+        "code": "Unlicense OR MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/BurntSushi/memchr/blob/9ba486e4ba7e865c0510305c5dacba73988d9f31/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c); its /rust/deps path appears in the release binary. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/BurntSushi/memchr"
+    },
+    {
+      "id": "rust-crate-object-0.37.3",
+      "kind": "native-library",
+      "name": "object (Rust crate)",
+      "version": "0.37.3",
+      "source": "https://crates.io/crates/object/0.37.3",
+      "revision": "916c47b90e5c0bea139ca4bdfc53811f7d2c3383",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/object/object-0.37.3.crate",
+          "sha256": "ff76201f031d8863c38aa7f905eca4f53abbfa15f609db4277d44cd8938f33fe",
+          "size": 344032
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "rust-std"
+      ],
+      "license": {
+        "code": "Apache-2.0 OR MIT",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/gimli-rs/object/blob/916c47b90e5c0bea139ca4bdfc53811f7d2c3383/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c); its /rust/deps path appears in the release binary. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/gimli-rs/object"
+    },
+    {
+      "id": "rust-crate-rustc-demangle-0.1.27",
+      "kind": "native-library",
+      "name": "rustc-demangle (Rust crate)",
+      "version": "0.1.27",
+      "source": "https://crates.io/crates/rustc-demangle/0.1.27",
+      "revision": "f65a6d8f63a7656c71649d92ff3cb000951c11a6",
+      "downloads": [
+        {
+          "url": "https://static.crates.io/crates/rustc-demangle/rustc-demangle-0.1.27.crate",
+          "sha256": "b50b8869d9fc858ce7266cce0194bd74df58b9d0e3f6df3a9fc8eb470d95c09d",
+          "size": 30448
+        }
+      ],
+      "paths": [],
+      "configuration": null,
+      "requires": [],
+      "usedBy": [
+        "#42",
+        "rust-std"
+      ],
+      "license": {
+        "code": "MIT OR Apache-2.0",
+        "content": null,
+        "name": null,
+        "evidence": "https://github.com/rust-lang/rustc-demangle/blob/f65a6d8f63a7656c71649d92ff3cb000951c11a6/LICENSE-MIT"
+      },
+      "upstream": [],
+      "terms": {
+        "redistribution": "allowed",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "attribution": "Copyright notice and MIT license text (MIT elected from the offered licenses).",
+        "download": {
+          "access": "public",
+          "presentation": "none"
+        },
+        "termsUrl": "https://opensource.org/license/mit"
+      },
+      "distribution": "bundle",
+      "review": {
+        "date": "2026-09-28",
+        "notes": "Linked through the Rust 1.98.1 standard library (library/Cargo.lock at rust-lang/rust 48a229c); its /rust/deps path appears in the release binary. The crate archive SHA-256 equals its Cargo.lock checksum; `revision` is the commit in its .cargo_vcs_info.json.",
+        "legal": {
+          "status": "pending",
+          "reference": null,
+          "date": null
+        }
+      },
+      "vcs": "https://github.com/rust-lang/rustc-demangle"
+    },
+    {
+      "id": "conformance-audio-fixtures",
+      "kind": "fixture",
+      "name": "Conformance audio frames",
+      "paths": [
+        "conformance/fixtures/audio-frames.jsonl",
+        "conformance/fixtures/invalid/audio-frames.jsonl"
+      ],
+      "synthetic": true,
+      "method": "Generated PCM from the recipe in conformance/README.md (Synthetic audio): a 16 kHz mono s16le 10 ms 1 kHz sine and 320 zero bytes; the invalid set uses hand-authored malformed or all-zero base64 payloads.",
+      "review": {
+        "notes": "Murmur-authored under the repository's Apache-2.0 license; no recording or third-party audio."
+      }
+    },
+    {
+      "id": "conformance-json-fixtures",
+      "kind": "fixture",
+      "name": "Conformance ProtoJSON fixtures",
+      "paths": [
+        "conformance/fixtures/forward-compatible-events.jsonl",
+        "conformance/fixtures/invalid/ambiguous-oneof.jsonl",
+        "conformance/fixtures/invalid/ambiguous-session-command.jsonl",
+        "conformance/fixtures/invalid/enum.jsonl",
+        "conformance/fixtures/invalid/missing-payload.jsonl",
+        "conformance/fixtures/invalid/missing-session-command.jsonl",
+        "conformance/fixtures/invalid/protocol-major.jsonl",
+        "conformance/fixtures/invalid/protocol-version.jsonl",
+        "conformance/fixtures/invalid/sequence-order.jsonl",
+        "conformance/fixtures/invalid/uint64.jsonl",
+        "conformance/fixtures/runtime-events.jsonl",
+        "conformance/fixtures/session-control.jsonl",
+        "conformance/fixtures/source-discovery.jsonl"
+      ],
+      "synthetic": true,
+      "method": "Hand-authored synthetic ProtoJSON; transcript text is marked synthetic and identifiers are placeholders.",
+      "review": {
+        "notes": "Murmur-authored under the repository's Apache-2.0 license; contains no recordings, conversations, credentials, or real identifiers."
+      }
+    }
+  ]
+}

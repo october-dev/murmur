@@ -73,6 +73,13 @@ Keep product commands and billing policy outside the runtime. Provider-specific
 dependencies belong behind adapters, with their licenses and model terms called
 out in the pull request.
 
+A change that adds or bumps an engine, native library, model, voice, tokenizer,
+phonemizer, or test fixture follows the update procedure in
+[licensing/README.md](licensing/README.md). Include the `licensing/manifest.json`
+change and any legal review reference. Never rely on an SDK repository's license
+alone for the artifacts it downloads. A pull request that adds a downloader or a
+packaging path also adds its licensing cross-check in the same pull request.
+
 ## Connector pull requests
 
 Read the [connector authoring guide](docs/connector-authoring.md) and open a
