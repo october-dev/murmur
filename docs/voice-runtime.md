@@ -37,20 +37,41 @@ should preserve these concepts and pass the shared conformance suite:
 
 ### `VoiceProvider`
 
-A live provider session starts with callbacks or an event stream and has an
-idempotent hard stop. Optional capabilities are declared instead of assumed:
+A provider creates one-shot recognition sessions. A session is created inert,
+the caller subscribes to its event stream, and then starts it. Partial and final
+transcripts, graceful finalization, an idempotent hard stop, and frame
+backpressure are baseline behavior. Optional capabilities are declared instead
+of assumed or simulated:
 
-- partial and final transcript delivery
-- immediate input mute and warm unmute
-- graceful finalization of a server-side decoder
-- real-audio readiness and normalized amplitude
+- immediate input mute: the input gate closes at once while the session stays
+  warm and the already accepted tail is flushed
+- warm unmute of the same session, which requires immediate mute
+- real-audio readiness
+- normalized amplitude
 - rejected-final reporting, for example when optional speaker verification
   rejects a segment
-- provider close and typed failure events
 
 `stop` means cancel and release resources. `finalize` means close the input
-gate, let already accepted audio finish decoding, return the final text, and
-then release resources. They are deliberately different operations.
+gate, let already accepted audio finish decoding, emit the remaining finals on
+the event stream, and then release resources. They are deliberately different
+operations.
+
+- Delivery order is the total order of a session. A partial is the complete,
+  replaceable hypothesis of the open segment. Finals are append-only, never
+  revised, and carry their own separators, so an utterance is the exact
+  concatenation of its finals. A rejected segment is never assembled.
+- Mute, unmute, and finalize are serialized and single-flight, and none is
+  legal before start completes. Stop is always allowed and overtakes any
+  pending operation with `cancelled`.
+- The caller owns pre-open buffering: a bounded pre-roll drained once start or
+  unmute completes. At most one frame write is outstanding, and each adapter
+  bounds and documents its internal queue.
+- A startup failure, such as a rate limit, is reported by start. A later
+  failure ends the session with one typed failure event, and stream
+  completion means the session is closed. Sessions never reconnect; a retry is
+  a new session, and finals already emitted stay valid.
+- Credentials enter only through adapter configuration and never appear in
+  session requests, events, errors, or logs.
 
 ### `VoiceCaptureCoordinator`
 

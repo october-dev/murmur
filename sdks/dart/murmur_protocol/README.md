@@ -15,6 +15,12 @@ Typed `AudioFormat`, `AudioFrame`, and `SessionControl` models preserve the
 `VoiceSession` interfaces let pure-Dart and Flutter hosts use the same explicit
 discovery, connection, capture, error, and cleanup lifecycle.
 
+`VoiceProvider` and `ProviderSession` define the provider-neutral streaming
+transcription boundary. Create a session, subscribe to its events, await
+`start`, await each `addFrame`, concatenate finals verbatim, and end with
+`finalize` or `stop`. The dartdoc on `ProviderSession` is the normative
+contract.
+
 The package source and pub.dev metadata are in place. It remains unpublished
 while the initial public protocol is reviewed against the shared fixtures in
 `conformance/`.

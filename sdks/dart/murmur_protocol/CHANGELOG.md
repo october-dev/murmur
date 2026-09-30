@@ -5,6 +5,7 @@
 - Add framework-neutral voice connector, session, state, and error interfaces.
 - Add a deterministic fake voice connector with synthetic audio in
   `package:murmur_protocol/testing.dart`.
+- Add the provider-neutral streaming transcription contract.
 
 ## 0.1.0
 
